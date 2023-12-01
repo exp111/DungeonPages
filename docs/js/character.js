@@ -2,7 +2,7 @@ class Character {
     Name = "";
     Ability = null;
     Health = null;
-    Bonuses = []; // XP unlocks
+    Experience = null; // XP unlocks
     Weapons = [];
     Relics = [];
     DOMObject = null;
@@ -19,6 +19,9 @@ class Character {
         // Ability
         ret.appendChild(this.Ability.DOMObject)
         // XP
+        ret.appendChild(this.Experience.DOMObject);
+        // Weapons
+        // Relics
         this.DOMObject = ret;
         return ret;
     }
@@ -28,10 +31,7 @@ class Character {
         ret.Name = json.name;
         ret.Ability = Ability.FromJson(json.ability);
         ret.Health = Health.FromJson(json.health);
-        for (let i in json.bonuses) {
-            let b = json.bonuses[i];
-            ret.Bonuses.push(Bonus.FromJson(b));
-        }
+        ret.Experience = Experience.FromJson(json.bonuses);
         for (let i in json.weapons) {
             let w = json.weapons[i];
             ret.Weapons.push(Weapon.FromJson(w));
@@ -52,8 +52,10 @@ class Health {
     DOMObject = null;
 
     CreateDOM() {
+        // Wrapper
         let ret = document.createElement("div");
         ret.classList.add("character-health");
+        // Elements
         for (let i in this.Elements) {
             let count = this.Elements[i];
             let element = document.createElement("div");
@@ -63,13 +65,14 @@ class Health {
                 // first one is bigger
                 element.style.setProperty("grid-column-end", "span 3");
             }
-            // add the checkmark
+            /// checkmark
             let check = document.createElement("input");
             check.type = "checkbox";
             check.classList.add("character-health-check");
             check.disabled = true;
             check.checked = i <= this.Unlocked;
             element.appendChild(check);
+            /// icons
             let icons = document.createElement("div");
             icons.classList.add("character-health-icons");
             for (let i = 0; i < count; i++) {
@@ -116,6 +119,46 @@ class Ability {
     }
 }
 
+class Experience {
+    Bonuses = []; // XP Bonuses
+    BonusesUnlocked = 0;
+    Earned = 0;
+    DOMObject = null;
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        ret.classList.add("character-xp");
+        // Points
+        let points = document.createElement("div");
+        points.classList.add("character-xp-points");
+        for (let i = 0; i < 3; i++) {
+            let grid = document.createElement("div");
+            grid.classList.add("character-xp-points-part");
+            for (let j = 0; j < 25; j++) {
+                let p = document.createElement("input");
+                p.classList.add("character-xp-point");
+                p.type = "checkbox";
+                p.disabled = true;
+                p.checked = (i * 25 + j) < this.Earned;
+                grid.appendChild(p);
+            }
+            points.appendChild(grid);
+        }
+        ret.appendChild(points);
+        this.DOMObject = ret;
+        return ret;
+    }
+
+    static FromJson(json) {
+        let ret = new Experience();
+        for (let i in json) {
+            let b = json[i];
+            ret.Bonuses.push(Bonus.FromJson(b));
+        }
+        ret.CreateDOM();
+        return ret;
+    }
+}
 class Bonus {
     Treshold = 0;
     Type = ""; // die, potion, tactics, range, rerollGood, rerollEvil, rerollAny
@@ -130,6 +173,7 @@ class Bonus {
         return ret;
     }
 }
+
 class Weapon {
     Name = "";
     Treshold = 0;

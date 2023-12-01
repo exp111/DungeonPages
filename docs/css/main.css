@@ -43,6 +43,42 @@
     width: 9px;
 }
 
+.character-xp-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: min-content;
+    gap: 0px 5px;
+}
+
+.character-xp-points-part {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    width: min-content;
+    padding-right: 5px;
+    border-right: solid #c9cacb 1px;
+}
+.character-xp-points-part:last-child {
+    border-right: none;
+}
+
+.character-xp-point {
+    margin: 1px;
+    width: 0.8em;
+    height: 0.8em;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+}
+
+.character-xp-point:checked {
+    background-color: black;
+}
+
 .map {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
