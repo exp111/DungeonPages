@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Grid Test</title>
+    <title>Dungeon Pages</title>
     <link rel="stylesheet" type="text/css" href="css/main.css" />
 </head>
 
@@ -13,10 +13,10 @@
     <script src="js/map.js"></script>
     <script src="js/data.js"></script>
     <script>
-        loadJson("cave.json").then((json) => {
-            var dungeon = Dungeon.FromJson(json);
-            var map = document.getElementById("map");
-            map.appendChild(dungeon.DOMObject);
+        loadMapJson("highmountVillage.json").then((json) => {
+            var map = Map.FromJson(json);
+            var m = document.getElementById("map");
+            m.appendChild(map.DOMObject);
         });
     </script>
 </body>

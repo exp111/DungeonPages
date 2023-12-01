@@ -19,8 +19,20 @@ async function loadJsonFile(path)
 
 // Loads a json file from the data folder
 var Paths = {
-    "dataPath": "assets/json/",
+    "dataPath": "assets/data/",
+    "mapPath": "maps/",
+    "dungeonPath": "dungeons/",
+    "characterPath": "characters/",
 };
 async function loadJson(path) {
     return loadJsonFile(Paths.dataPath + path);
+}
+async function loadMapJson(path) {
+    return loadJsonFile(Paths.dataPath + Paths.mapPath + path);
+}
+async function loadDungeonJson(path) {
+    return loadJsonFile(Paths.dataPath + Paths.dungeonPath + path);
+}
+async function loadCharacterJson(path) {
+    return loadJsonFile(Paths.dataPath + Paths.characterPath + path);
 }
