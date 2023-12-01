@@ -7,12 +7,25 @@
 </head>
 
 <body>
+    <div id="character">
+
+    </div>
     <div id="map">
 
     </div>
     <script src="js/map.js"></script>
+    <script src="js/character.js"></script>
     <script src="js/data.js"></script>
     <script>
+        Global = {
+            map: null,
+            character: null,
+        };
+        loadCharacterJson("zafinn.json").then((json) => {
+            var char = Character.FromJson(json);
+            var c = document.getElementById("character");
+            c.appendChild(char.DOMObject);
+        });
         loadMapJson("highmountVillage.json").then((json) => {
             var map = Map.FromJson(json);
             var m = document.getElementById("map");

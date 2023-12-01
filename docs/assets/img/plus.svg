@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="2.4324036mm"
+   height="2.4324036mm"
+   viewBox="0 0 2.4324036 2.4324036"
+   version="1.1"
+   id="svg46409"
+   inkscape:export-filename="lock.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview46411"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs46406" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-72.744608,-70.17803)">
+    <g
+       id="g1728"
+       transform="matrix(0.35277777,0,0,-0.35277777,72.744607,70.938269)">
+      <path
+         d="M 0,0 H 2.155 V 2.155 H 4.74 V 0 H 6.895 V -2.586 H 4.74 V -4.74 H 2.155 v 2.154 H 0 Z"
+         style="fill:#6c84a9;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path1730" />
+    </g>
+  </g>
+</svg>

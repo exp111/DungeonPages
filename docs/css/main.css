@@ -5,6 +5,42 @@
     --border-radius: 5px;
 }
 
+.character {
+    
+}
+
+.character-health {
+    --row-count: 3;
+    --column-count: 3;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: max-content;
+    gap: 4px 0;
+}
+
+.character-health-element {
+    display: flex;
+    align-items: center;
+    border-radius: var(--border-radius);
+    border: 1px black solid;
+}
+
+.character-health-icons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.character-health-icon {
+    background-image: url("../assets/img/plus.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    height: 9px;
+    width: 9px;
+}
+
 .map {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -15,7 +51,7 @@
 .dungeon {
     background-color: #e6e5e5;
     border-radius: var(--border-radius);
-    width: min-content;
+    width: max-content;
 }
 
 .dungeon-title {

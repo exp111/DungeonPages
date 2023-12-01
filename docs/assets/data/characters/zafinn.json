@@ -1,0 +1,62 @@
+{
+    "name": "Zafinn",
+    "ability": {
+        "name": "Beam of Energy",
+        "type": "SACRIFICE_DOUBLE"
+    },
+    "health": [
+        10,
+        3,
+        2,
+        2,
+        3,
+        2,
+        2
+    ],
+    "bonuses": [{
+            "treshold": 8,
+            "type": "die"
+        },
+        {
+            "treshold": 13,
+            "type": "potion"
+        },
+        {
+            "treshold": 20,
+            "type": "die"
+        },
+        {
+            "treshold": 23,
+            "type": "range"
+        },
+        {
+            "treshold": 27,
+            "type": "rerollAny"
+        }
+    ],
+    "weapons": [{
+            "name": "Oak Staff",
+            "range": 1,
+            "effects": ["Ortho"]
+        },
+        {
+            "name": "Lightning Bolt",
+            "treshold": 6,
+            "range": 2,
+            "effects": ["StraightLine"]
+        },
+        {
+            "name": "Elder Fire",
+            "treshold": 16,
+            "range": 3,
+            "effects": ["StraightLine"]
+        },
+        {
+            "name": "Staff of Power",
+            "treshold": 28,
+            "range": 2,
+            "effects": ["Ortho"]
+        }
+    ],
+    "relics": []
+}
