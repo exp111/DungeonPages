@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="4.7035828mm"
+   height="4.7039413mm"
+   viewBox="0 0 4.7035828 4.7039413"
+   version="1.1"
+   id="svg46409"
+   inkscape:export-filename="door.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview46411"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs46406" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-73.741808,-64.116964)">
+    <g
+       id="g6042"
+       transform="matrix(0.35277777,0,0,-0.35277777,77.042747,67.439777)">
+      <path
+         d="m 0,0 -1.75,-0.54 c -0.339,-0.104 -0.697,0.085 -0.802,0.423 l -0.54,1.751 c -0.104,0.338 0.086,0.697 0.424,0.801 l 1.75,0.54 C -0.58,3.079 -0.221,2.89 -0.117,2.552 L 0.423,0.801 C 0.527,0.463 0.338,0.104 0,0 m -5.265,2.952 -0.54,1.751 c -0.104,0.338 0.086,0.696 0.424,0.801 l 1.75,0.54 C -3.293,6.148 -2.934,5.958 -2.83,5.62 L -2.29,3.87 C -2.186,3.532 -2.375,3.173 -2.713,3.069 L -4.464,2.529 C -4.802,2.424 -5.16,2.614 -5.265,2.952 M 3.976,5.513 0.616,6.058 0.071,9.419 -2.691,7.428 -5.452,9.419 -5.997,6.058 l -3.36,-0.545 1.99,-2.761 -1.99,-2.762 3.36,-0.545 0.545,-3.36 2.761,1.991 2.762,-1.991 0.545,3.36 3.36,0.545 -1.991,2.762 z"
+         style="fill:#394c65;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path6044" />
+    </g>
+  </g>
+</svg>
