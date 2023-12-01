@@ -119,7 +119,8 @@
 .tile-item,
 .tile-entry,
 .tile-exit,
-.tile-trap {
+.tile-trap,
+.tile-lock {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
@@ -171,4 +172,9 @@
 
 .tile-fog {
     background-image: url("../assets/img/traps/fog.svg");
+}
+
+.tile-lock {
+    background-color: #b9b5b3;
+    background-image: url("../assets/img/lock.svg");
 }
