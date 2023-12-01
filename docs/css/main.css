@@ -6,15 +6,17 @@
 }
 
 .character {
-    
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
 }
 
 .character-health {
     --row-count: 3;
     --column-count: 3;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(var(--row-count), 1fr);
+    grid-template-rows: repeat(var(--row-count), 1fr);
     width: max-content;
     gap: 4px 0;
 }
