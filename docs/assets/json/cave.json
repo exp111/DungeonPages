@@ -2,7 +2,7 @@
     "name": "The Cave",
     "rows": 6,
     "columns": 6,
-    "dice": 2,
+    "dice": 1,
     "tiles": [{
             "type": "wall"
         },
