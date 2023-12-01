@@ -84,6 +84,7 @@ class Health {
         }
         return ret;
     }
+
     static FromJson(json) {
         let ret = new Health();
         ret.Elements = json;
@@ -108,6 +109,7 @@ class Ability {
         // return it
         return ret;
     }
+
     static FromJson(json) {
         let ret = new Ability();
         ret.Name = json.name;
@@ -144,6 +146,14 @@ class Experience {
             points.appendChild(grid);
         }
         ret.appendChild(points);
+        // Bonuses
+        let bonuses = document.createElement("div");
+        bonuses.classList.add("character-xp-bonuses");
+        for (let i in this.Bonuses) {
+            let bonus = this.Bonuses[i];
+            bonuses.appendChild(bonus.DOMObject);
+        }
+        ret.appendChild(bonuses);
         return ret;
     }
 
@@ -161,6 +171,39 @@ class Bonus {
     Treshold = 0;
     Type = ""; // die, potion, tactics, range, rerollGood, rerollEvil, rerollAny
     Amount = 1;
+    Unlocked = false;
+    DOMObject = null;
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        ret.classList.add("character-xp-bonus");
+        this.DOMObject = ret;
+        // treshold
+        let treshold = document.createElement("div");
+        /// checkbox before treshold
+        let check = document.createElement("input");
+        check.type = "checkbox";
+        check.disabled = true;
+        check.checked = this.Unlocked;
+        treshold.innerText = `${this.Treshold}XP`;
+        treshold.prepend(check);
+        ret.appendChild(treshold);
+        // bonus
+        let bonusWrap = document.createElement("div");
+        bonusWrap.classList.add("character-xp-bonus-info");
+        let amount = document.createElement("div");
+        if (this.Amount > 1)
+            amount.innerText = `+${this.Amount}`;
+        else
+            amount.innerText = "+";
+        bonusWrap.appendChild(amount);
+        let bonus = document.createElement("div");
+        bonus.classList.add("bonus");
+        bonus.classList.add(`bonus-${this.Type}`);
+        bonusWrap.appendChild(bonus);
+        ret.appendChild(bonusWrap);
+        return ret;
+    }
 
     static FromJson(json) {
         let ret = new Bonus();
@@ -168,6 +211,7 @@ class Bonus {
         ret.Type = json.type;
         if (json.amount != null)
             ret.Amount = json.amount;
+        ret.CreateDOM();
         return ret;
     }
 }
@@ -200,6 +244,7 @@ class Weapons {
         return ret;
     }
 }
+
 class Weapon {
     Name = "";
     Treshold = 0;
@@ -240,6 +285,7 @@ class Weapon {
         }
         return ret;
     }
+
     static FromJson(json) {
         let ret = new Weapon();
         ret.Name = json.name;
@@ -252,6 +298,7 @@ class Weapon {
         return ret;
     }
 }
+
 class Relic {
     Name = "";
     Treshold = 0;

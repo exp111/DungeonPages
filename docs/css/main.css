@@ -47,7 +47,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     width: min-content;
-    gap: 0px 5px;
+    gap: 0px 10px;
 }
 
 .character-xp-points-part {
@@ -55,7 +55,8 @@
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
     width: min-content;
-    padding-right: 5px;
+    padding-right: 10px;
+    gap: 4px;
     border-right: solid #c9cacb 1px;
 }
 .character-xp-points-part:last-child {
@@ -63,7 +64,7 @@
 }
 
 .character-xp-point {
-    margin: 1px;
+    margin: 0;
     width: 0.8em;
     height: 0.8em;
     background-color: white;
@@ -77,6 +78,19 @@
 
 .character-xp-point:checked {
     background-color: black;
+}
+
+.character-xp-bonuses {
+    display: flex;
+    column-gap: 5px;
+    font-size: 12px;
+}
+
+.character-xp-bonus-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 18px;
 }
 
 .character-weapons-weapon {
@@ -228,21 +242,38 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center center;
+    width: 16px;
+    height: 16px;
 }
 .effect-ortho {
     background-image: url("../assets/img/effects/orthogonal.svg");
-    width: 16px;
-    height: 16px;
 }
 
 .effect-straightVert {
     background-image: url("../assets/img/effects/straightVert.svg");
-    width: 16px;
-    height: 16px;
 }
 
 .effect-straightHori {
     background-image: url("../assets/img/effects/straightHori.svg");
-    width: 16px;
-    height: 16px;
+}
+
+.bonus {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    width: 24px;
+    height: 24px;
+}
+
+.bonus-die {
+    background-image: url("../assets/img/goodDice.svg");
+}
+.bonus-potion {
+    background-image: url("../assets/img/items/potion.svg");
+}
+.bonus-range {
+    background-image: url("../assets/img/range.svg");
+}
+.bonus-rerollAny {
+    background-image: url("../assets/img/rerollAny.svg");
 }
