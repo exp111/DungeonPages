@@ -6,9 +6,11 @@
 }
 
 .character {
+    background-color: #f9f8f8;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 10px 0;
 }
 
 .character-health {
@@ -22,6 +24,7 @@
 }
 
 .character-health-element {
+    background-color: white;
     display: flex;
     align-items: center;
     border-radius: var(--border-radius);
@@ -107,6 +110,7 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     gap: 20px 30px;
+    padding: 10px 0;
 }
 
 .dungeon {
