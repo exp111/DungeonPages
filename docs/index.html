@@ -26,12 +26,14 @@
             var c = document.getElementById("character");
             c.appendChild(char.DOMObject);
             Global.character = char;
+            console.log(Global.character);
         });
         loadMapJson("highmountVillage.json").then((json) => {
             var map = Map.FromJson(json);
             var m = document.getElementById("map");
             m.appendChild(map.DOMObject);
             Global.map = map;
+            console.log(Global.map);
         });
     </script>
 </body>

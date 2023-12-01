@@ -249,6 +249,17 @@ class Monster {
     Effect = null;
     DOMObject = null;
 
+    GetDescription() {
+        switch (this.Effect) {
+            case "steadfast":
+                return `If there is only one ${this.Name}, this enemy has +1 DEF.`;
+            case "berserk":
+                return "Deals +1 damage when attacking if there is a marked space adjacent to this enemy";
+            default:
+                return "Unknown";
+        }
+    }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("monsters-monster");
@@ -285,7 +296,13 @@ class Monster {
         add(`${this.Defense}+`, "DEF");
         add(`${this.HP}`, "HP");
         add(`${this.XP}`, "XP");
-        //TODO: effect
+        // effect
+        if (this.Effect) {
+            let effect = document.createElement("div");
+            effect.classList.add("monsters-monster-effect");
+            effect.innerText = this.GetDescription();
+            ret.appendChild(effect);
+        }
         return ret;
     }
 
@@ -312,6 +329,15 @@ class Trap {
     Disarm = 0;
     Effect = null; //Fog //TODO: enum
     DOMObject = null;
+
+    GetDescription() {
+        switch (this.Effect) {
+            case "fog":
+                return "When Marked, reroll all dice and begin a new turn. Reduce your Range by 2 this turn (But no lower than 1).";
+            default:
+                return "Unknown";
+        }
+    }
 
     CreateDOM() {
         let ret = document.createElement("div");
@@ -343,7 +369,13 @@ class Trap {
         val.classList.add("traps-trap-stats-stat");
         val.innerText = this.Disarm;
         stats.appendChild(val);
-        //TODO: effect
+        // effect
+        if (this.Effect) {
+            let effect = document.createElement("div");
+            effect.classList.add("traps-trap-effect");
+            effect.innerText = this.GetDescription();
+            ret.appendChild(effect);
+        }
         return ret;
     }
 
