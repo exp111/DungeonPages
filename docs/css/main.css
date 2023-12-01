@@ -69,7 +69,7 @@
     border-radius: var(--border-radius);
 }
 
-.tile-space {
+.tile-space, .tile-trap {
     background-color: white;
 }
 
@@ -96,13 +96,41 @@
 }
 
 .tile-coin {
-    background-image: url("../assets/img/coin.svg");
+    background-image: url("../assets/img/items/coin.svg");
 }
 
 .tile-potion {
-    background-image: url("../assets/img/potion.svg");
+    background-image: url("../assets/img/items/potion.svg");
+}
+
+.tile-doubleCoin {
+    background-image: url("../assets/img/items/doubleCoin.svg");
+}
+
+.tile-key {
+    background-image: url("../assets/img/items/key.svg");
+}
+
+.tile-poison {
+    background-image: url("../assets/img/items/poison.svg");
+}
+
+.tile-teleportPotion {
+    background-image: url("../assets/img/items/teleportPotion.svg");
 }
 
 .tile-guardian {
-    background-image: url("../assets/img/guardian.svg");
+    background-image: url("../assets/img/monsters/guardian.svg");
+}
+
+.tile-orc {
+    background-image: url("../assets/img/monsters/orc.svg");
+}
+
+.tile-dragon {
+    background-image: url("../assets/img/monsters/dragon.svg");
+}
+
+.tile-fog {
+    background-image: url("../assets/img/traps/fog.svg");
 }

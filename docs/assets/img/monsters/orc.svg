@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="6.4676132mm"
+   height="6.4491653mm"
+   viewBox="0 0 6.4676132 6.4491653"
+   version="1.1"
+   id="svg46409"
+   inkscape:export-filename="fog.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview46411"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs46406" />
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-73.736406,-63.208204)">
+    <g
+       id="g5424"
+       transform="matrix(0.35277777,0,0,-0.35277777,76.128075,66.074527)">
+      <path
+         d="M 0,0 1.323,-3.6 2.456,0 3.61,-3.655 4.897,-0.146 5.981,-3.752 7.299,-0.437 C 8.171,-2.279 6.787,-5.43 5.529,-6.997 l -0.96,2.669 -0.939,-4.049 -1.014,3.368 -1.14,-3.027 -1.045,3.222 -0.96,-2.474 c -1.744,2.342 -2.26,4.767 -1.389,6.851 l 0.922,-2.829 z M 6.73,3.171 C 6.999,3.171 7.281,3.138 7.576,3.072 6.493,1.471 5.303,0.691 3.914,1.419 4.634,2.562 5.563,3.171 6.73,3.171 Z m -8.73,0 c 1.166,0 2.095,-0.609 2.815,-1.752 -1.388,-0.728 -2.58,0.053 -3.662,1.653 0.295,0.066 0.578,0.099 0.847,0.099 z m -3.964,4.954 c 0,0 -1.116,-6.556 -0.737,-8.435 0.484,-2.396 1.861,-3.617 3.05,-3.693 0.408,-0.865 0.899,-2.768 1.529,-3.637 2.937,-4.051 7.867,-2.586 9.044,0.027 0.44,0.979 1.117,2.759 1.517,3.611 1.185,0.085 2.554,1.305 3.036,3.692 0.38,1.879 -0.737,8.435 -0.737,8.435 0,0 -1.099,-1.915 -2.169,-3.971 -2.525,5.171 -9.841,5.203 -12.365,0.001 -1.07,2.056 -2.168,3.97 -2.168,3.97 z"
+         style="fill:#94c4c5;fill-opacity:1;fill-rule:nonzero;stroke:none"
+         id="path5426" />
+    </g>
+  </g>
+</svg>
