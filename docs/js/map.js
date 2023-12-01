@@ -26,19 +26,49 @@ class Dungeon {
     Dice = 1;
     Tiles = [];
     DOMObject = null;
+    //TODO: dots
 
     CreateDOM() {
-        // Create the grid
         let ret = document.createElement("div");
-        ret.classList.add("grid");
-        ret.style.setProperty("--row-count", this.Rows);
-        ret.style.setProperty("--column-count", this.Columns);
+        ret.classList.add("dungeon");
+        // title bar
+        let title = document.createElement("div");
+        title.classList.add("dungeon-title");
+        ret.appendChild(title);
+        /// name tag
+        let name = document.createElement("div");
+        name.classList.add("dungeon-name");
+        name.innerText = this.Name;
+        title.appendChild(name);
+        /// icons
+        let dices = document.createElement("div");
+        dices.classList.add("dungeon-dices");
+        if (this.Dice >= 2)
+        {
+            let wandering = document.createElement("div");
+            wandering.classList.add("dungeon-wandering-dice");
+            dices.appendChild(wandering);
+        }
+        for (let i = 0; i < this.Dice; i++)
+        {
+            let dice = document.createElement("div");
+            dice.classList.add("dungeon-dice");
+            dices.appendChild(dice);
+        }
+        title.appendChild(dices);
+        
+        // Create the grid
+        let grid = document.createElement("div");
+        grid.classList.add("dungeon-grid");
+        grid.style.setProperty("--row-count", this.Rows);
+        grid.style.setProperty("--column-count", this.Columns);
         // then add the tiles
         for (let i in this.Tiles)
         {
             let t = this.Tiles[i];
-            ret.appendChild(t.DOMObject);
+            grid.appendChild(t.DOMObject);
         }
+        ret.appendChild(grid);
         // then return
         this.DOMObject = ret;
         return ret;

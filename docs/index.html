@@ -5,25 +5,67 @@
     <title>Grid Test</title>
     <style>
         :root {
-            --tile-size: 50px;
-            --gap-size: 10px;
+            --tile-size: 30px;
+            --gap-size: 7px;
+            --outer-gap-size: 22px;
+            --border-radius: 5px;
         }
 
-        .grid {
+        .dungeon {
+            background-color: #e6e5e5;
+            border-radius: var(--border-radius);
+            width: min-content;
+        }
+
+        .dungeon-title {
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            border-bottom: #8c8581 3px solid;
+            margin: 0 var(--outer-gap-size);
+        }
+
+        .dungeon-name {
+            font-weight: bold;
+            font-family: Cambria;
+            font-size: 24px;
+            font-variant: small-caps;
+            color: #8c8581;
+        }
+
+        .dungeon-dices {
+            margin-left: auto;
+            display: flex;
+        }
+
+        .dungeon-dice, .dungeon-wandering-dice {
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 22px;
+            width: 22px;
+        }
+
+        .dungeon-dice {
+            background-image: url("assets/img/evilDice.svg");
+        }
+        .dungeon-wandering-dice {
+            background-image: url("assets/img/wanderingMonster.svg");
+        }
+
+        .dungeon-grid {
             --row-count: 6;
             --column-count: 6;
-            background-color: #e6e5e5;
             display: grid;
             grid-template-columns: repeat(var(--row-count), 1fr);
             grid-template-rows: repeat(var(--column-count), 1fr);
             gap: var(--gap-size);
-            padding: var(--gap-size);
-            width: calc(var(--column-count) * var(--tile-size) + (var(--column-count) + 1) * var(--gap-size));
-            height: calc(var(--column-count) * var(--tile-size) + (var(--column-count) + 1) * var(--gap-size));
+            padding: calc(var(--outer-gap-size) / 2) var(--outer-gap-size);
+            width: calc(var(--column-count) * var(--tile-size) + (var(--column-count) - 1) * var(--gap-size) + var(--outer-gap-size));
+            height: calc(var(--column-count) * var(--tile-size) + (var(--column-count) - 1) * var(--gap-size) + calc(var(--outer-gap-size) / 2));
         }
 
         .tile {
-            border-radius: 3px;
+            border-radius: var(--border-radius);
         }
 
         .tile-space {
