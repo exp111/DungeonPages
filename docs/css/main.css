@@ -101,13 +101,31 @@
     font-size: 18px;
 }
 
+.character-weapons-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 3px;
+}
 .character-weapons-weapon {
     display: grid;
     grid-template-columns: 2fr 0.5fr 1fr;
+    gap: 2px;
+}
+
+.character-weapons-weapon > div {
+    color: #315067;
+    background-color: white;
+    border: 1px solid #bfbfc0;
+    border-radius: var(--border-radius);
+}
+.character-weapons-weapon > div:not(:first-child) {
+    text-align: center;
 }
 
 .character-weapons-weapon-effects {
     display: flex;
+    align-items: center;
+    padding-left: 5px;
 }
 
 .map {
