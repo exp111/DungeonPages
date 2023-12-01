@@ -13,6 +13,7 @@ class Character {
         this.DOMObject = ret;
         // Name
         let name = document.createElement("div");
+        name.classList.add("character-name");
         name.innerText = this.Name;
         ret.appendChild(name);
         // Health

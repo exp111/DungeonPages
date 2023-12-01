@@ -1170,6 +1170,42 @@
             "height": 1
         }]
     }],
-    "monsters": [],
-    "traps": []
+    "monsters": [
+        {
+            "name": "Guardian",
+            "type": "guardian",
+            "attack": 5,
+            "damage": 1,
+            "defense": 3,
+            "hp": 2
+        }, 
+        {
+            "name": "Steadfast Orc",
+            "type": "orc",
+            "attack": 4,
+            "damage": 1,
+            "defense": 4,
+            "hp": 2,
+            "xp": 2,
+            "effect": "steadfast"
+        },
+        {
+            "name": "Berserk Dragon",
+            "type": "dragon",
+            "attack": 4,
+            "damage": 2,
+            "defense": 6,
+            "hp": 5,
+            "xp": 5,
+            "effect": "berserk"
+        }
+    ],
+    "traps": [
+        {
+            "name": "Cursed Fog",
+            "type": "fog",
+            "disarm": 6,
+            "effect": "fog"
+        }
+    ]
 }

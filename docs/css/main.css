@@ -13,6 +13,11 @@
     padding: 10px 0;
 }
 
+.character-name {
+    font-family: Cambria;
+    font-variant: small-caps;
+}
+
 .character-health {
     --row-count: 3;
     --column-count: 3;
@@ -106,9 +111,13 @@
 }
 
 .map {
+
+}
+
+.dungeons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 20px 30px;
     padding: 10px 0;
 }
@@ -280,4 +289,46 @@
 }
 .bonus-rerollAny {
     background-image: url("../assets/img/rerollAny.svg");
+}
+
+.legend {
+    display: flex;
+    background-color: #f9f9f8;
+    gap: 5px;
+}
+
+
+.monsters-title {
+    display: flex;
+}
+.monsters-title-icon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+}
+.monsters-title-name {
+    font-family: Cambria;
+    font-variant: small-caps;
+    color: #315067;
+}
+
+.monsters-stats {
+    display: flex;
+    border: 1px solid black;
+    border-radius: var(--border-radius);
+}
+.monsters-stats-stat {
+    border-right: 1px solid black;
+    background-color: #e7e6e5;
+    color: #315067;
+}
+.monsters-stats-stat:nth-child(-n+2) {
+    color: white;
+    background-color: #315067;
+}
+.monsters-stats-stat:last-child {
+    border-right: none;
+    background-color: white;
 }

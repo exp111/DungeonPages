@@ -24,9 +24,14 @@ class Map {
         let ret = document.createElement("div");
         ret.classList.add("map");
         this.DOMObject = ret;
+        // dungeons
+        let dungeons = document.createElement("div");
+        dungeons.classList.add("dungeons");
+        ret.appendChild(dungeons);
         for (let i in this.Dungeons) {
             let d = this.Dungeons[i];
-            ret.appendChild(d.DOMObject);
+            dungeons.appendChild(d.DOMObject);
+            // listen to event and propagate
             d.OnTileClick = (e) => {
                 if (this.OnTileClick) {
                     this.OnTileClick({
@@ -34,6 +39,18 @@ class Map {
                     })
                 }
             };
+        }
+        // monsters + traps
+        let legend = document.createElement("div");
+        legend.classList.add("legend");
+        ret.appendChild(legend);
+        for (let i in this.Monsters) {
+            let m = this.Monsters[i];
+            legend.appendChild(m.DOMObject);
+        }
+        for (let i in this.Traps) {
+            let t = this.Traps[i];
+            legend.appendChild(t.DOMObject);
         }
         return ret;
     }
@@ -44,9 +61,14 @@ class Map {
             let d = json.dungeons[i];
             map.Dungeons.push(Dungeon.FromJson(d));
         }
-        //TODO: monsters, traps
-        map.Monsters = json.monster,
-            map.Traps = map.Traps;
+        for (let i in json.monsters) {
+            let m = json.monsters[i];
+            map.Monsters.push(Monster.FromJson(m));
+        }
+        for (let i in json.traps) {
+            let t = json.traps[i];
+            map.Traps.push(Trap.FromJson(t));
+        }
         map.CreateDOM();
         return map;
     }
@@ -205,5 +227,97 @@ class Tile {
             tile.Height = json.height;
         tile.CreateDOM(tile);
         return tile;
+    }
+}
+
+class Monster {
+    Name = "";
+    Type = "";
+    Attack = 0;
+    Damage = 0;
+    Defense = 0;
+    HP = 0;
+    XP = 1;
+    Effect = null;
+    DOMObject = null;
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        this.DOMObject = ret;
+        // Title
+        let title = document.createElement("div");
+        title.classList.add("monsters-title");
+        ret.appendChild(title);
+        /// Icon
+        let icon = document.createElement("div");
+        icon.classList.add("monsters-title-icon");
+        icon.classList.add(`tile-${this.Type}`);
+        title.appendChild(icon);
+        /// Name
+        let name = document.createElement("div");
+        name.classList.add("monsters-title-name");
+        name.innerText = this.Name;
+        title.appendChild(name);
+        //TODO: Stats
+        let stats = document.createElement("div");
+        stats.classList.add("monsters-stats");
+        ret.appendChild(stats);
+        /// ATK
+        function add(val, txt) {
+            let el = document.createElement("div");
+            el.classList.add("monsters-stats-stat");
+            el.appendChild(new Text(val));
+            el.appendChild(document.createElement("br"));
+            el.appendChild(new Text(txt));
+            stats.appendChild(el);
+        }
+        add(`${this.Attack}+`, "ATK");
+        add(`${this.Damage}`, "DMG");
+        add(`${this.Defense}+`, "DEF");
+        add(`${this.HP}`, "HP");
+        add(`${this.XP}`, "XP");
+        return ret;
+    }
+
+    static FromJson(json) {
+        let ret = new Monster();
+        ret.Name = json.name;
+        ret.Type = json.type;
+        ret.Attack = json.attack;
+        ret.Damage = json.damage;
+        ret.Defense = json.defense;
+        ret.HP = json.hp;
+        if (json.xp != null)
+            ret.XP = json.xp;
+        if (json.effect != null)
+            ret.Effect = json.effect;
+        ret.CreateDOM();
+        return ret;
+    }
+}
+
+class Trap {
+    Name = "";
+    Type = "";
+    Disarm = 0;
+    Effect = null; //Fog //TODO: enum
+    DOMObject = null;
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        this.DOMObject = ret;
+        //TODO: this
+        return ret;
+    }
+
+    static FromJson(json) {
+        let ret = new Trap();
+        ret.Name = json.name;
+        ret.Type = json.type;
+        ret.Disarm = json.disarm;
+        if (json.effect != null)
+            ret.Effect = json.effect;
+        ret.CreateDOM();
+        return ret;
     }
 }
