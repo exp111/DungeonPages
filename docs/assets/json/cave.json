@@ -1,0 +1,119 @@
+{
+    "name": "The Cave",
+    "rows": 6,
+    "columns": 6,
+    "dice": 1,
+    "tiles": [{
+            "type": "wall"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "entry"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "monster",
+            "subtype": "guardian"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "item",
+            "subtype": "coin"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "item",
+            "subtype": "potion"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "item",
+            "subtype": "coin"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "space"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "exit"
+        },
+        {
+            "type": "wall"
+        },
+        {
+            "type": "wall"
+        }
+    ]
+}

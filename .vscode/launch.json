@@ -1,0 +1,24 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DungeonPages",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": false,
+            "file": "${workspaceFolder}/docs/index.html",
+            "profile": "debug",
+            "keepProfileChanges": true
+        },
+        {
+            "name": "MapEditor",
+            "type": "firefox",
+            "request": "launch",
+            "reAttach": false,
+            "file": "${workspaceFolder}/docs/mapeditor.html"
+        }
+    ]
+}
