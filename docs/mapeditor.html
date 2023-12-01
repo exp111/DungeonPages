@@ -78,7 +78,7 @@
 
         function load() {
             let el = document.getElementById("json");
-            let txt = el.textContent;
+            let txt = el.value;
             let json = JSON.parse(txt);
             let map = Map.FromJson(json);
             console.log(map);
@@ -88,7 +88,7 @@
 
         function exportMap() {
             let el = document.getElementById("json");
-            el.textContent = JSON.stringify(Global.map.ToJson());
+            el.value = JSON.stringify(Global.map.ToJson());
         }
 
         function newMap() {
@@ -119,8 +119,12 @@
         }
 
         function loadMap() {
+            let map = document.getElementById("map");
+            // clear old map
+            map.innerHTML = "";
+            // 
             Global.map.OnTileClick = (e) => OnTileClick(e.tile);
-            document.getElementById("map").appendChild(Global.map.DOMObject);
+            map.appendChild(Global.map.DOMObject);
         }
 
         function TypeSelected() {
@@ -160,8 +164,7 @@
             let type = Global.selectedType;
             let subtype = Global.selectedSubType;
             tile.Type = type;
-            if (subtype != null)
-                tile.Subtype = subtype;
+            tile.Subtype = subtype;
             tile.UpdateDOM();
         }
     </script>

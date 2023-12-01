@@ -169,6 +169,7 @@ class Tile {
             "width": this.Width,
             "height": this.Height
         };
+        //TODO: dont add values if they're default
         return ret;
     }
 
