@@ -3,7 +3,9 @@ class Map {
     Monsters = [];
     Traps = [];
     DOMObject = null;
-    
+    // Events
+    OnTileClick = null;
+
     //TODO: can we do this automatically
     ToJson() {
         let ret = {
@@ -11,8 +13,7 @@ class Map {
             monsters: [],
             traps: [],
         };
-        for (let i in this.Dungeons)
-        {
+        for (let i in this.Dungeons) {
             let d = this.Dungeons[i];
             ret.dungeons.push(d.ToJson());
         }
@@ -25,6 +26,13 @@ class Map {
         for (let i in this.Dungeons) {
             let d = this.Dungeons[i];
             ret.appendChild(d.DOMObject);
+            d.OnTileClick = (e) => {
+                if (this.OnTileClick) {
+                    this.OnTileClick({
+                        "tile": e.tile
+                    })
+                }
+            };
         }
         this.DOMObject = ret;
         return ret;
@@ -32,14 +40,13 @@ class Map {
     static FromJson(json) {
         let map = new Map();
 
-        for (let i in json.dungeons)
-        {
+        for (let i in json.dungeons) {
             let d = json.dungeons[i];
             map.Dungeons.push(Dungeon.FromJson(d));
         }
         //TODO: monsters, traps
         map.Monsters = json.monster,
-        map.Traps = map.Traps;
+            map.Traps = map.Traps;
         map.CreateDOM();
         return map;
     }
@@ -67,8 +74,7 @@ class Dungeon {
             "height": this.Height,
             "tiles": []
         }
-        for (let i in this.Tiles)
-        {
+        for (let i in this.Tiles) {
             let t = this.Tiles[i];
             ret.tiles.push(t.ToJson());
         }
@@ -90,20 +96,18 @@ class Dungeon {
         let dices = document.createElement("div");
         dices.classList.add("dungeon-dices");
         // wandering dice
-        if (this.Dice >= 2)
-        {
+        if (this.Dice >= 2) {
             let wandering = document.createElement("div");
             wandering.classList.add("dungeon-wandering-dice");
             dices.appendChild(wandering);
         }
-        for (let i = 0; i < this.Dice; i++)
-        {
+        for (let i = 0; i < this.Dice; i++) {
             let dice = document.createElement("div");
             dice.classList.add("dungeon-dice");
             dices.appendChild(dice);
         }
         title.appendChild(dices);
-        
+
         // Create the grid
         let grid = document.createElement("div");
         grid.classList.add("dungeon-grid");
@@ -112,10 +116,17 @@ class Dungeon {
         ret.style.setProperty("grid-column-end", `span ${this.Width}`);
         ret.style.setProperty("grid-row-end", `span ${this.Height}`);
         // then add the tiles
-        for (let i in this.Tiles)
-        {
+        for (let i in this.Tiles) {
             let t = this.Tiles[i];
             grid.appendChild(t.DOMObject);
+            // trigger event on click
+            t.DOMObject.onclick = (e) => {
+                if (this.OnTileClick) {
+                    this.OnTileClick({
+                        "tile": t
+                    })
+                }
+            };
         }
         ret.appendChild(grid);
         // then return
@@ -127,7 +138,7 @@ class Dungeon {
 
         dungeon.Name = json.name;
         dungeon.Rows = json.rows,
-        dungeon.Columns = json.columns;
+            dungeon.Columns = json.columns;
         if (json.width != null)
             dungeon.Width = json.width;
         if (json.height != null)
@@ -164,15 +175,22 @@ class Tile {
     CreateDOM() {
         // Create tile
         let ret = document.createElement("div");
-        ret.classList.add("tile");
-        ret.classList.add(`tile-${this.Type}`);
-        if (this.Subtype)
-            ret.classList.add(`tile-${this.Subtype}`);
-        ret.style.setProperty("grid-column-end", `span ${this.Width}`);
-        ret.style.setProperty("grid-row-end", `span ${this.Height}`);
-        // return it
         this.DOMObject = ret;
+        this.UpdateDOM();
+        // return it
         return ret;
+    }
+
+    UpdateDOM() {
+        // clear
+        this.DOMObject.className = "";
+        // then add the classes
+        this.DOMObject.classList.add("tile");
+        this.DOMObject.classList.add(`tile-${this.Type}`);
+        if (this.Subtype)
+            this.DOMObject.classList.add(`tile-${this.Subtype}`);
+        this.DOMObject.style.setProperty("grid-column-end", `span ${this.Width}`);
+        this.DOMObject.style.setProperty("grid-row-end", `span ${this.Height}`);
     }
 
     static FromJson(json) {

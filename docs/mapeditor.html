@@ -4,6 +4,38 @@
 <head>
     <title>Map Editor</title>
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <style>
+        .button-select {
+            height: 50px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .button-select::-moz-focus-inner {
+            border: 0;
+        }
+
+        .button-select:focus {
+            outline: none;
+        }
+
+        .button-select option {
+            width: 50px;
+            font-size: 1.2em;
+            padding: 10px 0;
+            text-align: center;
+            margin-right: 20px;
+            display: inline-block;
+            cursor: pointer;
+            background: #f4f4f6;
+            border-radius: 5px;
+            color: black;
+        }
+
+        .button-select option:checked {
+            background: #9a9a9b;
+        }
+    </style>
 </head>
 
 <body>
@@ -11,12 +43,38 @@
     <button onclick="load()">Load</button>
     <button onclick="exportMap()">Export</button>
     <button onclick="newMap()">New</button>
+    <div>
+        Types:
+        <select class="button-select" id="types" multiple onchange="TypeSelected()">
+            <option value="space">Space</option>
+            <option value="wall">Wall</option>
+            <option value="monster">Monster</option>
+            <option value="item">Item</option>
+            <option value="trap">Trap</option>
+            <option value="entry">Entry</option>
+            <option value="exit">Exit</option>
+        </select>
+    </div>
+    <div>
+        Subtypes:
+        <select class="button-select" id="subtypes" multiple onchange="SubtypeSelected()"></select>
+    </div>
     <div id="map">
 
     </div>
     <script src="js/map.js"></script>
     <script>
-        var Global = {map: null};
+        var Global = {
+            map: null,
+            subTypes: {
+                "monster": ["guardian", "orc"],
+                "item": ["coin", "potion", "key"],
+                "trap": ["fog"]
+            },
+            selectedType: null,
+            selectedSubType: null,
+        };
+
 
         function load() {
             let el = document.getElementById("json");
@@ -25,7 +83,7 @@
             let map = Map.FromJson(json);
             console.log(map);
             Global.map = map;
-            document.getElementById("map").appendChild(Global.map.DOMObject);
+            loadMap();
         }
 
         function exportMap() {
@@ -35,22 +93,19 @@
 
         function newMap() {
             let m = new Map();
-            for (let i = 0; i < 5; i++)
-            {
+            for (let i = 0; i < 5; i++) {
                 let d = new Dungeon();
                 d.Name = `Dungeon ${i}`;
                 d.Rows = 6;
                 d.Columns = 6;
-                if (i == 4)  {
+                if (i == 4) {
                     //boss
                     d.Name = "Boss Dungeon";
                     d.Width = 2;
                     d.Rows = 14;
                 }
-                for (let x = 0; x < d.Rows; x++)
-                {
-                    for (let y = 0; y < d.Columns; y++)
-                    {
+                for (let x = 0; x < d.Rows; x++) {
+                    for (let y = 0; y < d.Columns; y++) {
                         let t = new Tile();
                         t.Type = "space";
                         d.Tiles.push(t);
@@ -60,7 +115,54 @@
             }
             Global.map = Map.FromJson(m.ToJson());
             exportMap();
+            loadMap();
+        }
+
+        function loadMap() {
+            Global.map.OnTileClick = (e) => OnTileClick(e.tile);
             document.getElementById("map").appendChild(Global.map.DOMObject);
+        }
+
+        function TypeSelected() {
+            let select = document.getElementById("types");
+            let val = select.value;
+            Global.selectedType = select.value;
+            // clear subtype select
+            let subSelect = document.getElementById("subtypes");
+            subSelect.innerHTML = "";
+            // fill if available
+            if (Global.subTypes[val] != null) {
+                let sub = Global.subTypes[val];
+                for (let i in sub) {
+                    let s = sub[i];
+                    subSelect.appendChild(new Option(s, s));
+                }
+                subSelect.selectedIndex = 0;
+                SubtypeSelected();
+            }
+            else
+            {
+                Global.selectedSubType = null;
+            }
+        }
+
+        function SubtypeSelected() {
+            let select = document.getElementById("subtypes");
+            Global.selectedSubType = select.value;
+        }
+
+        function OnTileClick(tile) {
+            if (Global.selectedType == null) {
+                console.error("No tile selected");
+                return;
+            }
+
+            let type = Global.selectedType;
+            let subtype = Global.selectedSubType;
+            tile.Type = type;
+            if (subtype != null)
+                tile.Subtype = subtype;
+            tile.UpdateDOM();
         }
     </script>
 </body>
