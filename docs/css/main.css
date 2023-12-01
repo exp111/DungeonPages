@@ -324,6 +324,8 @@
 }
 .monsters-monster-title, .traps-trap-title {
     display: flex;
+    align-items: start;
+    margin-bottom: 2px;
 }
 .monsters-monster-title-icon, .traps-trap-title-icon {
     background-position: center center;
