@@ -23,6 +23,7 @@ class Map {
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("map");
+        this.DOMObject = ret;
         for (let i in this.Dungeons) {
             let d = this.Dungeons[i];
             ret.appendChild(d.DOMObject);
@@ -34,7 +35,6 @@ class Map {
                 }
             };
         }
-        this.DOMObject = ret;
         return ret;
     }
     static FromJson(json) {
@@ -83,6 +83,7 @@ class Dungeon {
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("dungeon");
+        this.DOMObject = ret;
         // title bar
         let title = document.createElement("div");
         title.classList.add("dungeon-title");
@@ -130,7 +131,6 @@ class Dungeon {
         }
         ret.appendChild(grid);
         // then return
-        this.DOMObject = ret;
         return ret;
     }
     static FromJson(json) {

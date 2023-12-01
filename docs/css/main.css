@@ -37,7 +37,7 @@
 .character-health-icon {
     background-image: url("../assets/img/plus.svg");
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-position: center center;
     height: 9px;
     width: 9px;
@@ -77,6 +77,15 @@
 
 .character-xp-point:checked {
     background-color: black;
+}
+
+.character-weapons-weapon {
+    display: grid;
+    grid-template-columns: 2fr 0.5fr 1fr;
+}
+
+.character-weapons-weapon-effects {
+    display: flex;
 }
 
 .map {
@@ -213,4 +222,27 @@
 .tile-lock {
     background-color: #b9b5b3;
     background-image: url("../assets/img/lock.svg");
+}
+
+.effect {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+.effect-ortho {
+    background-image: url("../assets/img/effects/orthogonal.svg");
+    width: 16px;
+    height: 16px;
+}
+
+.effect-straightVert {
+    background-image: url("../assets/img/effects/straightVert.svg");
+    width: 16px;
+    height: 16px;
+}
+
+.effect-straightHori {
+    background-image: url("../assets/img/effects/straightHori.svg");
+    width: 16px;
+    height: 16px;
 }

@@ -37,25 +37,25 @@
     "weapons": [{
             "name": "Oak Staff",
             "range": 1,
-            "effects": ["Ortho"]
+            "effects": ["ortho"]
         },
         {
             "name": "Lightning Bolt",
             "treshold": 6,
             "range": 2,
-            "effects": ["StraightLine"]
+            "effects": ["straightVert", "straightHori"]
         },
         {
             "name": "Elder Fire",
             "treshold": 16,
             "range": 3,
-            "effects": ["StraightLine"]
+            "effects": ["straightVert", "straightHori"]
         },
         {
             "name": "Staff of Power",
             "treshold": 28,
             "range": 2,
-            "effects": ["Ortho"]
+            "effects": ["ortho"]
         }
     ],
     "relics": []

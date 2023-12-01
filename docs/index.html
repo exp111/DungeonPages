@@ -25,11 +25,13 @@
             var char = Character.FromJson(json);
             var c = document.getElementById("character");
             c.appendChild(char.DOMObject);
+            Global.character = char;
         });
         loadMapJson("highmountVillage.json").then((json) => {
             var map = Map.FromJson(json);
             var m = document.getElementById("map");
             m.appendChild(map.DOMObject);
+            Global.map = map;
         });
     </script>
 </body>

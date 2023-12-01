@@ -2,14 +2,15 @@ class Character {
     Name = "";
     Ability = null;
     Health = null;
-    Experience = null; // XP unlocks
-    Weapons = [];
+    Experience = null;
+    Weapons = null;
     Relics = [];
     DOMObject = null;
 
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("character");
+        this.DOMObject = ret;
         // Name
         let name = document.createElement("div");
         name.innerText = this.Name;
@@ -21,8 +22,8 @@ class Character {
         // XP
         ret.appendChild(this.Experience.DOMObject);
         // Weapons
+        ret.appendChild(this.Weapons.DOMObject);
         // Relics
-        this.DOMObject = ret;
         return ret;
     }
 
@@ -32,10 +33,7 @@ class Character {
         ret.Ability = Ability.FromJson(json.ability);
         ret.Health = Health.FromJson(json.health);
         ret.Experience = Experience.FromJson(json.bonuses);
-        for (let i in json.weapons) {
-            let w = json.weapons[i];
-            ret.Weapons.push(Weapon.FromJson(w));
-        }
+        ret.Weapons = Weapons.FromJson(json.weapons);
         for (let i in json.relics) {
             let r = json.relics[i];
             ret.Relics.push(Relic.FromJson(r));
@@ -55,6 +53,7 @@ class Health {
         // Wrapper
         let ret = document.createElement("div");
         ret.classList.add("character-health");
+        this.DOMObject = ret;
         // Elements
         for (let i in this.Elements) {
             let count = this.Elements[i];
@@ -83,7 +82,6 @@ class Health {
             element.appendChild(icons);
             ret.appendChild(element);
         }
-        this.DOMObject = ret;
         return ret;
     }
     static FromJson(json) {
@@ -101,13 +99,13 @@ class Ability {
 
     CreateDOM() {
         let ret = document.createElement("div");
+        this.DOMObject = ret;
         // Name
         let name = document.createElement("div");
         name.innerText = this.Name;
         ret.appendChild(name);
         //TODO: description?
         // return it
-        this.DOMObject = ret;
         return ret;
     }
     static FromJson(json) {
@@ -128,6 +126,7 @@ class Experience {
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("character-xp");
+        this.DOMObject = ret;
         // Points
         let points = document.createElement("div");
         points.classList.add("character-xp-points");
@@ -145,7 +144,6 @@ class Experience {
             points.appendChild(grid);
         }
         ret.appendChild(points);
-        this.DOMObject = ret;
         return ret;
     }
 
@@ -174,20 +172,83 @@ class Bonus {
     }
 }
 
+class Weapons {
+    Weapons = [];
+    DOMObject = null;
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        ret.classList.add("character-weapons");
+        this.DOMObject = ret;
+        let weapons = document.createElement("div");
+        weapons.classList.add("character-weapons-list");
+        ret.appendChild(weapons);
+        for (let i in this.Weapons) {
+            let w = this.Weapons[i];
+            weapons.appendChild(w.DOMObject);
+        }
+        return ret;
+    }
+
+    static FromJson(json) {
+        let ret = new Weapons();
+        for (let i in json) {
+            let w = json[i];
+            ret.Weapons.push(Weapon.FromJson(w));
+        }
+        ret.CreateDOM();
+        return ret;
+    }
+}
 class Weapon {
     Name = "";
     Treshold = 0;
     Range = 1;
     Effects = []; // Ortho,Diag,StraightLine,DiagLine //TODO: enum
     //TODO: alt effects like reroll 1
+    DOMObject = null;
+    Unlocked = false;
 
+    CreateDOM() {
+        let ret = document.createElement("div");
+        ret.classList.add("character-weapons-weapon");
+        this.DOMObject = ret;
+        // Name
+        let name = document.createElement("div");
+        /// Checkbox before name
+        let check = document.createElement("input");
+        check.type = "checkbox";
+        check.checked = this.Unlocked;
+        check.disabled = true;
+        name.innerText = `${this.Name} (${this.Treshold})`;
+        name.prepend(check);
+        ret.appendChild(name);
+        // Range
+        let range = document.createElement("div");
+        range.innerText = this.Range;
+        ret.appendChild(range);
+        // Effects
+        let effects = document.createElement("div");
+        effects.classList.add("character-weapons-weapon-effects");
+        ret.appendChild(effects);
+        for (let i in this.Effects) {
+            let e = this.Effects[i];
+            let ef = document.createElement("div");
+            ef.classList.add("effect");
+            ef.classList.add(`effect-${e}`);
+            effects.appendChild(ef);
+        }
+        return ret;
+    }
     static FromJson(json) {
         let ret = new Weapon();
         ret.Name = json.name;
         if (json.treshold != null)
             ret.Treshold = json.treshold;
-        ret.Range = json.Range;
+        ret.Range = json.range;
         ret.Effects = json.effects;
+        ret.Unlocked = ret.Treshold == 0; // default unlocked
+        ret.CreateDOM();
         return ret;
     }
 }
