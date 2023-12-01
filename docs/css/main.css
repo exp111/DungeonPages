@@ -179,6 +179,7 @@
 }
 .dungeon-wandering-dice {
     background-image: url("../assets/img/wanderingMonster.svg");
+    margin-right: var(--gap-size);
 }
 
 .dungeon-grid {
