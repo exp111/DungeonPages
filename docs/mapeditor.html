@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Map Editor</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
+</head>
+
+<body>
+    <textarea id="json" placeholder="Map JSON"></textarea>
+    <button onclick="load()">Load</button>
+    <button onclick="exportMap()">Export</button>
+    <button onclick="newMap()">New</button>
+    <div id="map">
+
+    </div>
+    <script src="js/map.js"></script>
+    <script>
+        var Global = {map: null};
+
+        function load() {
+            let el = document.getElementById("json");
+            let txt = el.textContent;
+            let json = JSON.parse(txt);
+            let map = Map.FromJson(json);
+            console.log(map);
+            Global.map = map;
+            document.getElementById("map").appendChild(Global.map.DOMObject);
+        }
+
+        function exportMap() {
+            let el = document.getElementById("json");
+            el.textContent = JSON.stringify(Global.map.ToJson());
+        }
+
+        function newMap() {
+            let m = new Map();
+            for (let i = 0; i < 5; i++)
+            {
+                let d = new Dungeon();
+                d.Name = `Dungeon ${i}`;
+                d.Rows = 6;
+                d.Columns = 6;
+                if (i == 4)  {
+                    //boss
+                    d.Name = "Boss Dungeon";
+                    d.Width = 2;
+                    d.Rows = 14;
+                }
+                for (let x = 0; x < d.Rows; x++)
+                {
+                    for (let y = 0; y < d.Columns; y++)
+                    {
+                        let t = new Tile();
+                        t.Type = "space";
+                        d.Tiles.push(t);
+                    }
+                }
+                m.Dungeons.push(d);
+            }
+            Global.map = Map.FromJson(m.ToJson());
+            exportMap();
+            document.getElementById("map").appendChild(Global.map.DOMObject);
+        }
+    </script>
+</body>
+
+</html>
