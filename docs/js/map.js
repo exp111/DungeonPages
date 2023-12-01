@@ -44,13 +44,21 @@ class Map {
         let legend = document.createElement("div");
         legend.classList.add("legend");
         ret.appendChild(legend);
+        /// monsters
+        let monsters = document.createElement("div");
+        monsters.classList.add("monsters");
+        legend.appendChild(monsters);
         for (let i in this.Monsters) {
             let m = this.Monsters[i];
-            legend.appendChild(m.DOMObject);
+            monsters.appendChild(m.DOMObject);
         }
+        /// traps
+        let traps = document.createElement("div");
+        traps.classList.add("traps");
+        legend.appendChild(traps);
         for (let i in this.Traps) {
             let t = this.Traps[i];
-            legend.appendChild(t.DOMObject);
+            traps.appendChild(t.DOMObject);
         }
         return ret;
     }
@@ -243,29 +251,30 @@ class Monster {
 
     CreateDOM() {
         let ret = document.createElement("div");
+        ret.classList.add("monsters-monster");
         this.DOMObject = ret;
         // Title
         let title = document.createElement("div");
-        title.classList.add("monsters-title");
+        title.classList.add("monsters-monster-title");
         ret.appendChild(title);
         /// Icon
         let icon = document.createElement("div");
-        icon.classList.add("monsters-title-icon");
+        icon.classList.add("monsters-monster-title-icon");
         icon.classList.add(`tile-${this.Type}`);
         title.appendChild(icon);
         /// Name
         let name = document.createElement("div");
-        name.classList.add("monsters-title-name");
+        name.classList.add("monsters-monster-title-name");
         name.innerText = this.Name;
         title.appendChild(name);
-        //TODO: Stats
+        // Stats
         let stats = document.createElement("div");
-        stats.classList.add("monsters-stats");
+        stats.classList.add("monsters-monster-stats");
         ret.appendChild(stats);
-        /// ATK
+        /// simple func to minimize boilerplate for each stat
         function add(val, txt) {
             let el = document.createElement("div");
-            el.classList.add("monsters-stats-stat");
+            el.classList.add("monsters-monster-stats-stat");
             el.appendChild(new Text(val));
             el.appendChild(document.createElement("br"));
             el.appendChild(new Text(txt));
@@ -276,6 +285,7 @@ class Monster {
         add(`${this.Defense}+`, "DEF");
         add(`${this.HP}`, "HP");
         add(`${this.XP}`, "XP");
+        //TODO: effect
         return ret;
     }
 
@@ -305,8 +315,35 @@ class Trap {
 
     CreateDOM() {
         let ret = document.createElement("div");
+        ret.classList.add("traps-trap");
         this.DOMObject = ret;
-        //TODO: this
+        // Title
+        let title = document.createElement("div");
+        title.classList.add("traps-trap-title");
+        ret.appendChild(title);
+        /// Icon
+        let icon = document.createElement("div");
+        icon.classList.add("traps-trap-title-icon");
+        icon.classList.add(`tile-${this.Type}`);
+        title.appendChild(icon);
+        /// Name
+        let name = document.createElement("div");
+        name.classList.add("traps-trap-title-name");
+        name.innerText = this.Name;
+        title.appendChild(name);
+        // Stats
+        let stats = document.createElement("div");
+        stats.classList.add("traps-trap-stats");
+        ret.appendChild(stats);
+        let dis = document.createElement("div");
+        dis.classList.add("traps-trap-stats-stat");
+        dis.innerText = "Disarm";
+        stats.appendChild(dis);
+        let val = document.createElement("div");
+        val.classList.add("traps-trap-stats-stat");
+        val.innerText = this.Disarm;
+        stats.appendChild(val);
+        //TODO: effect
         return ret;
     }
 

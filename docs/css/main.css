@@ -292,43 +292,52 @@
 }
 
 .legend {
+    padding: 10px;
     display: flex;
     background-color: #f9f9f8;
     gap: 5px;
 }
 
-
-.monsters-title {
+.monsters {
+    display: flex;
+    gap: 5px;
+    padding-right: 5px;
+    border-right: 1px solid black;
+}
+.monsters-monster-title, .traps-trap-title {
     display: flex;
 }
-.monsters-title-icon {
+.monsters-monster-title-icon, .traps-trap-title-icon {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
     width: 24px;
     height: 24px;
 }
-.monsters-title-name {
+.monsters-monster-title-name, .traps-trap-title-name {
     font-family: Cambria;
     font-variant: small-caps;
     color: #315067;
 }
 
-.monsters-stats {
+.monsters-monster-stats, .traps-trap-stats {
+    width: max-content;
     display: flex;
     border: 1px solid black;
     border-radius: var(--border-radius);
 }
-.monsters-stats-stat {
+.monsters-monster-stats-stat, .traps-trap-stats-stat {
+    padding: 1px;
+    text-align: center;
     border-right: 1px solid black;
     background-color: #e7e6e5;
     color: #315067;
 }
-.monsters-stats-stat:nth-child(-n+2) {
+.monsters-monster-stats-stat:nth-child(-n+2), .traps-trap-stats-stat:first-child {
     color: white;
     background-color: #315067;
 }
-.monsters-stats-stat:last-child {
+.monsters-monster-stats-stat:last-child, .traps-trap-stats-stat:last-child {
     border-right: none;
     background-color: white;
 }
