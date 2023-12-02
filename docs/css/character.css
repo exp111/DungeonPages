@@ -1,0 +1,150 @@
+.character {
+    background-color: #f9f8f8;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    padding: 10px 0;
+}
+
+.character-name {
+    font-family: Cambria;
+    font-variant: small-caps;
+}
+
+.character-health {
+    --row-count: 3;
+    --column-count: 3;
+    display: grid;
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    grid-template-rows: repeat(var(--row-count), 1fr);
+    width: max-content;
+    gap: 4px 0;
+}
+
+.character-health-element {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    border-radius: var(--border-radius);
+    border: 1px black solid;
+}
+
+.character-health-icons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.character-health-icon {
+    background-image: url("../assets/img/plus.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    height: 9px;
+    width: 9px;
+}
+
+.character-health-icon.checked:after {
+    content: "\2718";
+    position: relative;
+    top: -7px;
+    left: -2px;
+}
+
+.character-xp-points {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: min-content;
+    gap: 0px 10px;
+}
+
+.character-xp-points-part {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    width: min-content;
+    padding-right: 10px;
+    gap: 4px;
+    border-right: solid #c9cacb 1px;
+}
+.character-xp-points-part:last-child {
+    border-right: none;
+}
+
+.character-xp-point {
+    margin: 0;
+    width: 0.8em;
+    height: 0.8em;
+    background-color: white;
+    border-radius: 50%;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+}
+
+.character-xp-point:checked {
+    background-color: black;
+}
+
+.character-xp-bonuses {
+    display: flex;
+    column-gap: 5px;
+    font-size: 12px;
+}
+
+.character-xp-bonus-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: 18px;
+}
+
+.character-weapons-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 3px;
+}
+.character-weapons-weapon {
+    display: grid;
+    grid-template-columns: 2fr 0.5fr 1fr;
+    gap: 2px;
+}
+
+.character-weapons-weapon > div {
+    color: #315067;
+    background-color: white;
+    border: 1px solid #bfbfc0;
+    border-radius: var(--border-radius);
+}
+.character-weapons-weapon > div:not(:first-child) {
+    text-align: center;
+}
+
+.character-weapons-weapon-effects {
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+}
+
+.bonus {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    width: 24px;
+    height: 24px;
+}
+
+.bonus-die {
+    background-image: url("../assets/img/goodDice.svg");
+}
+.bonus-potion {
+    background-image: url("../assets/img/items/potion.svg");
+}
+.bonus-range {
+    background-image: url("../assets/img/range.svg");
+}
+.bonus-rerollAny {
+    background-image: url("../assets/img/rerollAny.svg");
+}

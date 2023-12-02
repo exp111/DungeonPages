@@ -1,0 +1,209 @@
+.dungeons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px 30px;
+    padding: 10px 0;
+}
+
+.dungeon {
+    background-color: #e6e5e5;
+    border-radius: var(--border-radius);
+    width: max-content;
+}
+
+.dungeon-title {
+    padding: 5px 0;
+    display: flex;
+    align-items: center;
+    border-bottom: #8c8581 3px solid;
+    margin: 0 var(--outer-gap-size);
+}
+
+.dungeon-name {
+    font-weight: bold;
+    font-family: Cambria;
+    font-size: 24px;
+    font-variant: small-caps;
+    color: #8c8581;
+}
+
+.dungeon-dices {
+    margin-left: auto;
+    display: flex;
+}
+
+.dungeon-dice, .dungeon-wandering-dice {
+    background-size: contain;
+    background-repeat: no-repeat;
+    height: 22px;
+    width: 22px;
+}
+
+.dungeon-dice {
+    background-image: url("../assets/img/evilDice.svg");
+}
+.dungeon-wandering-dice {
+    background-image: url("../assets/img/wanderingMonster.svg");
+    margin-right: var(--gap-size);
+}
+
+.dungeon-grid {
+    --row-count: 6;
+    --column-count: 6;
+    display: grid;
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    grid-template-rows: repeat(var(--row-count), 1fr);
+    gap: var(--gap-size);
+    padding: calc(var(--outer-gap-size) / 2) var(--outer-gap-size);
+    width: calc(var(--column-count) * var(--tile-size) + (var(--column-count) - 1) * var(--gap-size) + var(--outer-gap-size));
+    height: calc(var(--row-count) * var(--tile-size) + (var(--row-count) - 1) * var(--gap-size) + calc(var(--outer-gap-size) / 2));
+}
+
+.tile {
+    border-radius: var(--border-radius);
+}
+
+.tile-space, .tile-trap {
+    background-color: white;
+}
+
+.tile-wall {
+    background-color: #b9b5b3;
+}
+
+.tile-monster,
+.tile-item,
+.tile-entry,
+.tile-exit,
+.tile-trap,
+.tile-lock {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+}
+
+.tile-entry {
+    background-image: url("../assets/img/door.svg");
+}
+
+.tile-exit {
+    background-image: url("../assets/img/chest.svg");
+}
+
+.tile-coin {
+    background-image: url("../assets/img/items/coin.svg");
+}
+
+.tile-potion {
+    background-image: url("../assets/img/items/potion.svg");
+}
+
+.tile-doubleCoin {
+    background-image: url("../assets/img/items/doubleCoin.svg");
+}
+
+.tile-key {
+    background-image: url("../assets/img/items/key.svg");
+}
+
+.tile-poison {
+    background-image: url("../assets/img/items/poison.svg");
+}
+
+.tile-teleportPotion {
+    background-image: url("../assets/img/items/teleportPotion.svg");
+}
+
+.tile-guardian {
+    background-image: url("../assets/img/monsters/guardian.svg");
+}
+
+.tile-orc {
+    background-image: url("../assets/img/monsters/orc.svg");
+}
+
+.tile-dragon {
+    background-image: url("../assets/img/monsters/dragon.svg");
+}
+
+.tile-fog {
+    background-image: url("../assets/img/traps/fog.svg");
+}
+
+.tile-lock {
+    background-color: #b9b5b3;
+    background-image: url("../assets/img/lock.svg");
+}
+
+.legend {
+    padding: 10px;
+    display: flex;
+    background-color: #f9f9f8;
+    gap: 5px;
+}
+
+.monsters {
+    display: flex;
+    gap: 5px;
+    padding-right: 5px;
+    border-right: 1px solid black;
+}
+.monsters-monster-title, .traps-trap-title {
+    display: flex;
+    align-items: start;
+    margin-bottom: 2px;
+}
+.monsters-monster-title-icon, .traps-trap-title-icon {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 24px;
+    height: 24px;
+}
+.monsters-monster-title-name, .traps-trap-title-name {
+    font-family: Cambria;
+    font-variant: small-caps;
+    color: #315067;
+}
+
+.monsters-monster-stats, .traps-trap-stats {
+    width: max-content;
+    display: flex;
+    border: 1px solid black;
+    border-radius: var(--border-radius);
+}
+.monsters-monster-stats-stat, .traps-trap-stats-stat {
+    padding: 1px;
+    text-align: center;
+    border-right: 1px solid black;
+    background-color: #e7e6e5;
+    color: #315067;
+}
+.monsters-monster-stats-stat:nth-child(-n+2), .traps-trap-stats-stat:first-child {
+    color: white;
+    background-color: #315067;
+}
+.monsters-monster-stats-stat:last-child, .traps-trap-stats-stat:last-child {
+    border-right: none;
+    background-color: white;
+}
+
+.effect {
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    width: 16px;
+    height: 16px;
+}
+.effect-ortho {
+    background-image: url("../assets/img/effects/orthogonal.svg");
+}
+
+.effect-straightVert {
+    background-image: url("../assets/img/effects/straightVert.svg");
+}
+
+.effect-straightHori {
+    background-image: url("../assets/img/effects/straightHori.svg");
+}
