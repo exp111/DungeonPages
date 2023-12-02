@@ -215,6 +215,17 @@ class Dungeon {
             let t = json.tiles[i];
             dungeon.Tiles.push(Tile.FromJson(t));
         }
+        // Check if we have the right amount of tiles
+        let count = 0;
+        let should = dungeon.Rows * dungeon.Columns;
+        for (let i in dungeon.Tiles) {
+            let t = dungeon.Tiles[i];
+            count += (t.Width * t.Height);
+        }
+        if (count != should) {
+            console.error(`Not enough/Too many Tiles in dungeon ${dungeon.Name} (has: ${count}, should: ${should})`)
+        }
+        dungeon.CalculateGrid();
         dungeon.CreateDOM();
         return dungeon;
     }
