@@ -46,7 +46,7 @@ class Character {
 
 class Health {
     Elements = [];
-    Lost = 0;
+    Lost = 1;
     Unlocked = 0;
     DOMObject = null;
 
@@ -70,7 +70,6 @@ class Health {
             check.type = "checkbox";
             check.classList.add("character-health-check");
             check.disabled = true;
-            check.checked = i <= this.Unlocked;
             element.appendChild(check);
             /// icons
             let icons = document.createElement("div");
@@ -83,7 +82,23 @@ class Health {
             element.appendChild(icons);
             ret.appendChild(element);
         }
+        this.UpdateUI();
         return ret;
+    }
+
+    UpdateUI() {
+        // Element checkboxes
+        let checks = this.DOMObject.getElementsByClassName("character-health-check");
+        for (let i = 0; i < checks.length; i++) {
+            let check = checks[i];
+            check.checked = i <= this.Unlocked;
+        }
+        // Health
+        let icons = this.DOMObject.getElementsByClassName("character-health-icon");
+        for (let i = 0; i < icons.length; i++) {
+            let icon = icons[i];
+            icon.classList.toggle("checked", i < this.Lost);
+        }
     }
 
     static FromJson(json) {

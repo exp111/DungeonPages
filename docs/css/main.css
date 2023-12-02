@@ -51,6 +51,13 @@
     width: 9px;
 }
 
+.character-health-icon.checked:after {
+    content: "\2718";
+    position: relative;
+    top: -7px;
+    left: -2px;
+}
+
 .character-xp-points {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
