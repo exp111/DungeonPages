@@ -19,6 +19,13 @@
             "request": "launch",
             "reAttach": false,
             "file": "${workspaceFolder}/docs/mapeditor.html"
-        }
+        },
+        {
+            "name": "DP Edge",
+            "type": "msedge",
+            "request": "launch",
+            "url": "http://localhost:8000/docs/index.html"
+            //"file": "${workspaceFolder}/docs/index.html"
+          }
     ]
 }
