@@ -5,6 +5,11 @@
     --border-radius: 5px;
 }
 
+.wrapper {
+    display: grid;
+    grid-template-columns: 0.5fr auto;
+}
+
 .character {
     background-color: #f9f8f8;
     display: grid;

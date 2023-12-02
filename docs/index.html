@@ -4,34 +4,50 @@
 <head>
     <title>Dungeon Pages</title>
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/dice.css" />
 </head>
 
 <body>
-    <div id="character">
+    <div class="wrapper">
+        <div id="dice">
 
-    </div>
-    <div id="map">
+        </div>
+        <div class="game">
+            <div id="character">
 
+            </div>
+            <div id="map">
+
+            </div>
+        </div>
     </div>
+    <script src="js/dice.js"></script>
     <script src="js/map.js"></script>
     <script src="js/character.js"></script>
     <script src="js/data.js"></script>
     <script>
         Global = {
+            dice: null,
             map: null,
             character: null,
         };
+        // Dice
+        Global.dice = new DicePool();
+        let d = document.getElementById("dice");
+        d.parentNode.replaceChild(Global.dice.DOMObject, d);
+        // Character
         loadCharacterJson("zafinn.json").then((json) => {
-            var char = Character.FromJson(json);
-            var c = document.getElementById("character");
-            c.appendChild(char.DOMObject);
+            let char = Character.FromJson(json);
+            let c = document.getElementById("character");
+            c.parentNode.replaceChild(char.DOMObject, c);
             Global.character = char;
             console.log(Global.character);
         });
+        // Map
         loadMapJson("highmountVillage.json").then((json) => {
-            var map = Map.FromJson(json);
-            var m = document.getElementById("map");
-            m.appendChild(map.DOMObject);
+            let map = Map.FromJson(json);
+            let m = document.getElementById("map");
+            m.parentNode.replaceChild(map.DOMObject, m);
             Global.map = map;
             Global.map.OnTileClick = (e) => OnTileClick(e.dungeon, e.tile);
             console.log(Global.map);
