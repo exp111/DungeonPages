@@ -46,7 +46,7 @@ class Character {
 
 class Health {
     Elements = [];
-    Lost = 1;
+    Lost = 0;
     Unlocked = 0;
     DOMObject = null;
 
