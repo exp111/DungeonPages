@@ -22,7 +22,7 @@
     --row-count: 3;
     --column-count: 3;
     display: grid;
-    grid-template-columns: repeat(var(--row-count), 1fr);
+    grid-template-columns: repeat(var(--column-count), 1fr);
     grid-template-rows: repeat(var(--row-count), 1fr);
     width: max-content;
     gap: 4px 0;
@@ -193,12 +193,12 @@
     --row-count: 6;
     --column-count: 6;
     display: grid;
-    grid-template-columns: repeat(var(--row-count), 1fr);
-    grid-template-rows: repeat(var(--column-count), 1fr);
+    grid-template-columns: repeat(var(--column-count), 1fr);
+    grid-template-rows: repeat(var(--row-count), 1fr);
     gap: var(--gap-size);
     padding: calc(var(--outer-gap-size) / 2) var(--outer-gap-size);
-    width: calc(var(--row-count) * var(--tile-size) + (var(--row-count) - 1) * var(--gap-size) + var(--outer-gap-size));
-    height: calc(var(--column-count) * var(--tile-size) + (var(--column-count) - 1) * var(--gap-size) + calc(var(--outer-gap-size) / 2));
+    width: calc(var(--column-count) * var(--tile-size) + (var(--column-count) - 1) * var(--gap-size) + var(--outer-gap-size));
+    height: calc(var(--row-count) * var(--tile-size) + (var(--row-count) - 1) * var(--gap-size) + calc(var(--outer-gap-size) / 2));
 }
 
 .tile {

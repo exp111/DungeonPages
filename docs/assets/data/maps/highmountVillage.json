@@ -753,8 +753,8 @@
         }]
     }, {
         "name": "Yormengod's Domain (Boss)",
-        "rows": 14,
-        "columns": 6,
+        "rows": 6,
+        "columns": 14,
         "dice": 3,
         "width": 2,
         "height": 1,
