@@ -156,7 +156,6 @@ class Experience {
                 p.classList.add("character-xp-point");
                 p.type = "checkbox";
                 p.disabled = true;
-                p.checked = (i * 25 + j) < this.Earned;
                 grid.appendChild(p);
             }
             points.appendChild(grid);
@@ -170,7 +169,18 @@ class Experience {
             bonuses.appendChild(bonus.DOMObject);
         }
         ret.appendChild(bonuses);
+        // update ui
+        this.UpdateUI();
         return ret;
+    }
+
+    UpdateUI() {
+        let points = this.DOMObject.getElementsByClassName("character-xp-point");
+        for (let i = 0; i < points.length; i++) {
+            let point = points[i];
+            point.checked = i < this.Earned;
+        }
+        //TODO: call child update?
     }
 
     static FromJson(json) {
@@ -198,9 +208,9 @@ class Bonus {
         let treshold = document.createElement("div");
         /// checkbox before treshold
         let check = document.createElement("input");
+        check.classList.add("character-xp-bonus-checkbox");
         check.type = "checkbox";
         check.disabled = true;
-        check.checked = this.Unlocked;
         treshold.innerText = `${this.Treshold}XP`;
         treshold.prepend(check);
         ret.appendChild(treshold);
@@ -218,7 +228,17 @@ class Bonus {
         bonus.classList.add(`bonus-${this.Type}`);
         bonusWrap.appendChild(bonus);
         ret.appendChild(bonusWrap);
+        // update ui
+        this.UpdateUI();
         return ret;
+    }
+
+    UpdateUI() {
+        let checks = this.DOMObject.getElementsByClassName("character-xp-bonus-checkbox");
+        for (let i = 0; i < checks.length; i++) {
+            let check = checks[i];
+            check.checked = this.Unlocked;
+        }
     }
 
     static FromJson(json) {
@@ -278,8 +298,8 @@ class Weapon {
         let name = document.createElement("div");
         /// Checkbox before name
         let check = document.createElement("input");
+        check.classList.add("character-weapons-weapon-checkbox");
         check.type = "checkbox";
-        check.checked = this.Unlocked;
         check.disabled = true;
         name.innerText = `${this.Name} (${this.Treshold})`;
         name.prepend(check);
@@ -299,7 +319,17 @@ class Weapon {
             ef.classList.add(`effect-${e}`);
             effects.appendChild(ef);
         }
+        // update ui
+        this.UpdateUI();
         return ret;
+    }
+
+    UpdateUI() {
+        let checks = this.DOMObject.getElementsByClassName("character-weapons-weapon-checkbox");
+        for (let i = 0; i < checks.length; i++) {
+            let check = checks[i];
+            check.checked = this.Unlocked;
+        }
     }
 
     static FromJson(json) {
