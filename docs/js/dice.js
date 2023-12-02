@@ -51,7 +51,7 @@ class DicePool {
         //TODO: get active dice?
         for (let i in this.Dice) {
             let dice = this.Dice[i];
-            dice.Value = Math.floor(Math.random() * 5) + 1;
+            dice.Value = Math.floor(Math.random() * 6) + 1;
             dice.UpdateUI();
         }
     }
