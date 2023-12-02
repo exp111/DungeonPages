@@ -16,6 +16,12 @@ class Dice {
         let ret = document.createElement("div");
         ret.classList.add("dicepool-dice");
         this.DOMObject = ret;
+        // add pips
+        for (let i = 0; i < 6; i++) {
+            let pip = document.createElement("span");
+            pip.classList.add("pip");
+            ret.appendChild(pip);
+        }
         this.UpdateUI();
         return ret;
     }
@@ -24,12 +30,11 @@ class Dice {
         let obj = this.DOMObject;
         // good
         obj.classList.toggle("evil", this.IsEvil);
-        // add pips
-        obj.innerHTML = "";
-        for (let i = 0; i < this.Value; i++) {
-            let pip = document.createElement("span");
-            pip.classList.add("pip");
-            obj.appendChild(pip);
+        // mark pips
+        let pips = obj.getElementsByClassName("pip");
+        for (let i = 0; i < pips.length; i++) {
+            let pip = pips[i];
+            pip.classList.toggle("active", i < this.Value);
         }
     }
 }

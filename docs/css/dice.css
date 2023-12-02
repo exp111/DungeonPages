@@ -12,55 +12,66 @@
     height: var(--dice-size);
     border-radius: var(--border-radius);
     background-color: #e7e7e7;
-    box-shadow: inset 0 calc(var(--dice-size) / 20) white, 
-        inset 0 calc(var(--dice-size) / -20) #bbb, 
+    box-shadow: inset 0 calc(var(--dice-size) / 20) white,
+        inset 0 calc(var(--dice-size) / -20) #bbb,
         inset calc(var(--dice-size) / 20) 0 #d7d7d7,
-		inset calc(var(--dice-size) / -20) 0 #d7d7d7;
+        inset calc(var(--dice-size) / -20) 0 #d7d7d7;
     padding: calc(var(--dice-size) / 20);
     display: grid;
-	grid-template-areas:
-		"a . c"
-		"e g f"
-		"d . b";
+    grid-template-areas:
+        "a . c"
+        "e g f"
+        "d . b";
 }
 
 .dicepool-dice.evil {
     background-color: #333;
-    box-shadow: inset 0 calc(var(--dice-size) / 20) black, 
-        inset 0 calc(var(--dice-size) / -20) #3b3b3b, 
+    box-shadow: inset 0 calc(var(--dice-size) / 20) black,
+        inset 0 calc(var(--dice-size) / -20) #3b3b3b,
         inset calc(var(--dice-size) / 20) 0 #575757,
-		inset calc(var(--dice-size) / -20) 0 #575757;
+        inset calc(var(--dice-size) / -20) 0 #575757;
 }
 
-.dicepool-dice > .pip {
+.dicepool-dice>.pip {
     display: block;
-	align-self: center;
-	justify-self: center;
+    align-self: center;
+    justify-self: center;
     width: calc(var(--dice-size) / 4);
     height: calc(var(--dice-size) / 4);
     border-radius: 50%;
     background-color: #333;
 }
-.dicepool-dice.evil > .pip {
+
+.dicepool-dice.evil>.pip {
     background-color: #e7e7e7;
 }
 
-.pip:nth-child(2) {
-	grid-area: b;
+.pip:not(.active) {
+    display: none;
 }
-.pip:nth-child(3) {
-	grid-area: c;
+
+.pip.active:nth-of-type(2) {
+    grid-area: b;
 }
-.pip:nth-child(4) {
-	grid-area: d;
+
+.pip.active:nth-of-type(3) {
+    grid-area: c;
 }
-.pip:nth-child(5) {
-	grid-area: e;
+
+.pip.active:nth-of-type(4) {
+    grid-area: d;
 }
-.pip:nth-child(6) {
-	grid-area: f;
+
+.pip.active:nth-of-type(5) {
+    grid-area: e;
 }
+
+.pip.active:nth-of-type(6) {
+    grid-area: f;
+}
+
 /* This selects the last pip of odd-valued dice (1, 3, 5) and positions the pip in the center */
-.pip:nth-child(odd):last-child {
-	grid-area: g;
+/* Last of type: https://stackoverflow.com/a/75200868 */
+.pip.active:nth-of-type(odd):has(+ :not(.pip.active)) {
+    grid-area: g;
 }
