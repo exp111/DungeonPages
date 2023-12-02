@@ -33,8 +33,13 @@
             var m = document.getElementById("map");
             m.appendChild(map.DOMObject);
             Global.map = map;
+            Global.map.OnTileClick = (e) => OnTileClick(e.dungeon, e.tile);
             console.log(Global.map);
         });
+
+        function OnTileClick(dungeon, tile) {
+            console.log(`Clicked tile ${tile} in dungeon ${dungeon.Name}`);
+        }
     </script>
 </body>
 

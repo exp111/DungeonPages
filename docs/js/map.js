@@ -35,6 +35,7 @@ class Map {
             d.OnTileClick = (e) => {
                 if (this.OnTileClick) {
                     this.OnTileClick({
+                        "dungeon": e.dungeon,
                         "tile": e.tile
                     })
                 }
@@ -154,6 +155,7 @@ class Dungeon {
             t.DOMObject.onclick = (e) => {
                 if (this.OnTileClick) {
                     this.OnTileClick({
+                        "dungeon": this,
                         "tile": t
                     })
                 }
