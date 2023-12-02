@@ -8,4 +8,5 @@
 .wrapper {
     display: grid;
     grid-template-columns: 0.5fr auto;
+    gap: 10px;
 }

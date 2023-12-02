@@ -40,20 +40,44 @@ class DicePool {
     EvilDice = [];
     // Runtime
     DOMObject = null;
+    OnDiceClick = null;
 
     constructor() {
         this.CreateDice();
         this.CreateDOM();
     }
 
+    Reroll() {
+        //TODO: get active dice?
+        for (let i in this.Dice) {
+            let dice = this.Dice[i];
+            dice.Value = Math.floor(Math.random() * 5) + 1;
+            dice.UpdateUI();
+        }
+    }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("dicepool");
         this.DOMObject = ret;
+        // add button
+        let reroll = document.createElement("button");
+        reroll.classList.add("dicepool-button");
+        reroll.onclick = (e) => this.Reroll();
+        reroll.innerText = "Reroll";
+        ret.appendChild(reroll);
         // add dice
         for (let i in this.Dice) {
             let d = this.Dice[i];
             ret.appendChild(d.DOMObject);
+            // listen to click
+            d.DOMObject.onclick = (e) => {
+                if (this.OnDiceClick) {
+                    this.OnDiceClick({
+                        "dice": d
+                    });
+                }
+            };
         }
         return ret;
     }

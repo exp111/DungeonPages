@@ -37,6 +37,7 @@
         Global.dice = new DicePool();
         let d = document.getElementById("dice");
         d.parentNode.replaceChild(Global.dice.DOMObject, d);
+        Global.dice.OnDiceClick = (e) => OnDiceClick(e.dice);
         // Character
         loadCharacterJson("zafinn.json").then((json) => {
             let char = Character.FromJson(json);
@@ -57,6 +58,10 @@
 
         function OnTileClick(dungeon, tile) {
             console.log(`Clicked tile ${tile} in dungeon ${dungeon.Name}`);
+        }
+
+        function OnDiceClick(dice) {
+            console.log(`Clicked dice ${dice}`);
         }
     </script>
 </body>

@@ -16,6 +16,7 @@
         inset 0 calc(var(--dice-size) / -20) #bbb, 
         inset calc(var(--dice-size) / 20) 0 #d7d7d7,
 		inset calc(var(--dice-size) / -20) 0 #d7d7d7;
+    padding: calc(var(--dice-size) / 20);
     display: grid;
 	grid-template-areas:
 		"a . c"
