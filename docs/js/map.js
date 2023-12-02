@@ -113,6 +113,7 @@ class Dungeon {
         }
         return ret;
     }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("dungeon");
@@ -238,6 +239,7 @@ class Tile {
     Height = 1;
     // Runtime
     DOMObject = null;
+    Value = null;
     X = 0;
     Y = 0;
 
@@ -252,16 +254,30 @@ class Tile {
         return ret;
     }
 
+    CanBeMarked() {
+        // already marked
+        if (this.Value != null)
+            return false;
+
+        switch (this.Type) {
+            case "trap":
+            case "space":
+                return true;
+            default:
+                return false;
+        }
+    }
+
     CreateDOM() {
         // Create tile
         let ret = document.createElement("div");
         this.DOMObject = ret;
-        this.UpdateDOM();
+        this.UpdateUI();
         // return it
         return ret;
     }
 
-    UpdateDOM() {
+    UpdateUI() {
         // clear
         this.DOMObject.className = "";
         // then add the classes
@@ -271,6 +287,7 @@ class Tile {
             this.DOMObject.classList.add(`tile-${this.Subtype}`);
         this.DOMObject.style.setProperty("grid-column-end", `span ${this.Width}`);
         this.DOMObject.style.setProperty("grid-row-end", `span ${this.Height}`);
+        this.DOMObject.innerText = this.Value;
     }
 
     static FromJson(json) {

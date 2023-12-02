@@ -32,6 +32,7 @@
             dice: null,
             map: null,
             character: null,
+            selectedDice: null,
         };
         // Dice
         Global.dice = new DicePool();
@@ -57,11 +58,27 @@
         });
 
         function OnTileClick(dungeon, tile) {
-            console.log(`Clicked tile ${tile} in dungeon ${dungeon.Name}`);
+            console.log(`Clicked tile ${tile.Type} (${tile.X}, ${tile.Y}) in dungeon ${dungeon.Name}`);
+            if (Global.selectedDice == null)
+            {
+                console.log("No dice selected")
+                return;
+            }
+            if (!tile.CanBeMarked())
+            {
+                console.log("Tile can't be marked");
+                return;
+            }
+            tile.Value = Global.selectedDice.Value;
+            tile.UpdateUI();
+            //TODO: use dice
         }
 
         function OnDiceClick(dice) {
             console.log(`Clicked dice ${dice}`);
+            //TODO: check if dice was used
+            Global.selectedDice = dice;
+            //TODO: make selection visible
         }
     </script>
 </body>
