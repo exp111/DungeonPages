@@ -3,10 +3,11 @@ const EVIL_DICE_COUNT = 3;
 
 class Dice {
     IsEvil = false;
-    Used = true;
     Value = 1;
     // Runtime
     DOMObject = null;
+    Used = true;
+    Active = false;
 
     constructor(evil) {
         this.IsEvil = evil;
@@ -33,6 +34,8 @@ class Dice {
         obj.classList.toggle("evil", this.IsEvil);
         // used
         obj.classList.toggle("used", this.Used);
+        // active
+        obj.classList.toggle("active", this.Active);
         // mark pips
         let pips = obj.getElementsByClassName("pip");
         for (let i = 0; i < pips.length; i++) {
@@ -48,6 +51,8 @@ class DicePool {
     EvilDice = [];
     // Runtime
     DOMObject = null;
+    SelectedDice = null;
+    // Events
     OnDiceClick = null;
 
     constructor() {
@@ -55,15 +60,59 @@ class DicePool {
         this.CreateDOM();
     }
 
+    UseDice(tile) {
+        let dice = this.SelectedDice;
+        if (dice == null || dice.Used)
+            return false;
+
+        // mark tile
+        if (!tile.CanBeMarked())
+            return false;
+
+        tile.Value = dice.Value;
+        tile.UpdateUI();
+        // use dice
+        this.SelectedDice = null;
+        dice.Used = true;
+        dice.Active = false;
+        dice.UpdateUI();
+        return true;
+    }
+
+    SelectDice(dice) {
+        if (dice.Active)
+            return false;
+        if (dice.Used)
+            return false;
+        // remove last active dice
+        if (this.SelectedDice != null) {
+            this.SelectedDice.Active = false;
+            this.SelectedDice.UpdateUI();
+        }
+        // select the new dice
+        this.SelectedDice = dice;
+        dice.Active = true;
+        dice.UpdateUI();
+        return true;
+    }
+
     Reroll() {
         //TODO: check if all dice were used
+        for (let i in this.Dice) {
+            let dice = this.Dice[i];
+            if (!dice.Used)
+                return false;
+        }
+
         //TODO: get active dice?
         for (let i in this.Dice) {
             let dice = this.Dice[i];
             dice.Used = false;
+            dice.Active = false;
             dice.Value = Math.floor(Math.random() * 6) + 1;
             dice.UpdateUI();
         }
+        return true;
     }
 
     CreateDOM() {

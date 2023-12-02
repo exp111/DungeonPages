@@ -35,6 +35,11 @@
 .dicepool-dice.used {
     filter: opacity(40%);
 }
+/*TODO: other color */
+.dicepool-dice.active {
+    box-shadow: 0 0 0 2px blue; /*box shadow doesnt take up space */
+}
+/*TODO: extra case for evil dice?*/
 
 .pip {
     display: block;
