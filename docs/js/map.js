@@ -92,7 +92,9 @@ class Dungeon {
     Width = 1;
     Height = 1;
     Tiles = [];
+    // Runtime
     DOMObject = null;
+    Grid = [];
     //TODO: dots
 
     ToJson() {
@@ -165,12 +167,43 @@ class Dungeon {
         // then return
         return ret;
     }
+
+    CalculateGrid() {
+        // preallocate grid
+        this.Grid = new Array(this.Columns);
+        for (let i = 0; i < this.Grid.length; i++)
+            this.Grid[i] = new Array(this.Rows);
+        // add the tiles
+        for (let i = 0; i < this.Tiles.length; i++) {
+            let t = this.Tiles[i];
+            // calculate pos
+            let x = 0;
+            let y = 0;
+            let offset = 0;
+            do {
+                x = (i + offset) % this.Columns;
+                y = Math.floor((i + offset) / this.Columns);
+                offset += 1;
+            } while (this.Grid[x][y] != null); // check if the pos is free
+            // put the tile into the grid, including the width
+            for (let w = 0; w < t.Width; w++)
+            {
+                for (let h = 0; h < t.Height; h++)
+                {
+                    this.Grid[x+w][y+h] = t;
+                }
+            }
+            t.X = x;
+            t.Y = y;
+        }
+    }
+
     static FromJson(json) {
         let dungeon = new Dungeon();
 
         dungeon.Name = json.name;
         dungeon.Rows = json.rows,
-            dungeon.Columns = json.columns;
+        dungeon.Columns = json.columns;
         if (json.width != null)
             dungeon.Width = json.width;
         if (json.height != null)
@@ -192,7 +225,10 @@ class Tile {
     Subtype = ""; // depends on the monster/trap/item
     Width = 1;
     Height = 1;
+    // Runtime
     DOMObject = null;
+    X = 0;
+    Y = 0;
 
     ToJson() {
         let ret = {
