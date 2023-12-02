@@ -59,24 +59,29 @@
 
         function OnTileClick(dungeon, tile) {
             console.log(`Clicked tile ${tile.Type} (${tile.X}, ${tile.Y}) in dungeon ${dungeon.Name}`);
-            if (Global.selectedDice == null)
-            {
+            if (Global.selectedDice == null) {
                 console.log("No dice selected")
                 return;
             }
-            if (!tile.CanBeMarked())
-            {
+            let dice = Global.selectedDice;
+            if (!tile.CanBeMarked()) {
                 console.log("Tile can't be marked");
                 return;
             }
-            tile.Value = Global.selectedDice.Value;
+            tile.Value = dice.Value;
             tile.UpdateUI();
-            //TODO: use dice
+            // use dice
+            dice.Used = true;
+            dice.UpdateUI();
         }
 
         function OnDiceClick(dice) {
             console.log(`Clicked dice ${dice}`);
-            //TODO: check if dice was used
+            // check if dice was used
+            if (dice.Used) {
+                console.log("Dice was already used");
+                return;
+            }
             Global.selectedDice = dice;
             //TODO: make selection visible
         }

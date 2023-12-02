@@ -32,7 +32,11 @@
         inset calc(var(--dice-size) / -20) 0 #575757;
 }
 
-.dicepool-dice>.pip {
+.dicepool-dice.used {
+    filter: opacity(40%);
+}
+
+.pip {
     display: block;
     align-self: center;
     justify-self: center;

@@ -3,6 +3,7 @@ const EVIL_DICE_COUNT = 3;
 
 class Dice {
     IsEvil = false;
+    Used = true;
     Value = 1;
     // Runtime
     DOMObject = null;
@@ -30,6 +31,8 @@ class Dice {
         let obj = this.DOMObject;
         // good
         obj.classList.toggle("evil", this.IsEvil);
+        // used
+        obj.classList.toggle("used", this.Used);
         // mark pips
         let pips = obj.getElementsByClassName("pip");
         for (let i = 0; i < pips.length; i++) {
@@ -53,9 +56,11 @@ class DicePool {
     }
 
     Reroll() {
+        //TODO: check if all dice were used
         //TODO: get active dice?
         for (let i in this.Dice) {
             let dice = this.Dice[i];
+            dice.Used = false;
             dice.Value = Math.floor(Math.random() * 6) + 1;
             dice.UpdateUI();
         }
