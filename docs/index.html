@@ -81,8 +81,8 @@
             // use dice
             if (!Global.dice.UseDice(dungeon, tile, Global.character))
                 return;
-            //TODO: check for item collection/monster defeat
-            dungeon.CheckForCollection(tile);
+            // check for item collection/monster defeat
+            dungeon.CheckForCollection(tile, Global.map.Monsters);
 
             // Need to recheck fully everytime
             if (dungeon.IsFinished())

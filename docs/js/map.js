@@ -31,9 +31,9 @@ class Map {
         let xp = 0;
         for (let i in monsters) {
             let monster = monsters[i];
-            let m = this.Monsters.find(m => m.Type == monster);
+            let m = this.Monsters.find(m => m.Type == monster.Subtype);
             if (m == null) {
-                console.error(`Did not find monster ${monster}`);
+                console.error(`Did not find monster ${monster.Subtype}`);
                 continue;
             }
             xp += m.XP;
@@ -234,8 +234,8 @@ class Dungeon {
         };
     }
 
-    CheckForCollection(tile) {
-        //TODO: move this into map or give the monsters into this func
+    CheckForCollection(tile, monsters) {
+        //TODO: move this into map?
         let tiles = this.GetTileNeighbours(tile);
         for (let i in tiles) {
             let other = tiles[i];
@@ -244,11 +244,11 @@ class Dungeon {
                 continue;
             let result = false;
             switch (other.Type) {
-                case "item":
+                case "item": {
+                    //TODO: this code should probably not be here?
                     // check if there are two identical numbers adjacent
                     let collected = {};
                     let adjacent = this.GetTileNeighbours(other);
-                    //TODO: this code should probably not be here?
                     for (let i in adjacent) {
                         let adj = adjacent[i];
 
@@ -258,8 +258,7 @@ class Dungeon {
                             continue;
 
                         // if we already have this value this one is collected
-                        if (collected[val] != null)
-                        {
+                        if (collected[val] != null) {
                             result = true;
                             break;
                         }
@@ -267,9 +266,33 @@ class Dungeon {
                         collected[val] = true;
                     }
                     break;
-                case "monster":
-                    //TODO: monster
+                }
+                case "monster": {
+                    // get the monster
+                    let monster = monsters.find(m => m.Type == other.Subtype);
+                    if (monster == null) {
+                        console.error(`Monster ${other.Subtype} in Tile (${other.X},${other.Y}) not found.`);
+                        continue;
+                    }
+                    // check if number of (adjacent values >= DEF) is >= than hp
+                    //TODO: code probably also shouldnt be here?
+                    let dmg = 0;
+                    let adjacent = this.GetTileNeighbours(other);
+                    for (let i in adjacent) {
+                        let adj = adjacent[i];
+                        let value = adj.Value;
+                        // no number => not important
+                        if (value == null)
+                            continue;
+                        if (value >= monster.Defense) {
+                            dmg += 1;
+                        }
+                    }
+                    if (dmg >= monster.HP) {
+                        result = true;
+                    }
                     break;
+                }
                 default:
                     continue;
             }
