@@ -340,10 +340,10 @@ class Weapon {
                             ret.push(grid[tile.X - 1][tile.Y]);
                         if (tile.Y > 0) // top
                             ret.push(grid[tile.X][tile.Y - 1]);
-                        if (tile.X < grid.length - 1) // right
-                            ret.push(grid[tile.X + 1][tile.Y]);
-                        if (tile.Y < grid[tile.X].length - 1) // down
-                            ret.push(grid[tile.X][tile.Y + 1]);
+                        if ((tile.X + tile.Width) < grid.length) // right
+                            ret.push(grid[tile.X + tile.Width][tile.Y]);
+                        if ((tile.Y + tile.Height) < grid[tile.X].length) // down
+                            ret.push(grid[tile.X][tile.Y + tile.Height]);
                         return ret;
                     }
                     break;
@@ -352,8 +352,8 @@ class Weapon {
                         let ret = [];
                         if (tile.Y > 0) // prev
                             ret.push(grid[tile.X][tile.Y - 1]);
-                        if (tile.Y < grid[tile.X].length - 1) // next
-                            ret.push(grid[tile.X][tile.Y + 1]);
+                        if ((tile.Y + tile.Height) < grid[tile.X].length) // next
+                            ret.push(grid[tile.X][tile.Y + tile.Height]);
                         return ret;
                     }
                     break;
@@ -362,8 +362,8 @@ class Weapon {
                         let ret = [];
                         if (tile.X > 0) // prev
                             ret.push(grid[tile.X - 1][tile.Y]);
-                        if (tile.X < grid.length - 1) // next
-                            ret.push(grid[tile.X + 1][tile.Y]);
+                        if ((tile.X + tile.Width) < grid.length) // next
+                            ret.push(grid[tile.X + tile.Width][tile.Y]);
                         return ret;
                     }
                     break;

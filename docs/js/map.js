@@ -307,6 +307,7 @@ class Tile {
         switch (this.Type) {
             case "entry":
                 return true
+                return true;
             case "trap":
             case "space":
                 return this.Value != null; // marked
