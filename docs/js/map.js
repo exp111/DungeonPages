@@ -2,9 +2,22 @@ class Map {
     Dungeons = [];
     Monsters = [];
     Traps = [];
+    // Runtime
     DOMObject = null;
+    SelectedDungeon = null;
     // Events
     OnTileClick = null;
+    OnDungeonClick = null;
+
+    HasActiveDungeon() {
+        return this.SelectedDungeon != null;
+    }
+
+    SelectDungeon(dungeon) {
+        this.SelectedDungeon = dungeon;
+        dungeon.Active = true;
+        dungeon.UpdateUI();
+    }
 
     //TODO: can we do this automatically
     ToJson() {
@@ -33,6 +46,13 @@ class Map {
             let d = this.Dungeons[i];
             dungeons.appendChild(d.DOMObject);
             // listen to event and propagate
+            d.DOMObject.onclick = (e) => {
+                if (this.OnDungeonClick) {
+                    this.OnDungeonClick({
+                        "dungeon": d
+                    });
+                }
+            };
             d.OnTileClick = (e) => {
                 if (this.OnTileClick) {
                     this.OnTileClick({
@@ -97,6 +117,8 @@ class Dungeon {
     // Runtime
     DOMObject = null;
     Grid = [];
+    Active = false;
+    Completed = false;
     //TODO: dots
 
     ToJson() {
@@ -119,6 +141,10 @@ class Dungeon {
     CanReachTile(tile, character) {
         let weapons = character.Weapons;
         return weapons.CanReachTile(tile, this.Grid);
+    }
+
+    GetTileNeighbours(tile) {
+
     }
 
     CreateDOM() {
@@ -173,7 +199,13 @@ class Dungeon {
         }
         ret.appendChild(grid);
         // then return
+        this.UpdateUI();
         return ret;
+    }
+
+    UpdateUI() {
+        let obj = this.DOMObject;
+        obj.classList.toggle("active", this.Active);
     }
 
     CalculateGrid() {

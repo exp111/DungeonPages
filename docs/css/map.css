@@ -12,6 +12,10 @@
     width: max-content;
 }
 
+.dungeon:not(.active) {
+    filter: opacity(40%);
+}
+
 .dungeon-title {
     padding: 5px 0;
     display: flex;

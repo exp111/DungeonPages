@@ -53,14 +53,35 @@
             let m = document.getElementById("map");
             m.parentNode.replaceChild(map.DOMObject, m);
             Global.map = map;
+            Global.map.OnDungeonClick = (e) => OnDungeonClick(e.dungeon);
             Global.map.OnTileClick = (e) => OnTileClick(e.dungeon, e.tile);
             console.log(Global.map);
         });
 
+        function OnDungeonClick(dungeon) {
+            console.log(`Clicked dungeon ${dungeon.Name}`);
+            let map = Global.map;
+            if (!dungeon.Completed && !map.HasActiveDungeon())
+            {
+                map.SelectDungeon(dungeon);
+                let pool = Global.dice;
+                pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
+            }
+        }
+
         function OnTileClick(dungeon, tile) {
             console.log(`Clicked tile ${tile.Type} (${tile.X}, ${tile.Y}) in dungeon ${dungeon.Name}`);
+            
+            if (!dungeon.Active)
+            {
+                console.error(`Dungeon ${dungeon.Name} is not active`);
+                return;
+            }
+            //TODO: move most non dice logic from usedice to here
             // use dice
             Global.dice.UseDice(dungeon, tile, Global.character);
+            //TODO: check for finish
+            //TODO: if finish calc rewards
         }
 
         function OnDiceClick(dice) {

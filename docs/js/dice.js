@@ -8,6 +8,7 @@ class Dice {
     DOMObject = null;
     Used = true;
     Active = false;
+    Disabled = true;
 
     constructor(evil) {
         this.IsEvil = evil;
@@ -36,6 +37,8 @@ class Dice {
         obj.classList.toggle("used", this.Used);
         // active
         obj.classList.toggle("active", this.Active);
+        // disabled
+        obj.classList.toggle("disabled", this.Disabled);
         // mark pips
         let pips = obj.getElementsByClassName("pip");
         for (let i = 0; i < pips.length; i++) {
@@ -52,18 +55,47 @@ class DicePool {
     // Runtime
     DOMObject = null;
     SelectedDice = null;
+    AvailableGood = 1;
+    AvailableEvil = 0;
     // Events
     OnDiceClick = null;
 
     constructor() {
         this.CreateDice();
+        this.UpdateDice();
         this.CreateDOM();
     }
 
-    UseDice(tile) {
+    SetAvailableDice(good, evil) {
+        // set
+        this.AvailableGood = good;
+        this.AvailableEvil = evil;
+        // reset
+        this.UnselectDice();
+        for (let i in this.Dice) {
+            let dice = this.Dice[i];
+            dice.Used = true;
+        }
+        // update dice
+        this.UpdateDice();
+    }
+
+    UpdateDice() {
+        for (let i in this.GoodDice) {
+            let dice = this.GoodDice[i];
+            dice.Disabled = i >= this.AvailableGood;
+            dice.UpdateUI();
+        }
+        for (let i in this.EvilDice) {
+            let dice = this.EvilDice[i];
+            dice.Disabled = i >= this.AvailableEvil;
+            dice.UpdateUI();
+        }
+    }
+
     UseDice(dungeon, tile, character) {
         let dice = this.SelectedDice;
-        if (dice == null || dice.Used)
+        if (dice == null || dice.Used || dice.Disabled)
             return false;
 
         // mark tile
@@ -84,20 +116,23 @@ class DicePool {
     }
 
     SelectDice(dice) {
-        if (dice.Active)
-            return false;
-        if (dice.Used)
+        if (dice.Active || dice.Used || dice.Disabled)
             return false;
         // remove last active dice
         if (this.SelectedDice != null) {
-            this.SelectedDice.Active = false;
-            this.SelectedDice.UpdateUI();
+            this.UnselectDice();
         }
         // select the new dice
         this.SelectedDice = dice;
         dice.Active = true;
         dice.UpdateUI();
         return true;
+    }
+
+    UnselectDice() {
+        let dice = this.SelectedDice;
+        dice.Active = false;
+        dice.UpdateUI();
     }
 
     Reroll() {
@@ -108,9 +143,12 @@ class DicePool {
                 return false;
         }
 
-        //TODO: get active dice?
+        // go through each dice and reroll
         for (let i in this.Dice) {
             let dice = this.Dice[i];
+            if (dice.Disabled) // disabled
+                continue;
+
             dice.Used = false;
             dice.Active = false;
             dice.Value = Math.floor(Math.random() * 6) + 1;
