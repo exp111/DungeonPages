@@ -61,8 +61,7 @@
         function OnDungeonClick(dungeon) {
             console.log(`Clicked dungeon ${dungeon.Name}`);
             let map = Global.map;
-            if (!dungeon.Completed && !map.HasActiveDungeon())
-            {
+            if (!dungeon.Completed && !map.HasActiveDungeon()) {
                 map.SelectDungeon(dungeon);
                 let pool = Global.dice;
                 pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
@@ -71,9 +70,8 @@
 
         function OnTileClick(dungeon, tile) {
             console.log(`Clicked tile ${tile.Type} (${tile.X}, ${tile.Y}) in dungeon ${dungeon.Name}`);
-            
-            if (!dungeon.Active)
-            {
+
+            if (!dungeon.Active) {
                 console.error(`Dungeon ${dungeon.Name} is not active`);
                 return;
             }
@@ -85,18 +83,23 @@
             dungeon.CheckForCollection(tile, Global.map.Monsters);
 
             // Need to recheck fully everytime
-            if (dungeon.IsFinished())
-            {
+            if (dungeon.IsFinished()) {
                 console.log(`Finished Dungeon ${dungeon.Name}`);
                 Global.map.FinishDungeon();
-                //TODO: check if there is a sequential path
-                let rewards = dungeon.CalculateXP();
-                let xp = rewards.xp;
-                let enemies = rewards.enemies;
-                let monsterXP = Global.map.GetMonsterXP(enemies);
-                console.log(`Got ${xp + monsterXP} experience. (${xp} + ${monsterXP})`);
+                // check if there is a sequential path
+                if (dungeon.IsFinished(true)) {
+                    //TODO: move this into the map?
+                    let rewards = dungeon.CalculateXP();
+                    let xp = rewards.xp;
+                    let enemies = rewards.enemies;
+                    let monsterXP = Global.map.GetMonsterXP(enemies);
+                    console.log(`Got ${xp + monsterXP} experience. (${xp} + ${monsterXP})`);
+                    //TODO: give rewards to the player
+                } else {
+                    console.log("Dungeon did not finish with a sequential path");
+                }
             }
-            
+
         }
 
         function OnDiceClick(dice) {

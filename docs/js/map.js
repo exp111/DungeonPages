@@ -161,7 +161,7 @@ class Dungeon {
     }
 
     // Check if the dungeon has a path between entry and exit
-    IsFinished() {
+    IsFinished(sequential = false) {
         // find the entry
         let entry = null;
         for (let i in this.Tiles) {
@@ -181,18 +181,28 @@ class Dungeon {
         // basic dfs
         while (queue.length > 0) {
             let tile = queue.pop();
+            // get reachable tiles
             let tiles = this.GetTileNeighbours(tile);
             for (let i in tiles) {
                 let newTile = tiles[i];
+                // check if marked
                 let id = `${newTile.X},${newTile.Y}`;
                 if (marked[id] != null) // skip already marked ones
                     continue;
                 marked[id] = true;
-                // check
+                // end check
                 if (newTile.Type == "exit")
                     return true;
                 // no need to check for traversable as we cant explore non traversable ones?
+                // valid searchtarget check
                 if (newTile.IsExplored()) {
+                    // if we need a sequential path, check for val diff > 1
+                    if (sequential) {
+                        // doesnt matter for the entry
+                        if (tile.Type != "entry" && 
+                            Math.abs(tile.Value - newTile.Value) > 1)
+                            continue;
+                    }
                     queue.push(newTile);
                 }
             }
