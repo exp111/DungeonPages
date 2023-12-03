@@ -60,7 +60,7 @@
         function OnTileClick(dungeon, tile) {
             console.log(`Clicked tile ${tile.Type} (${tile.X}, ${tile.Y}) in dungeon ${dungeon.Name}`);
             // use dice
-            Global.dice.UseDice(tile);
+            Global.dice.UseDice(dungeon, tile, Global.character);
         }
 
         function OnDiceClick(dice) {

@@ -61,12 +61,16 @@ class DicePool {
     }
 
     UseDice(tile) {
+    UseDice(dungeon, tile, character) {
         let dice = this.SelectedDice;
         if (dice == null || dice.Used)
             return false;
 
         // mark tile
         if (!tile.CanBeMarked())
+            return false;
+
+        if (!dungeon.CanReachTile(tile, character))
             return false;
 
         tile.Value = dice.Value;
@@ -97,7 +101,7 @@ class DicePool {
     }
 
     Reroll() {
-        //TODO: check if all dice were used
+        // check if all dice were used
         for (let i in this.Dice) {
             let dice = this.Dice[i];
             if (!dice.Used)

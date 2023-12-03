@@ -20,6 +20,7 @@ class Map {
         //TODO: monsters, traps
         return ret;
     }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("map");
@@ -63,6 +64,7 @@ class Map {
         }
         return ret;
     }
+
     static FromJson(json) {
         let map = new Map();
 
@@ -112,6 +114,11 @@ class Dungeon {
             ret.tiles.push(t.ToJson());
         }
         return ret;
+    }
+
+    CanReachTile(tile, character) {
+        let weapons = character.Weapons;
+        return weapons.CanReachTile(tile, this.Grid);
     }
 
     CreateDOM() {
@@ -187,11 +194,9 @@ class Dungeon {
                 offset += 1;
             } while (this.Grid[x][y] != null); // check if the pos is free
             // put the tile into the grid, including the width
-            for (let w = 0; w < t.Width; w++)
-            {
-                for (let h = 0; h < t.Height; h++)
-                {
-                    this.Grid[x+w][y+h] = t;
+            for (let w = 0; w < t.Width; w++) {
+                for (let h = 0; h < t.Height; h++) {
+                    this.Grid[x + w][y + h] = t;
                 }
             }
             t.X = x;
@@ -204,7 +209,7 @@ class Dungeon {
 
         dungeon.Name = json.name;
         dungeon.Rows = json.rows,
-        dungeon.Columns = json.columns;
+            dungeon.Columns = json.columns;
         if (json.width != null)
             dungeon.Width = json.width;
         if (json.height != null)
@@ -252,6 +257,30 @@ class Tile {
         };
         //TODO: dont add values if they're default
         return ret;
+    }
+
+    IsTraversable() {
+        switch (this.Type) {
+            //TODO: locked door
+            case "trap":
+                return this.Value != null; // only marked traps can be traversed
+            case "space":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    IsExplored() {
+        switch (this.Type) {
+            case "entry":
+                return true
+            case "trap":
+            case "space":
+                return this.Value != null; // marked
+            default:
+                return false;
+        }
     }
 
     CanBeMarked() {

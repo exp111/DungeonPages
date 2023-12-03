@@ -60,8 +60,7 @@ class Health {
             let count = this.Elements[i];
             let element = document.createElement("div");
             element.classList.add("character-health-element");
-            if (i == 0)
-            {
+            if (i == 0) {
                 // first one is bigger
                 element.style.setProperty("grid-column-end", "span 3");
             }
@@ -256,6 +255,17 @@ class Weapons {
     Weapons = [];
     DOMObject = null;
 
+    CanReachTile(tile, grid) {
+        for (let i in this.Weapons) {
+            let weapon = this.Weapons[i];
+            if (!weapon.Unlocked)
+                continue;
+            if (weapon.CanReachTile(tile, grid))
+                return true;
+        }
+        return false;
+    }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("character-weapons");
@@ -285,10 +295,88 @@ class Weapon {
     Name = "";
     Treshold = 0;
     Range = 1;
-    Effects = []; // Ortho,Diag,StraightLine,DiagLine //TODO: enum
+    Effects = []; // Ortho,Diag,straightVert,StraightHori,DiagLine //TODO: enum
     //TODO: alt effects like reroll 1
     DOMObject = null;
     Unlocked = false;
+
+    CanReachTile(tile, grid) {
+        if (this.Range == 0)
+            return false;
+
+        function canMark(tile, grid, depth, range, getAvailableTiles) {
+            // get tiles that are available from here
+            let tiles = getAvailableTiles(tile, grid);
+            let canGoDeeper = depth < (range - 1);
+            for (let i in tiles) {
+                let newTile = tiles[i];
+                // is it explored? then we mark our origin
+                if (newTile.IsExplored())
+                    return true;
+                // is it traversable? next tile
+                if (!newTile.IsTraversable())
+                    continue;
+
+                // we can move through so get the next tile, if we still have range
+                if (canGoDeeper)
+                {
+                    // if we can mark any tiles from this one, we can mark our origin
+                    if (canMark(newTile, grid, depth + 1, range, getAvailableTiles)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        for (let i in this.Effects) {
+            let effect = this.Effects[i];
+            let func = null;
+            switch (effect) {
+                case "ortho":
+                    func = function (tile, grid) {
+                        let ret = [];
+                        if (tile.X > 0) // left
+                            ret.push(grid[tile.X - 1][tile.Y]);
+                        if (tile.Y > 0) // top
+                            ret.push(grid[tile.X][tile.Y - 1]);
+                        if (tile.X < grid.length - 1) // right
+                            ret.push(grid[tile.X + 1][tile.Y]);
+                        if (tile.Y < grid[tile.X].length - 1) // down
+                            ret.push(grid[tile.X][tile.Y + 1]);
+                        return ret;
+                    }
+                    break;
+                case "straightVert":
+                    func = function (tile, grid) {
+                        let ret = [];
+                        if (tile.Y > 0) // prev
+                            ret.push(grid[tile.X][tile.Y - 1]);
+                        if (tile.Y < grid[tile.X].length - 1) // next
+                            ret.push(grid[tile.X][tile.Y + 1]);
+                        return ret;
+                    }
+                    break;
+                case "straightHori":
+                    func = function (tile, grid) {
+                        let ret = [];
+                        if (tile.X > 0) // prev
+                            ret.push(grid[tile.X - 1][tile.Y]);
+                        if (tile.X < grid.length - 1) // next
+                            ret.push(grid[tile.X + 1][tile.Y]);
+                        return ret;
+                    }
+                    break;
+                default:
+                    console.log(`Unknown Effect: ${effect}`);
+            }
+            if (func) {
+                if (canMark(tile, grid, 0, this.Range, func))
+                    return true;
+            }
+        }
+        return false;
+    }
 
     CreateDOM() {
         let ret = document.createElement("div");

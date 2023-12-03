@@ -37,7 +37,7 @@
 }
 /*TODO: other color */
 .dicepool-dice.active {
-    box-shadow: 0 0 0 2px blue; /*box shadow doesnt take up space */
+    box-shadow: 0 0 0 2px blue; /* box shadow doesnt take up space */
 }
 /*TODO: extra case for evil dice?*/
 
