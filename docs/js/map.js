@@ -177,18 +177,11 @@ class Dungeon {
         }
 
         let marked = {};
+        let base = this;
 
-        function findExit(tile, grid) {
+        function findExit(tile) {
             // get next step tiles
-            let tiles = [];
-            if (tile.X > 0) // left
-                tiles.push(grid[tile.X - 1][tile.Y]);
-            if (tile.Y > 0) // top
-                tiles.push(grid[tile.X][tile.Y - 1]);
-            if ((tile.X + tile.Width) < grid.length) // right
-                tiles.push(grid[tile.X + tile.Width][tile.Y]);
-            if ((tile.Y + tile.Height) < grid[tile.X].length) // down
-                tiles.push(grid[tile.X][tile.Y + tile.Height]);
+            let tiles = base.GetTileNeighbours(tile);
 
             for (let i in tiles) {
                 let newTile = tiles[i];
@@ -201,14 +194,14 @@ class Dungeon {
                     return true;
                 // no need to check for traversable as we cant explore non traversable ones?
                 if (newTile.IsExplored()) {
-                    if (findExit(newTile, grid)) {
+                    if (findExit(newTile)) {
                         return true;
                     }
                 }
             }
             return false;
         }
-        if (findExit(entry, this.Grid))
+        if (findExit(entry))
             return true;
         return false;
     }
@@ -247,7 +240,21 @@ class Dungeon {
     }
 
     GetTileNeighbours(tile) {
-
+        //INFO: this assumes we have a rectangular grid
+        let ret = [];
+        if (tile.X > 0) // left
+            for (let i = 0; i < tile.Height; i++)
+                ret.push(this.Grid[tile.X - 1][tile.Y + i]);
+        if (tile.Y > 0) // top
+            for (let i = 0; i < tile.Width; i++)
+                ret.push(this.Grid[tile.X + i][tile.Y - 1]);
+        if ((tile.X + tile.Width) < this.Grid.length) // right
+            for (let i = 0; i < tile.Height; i++)
+                ret.push(this.Grid[tile.X + tile.Width][tile.Y + i]);
+        if ((tile.Y + tile.Height) < this.Grid[tile.X].length) // down
+            for (let i = 0; i < tile.Width; i++)
+                ret.push(this.Grid[tile.X + i][tile.Y + tile.Height]);
+        return ret;
     }
 
     CreateDOM() {
