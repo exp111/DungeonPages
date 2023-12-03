@@ -177,12 +177,11 @@ class Dungeon {
         }
 
         let marked = {};
-        let base = this;
-
-        function findExit(tile) {
-            // get next step tiles
-            let tiles = base.GetTileNeighbours(tile);
-
+        let queue = [entry];
+        // basic dfs
+        while (queue.length > 0) {
+            let tile = queue.pop();
+            let tiles = this.GetTileNeighbours(tile);
             for (let i in tiles) {
                 let newTile = tiles[i];
                 let id = `${newTile.X},${newTile.Y}`;
@@ -194,15 +193,10 @@ class Dungeon {
                     return true;
                 // no need to check for traversable as we cant explore non traversable ones?
                 if (newTile.IsExplored()) {
-                    if (findExit(newTile)) {
-                        return true;
-                    }
+                    queue.push(newTile);
                 }
             }
-            return false;
         }
-        if (findExit(entry))
-            return true;
         return false;
     }
 

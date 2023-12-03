@@ -89,7 +89,7 @@
             {
                 console.log(`Finished Dungeon ${dungeon.Name}`);
                 Global.map.FinishDungeon();
-                //TODO: calc rewards
+                //TODO: check if there is a sequential path
                 let rewards = dungeon.CalculateXP();
                 let xp = rewards.xp;
                 let enemies = rewards.enemies;
