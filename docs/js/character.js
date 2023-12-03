@@ -300,11 +300,13 @@ class Weapon {
     DOMObject = null;
     Unlocked = false;
 
+    //TODO: move these out of here? idk
     CanReachTile(tile, grid) {
         if (this.Range == 0)
             return false;
 
         function canMark(tile, grid, depth, range, getAvailableTiles) {
+            //TODO: add marked array for optimization?
             // get tiles that are available from here
             let tiles = getAvailableTiles(tile, grid);
             let canGoDeeper = depth < (range - 1);

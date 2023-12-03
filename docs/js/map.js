@@ -234,6 +234,53 @@ class Dungeon {
         };
     }
 
+    CheckForCollection(tile) {
+        //TODO: move this into map or give the monsters into this func
+        let tiles = this.GetTileNeighbours(tile);
+        for (let i in tiles) {
+            let other = tiles[i];
+            // already collected
+            if (other.Collected)
+                continue;
+            let result = false;
+            switch (other.Type) {
+                case "item":
+                    // check if there are two identical numbers adjacent
+                    let collected = {};
+                    let adjacent = this.GetTileNeighbours(other);
+                    //TODO: this code should probably not be here?
+                    for (let i in adjacent) {
+                        let adj = adjacent[i];
+
+                        // no number => not important for us
+                        let val = adj.Value;
+                        if (val == null)
+                            continue;
+
+                        // if we already have this value this one is collected
+                        if (collected[val] != null)
+                        {
+                            result = true;
+                            break;
+                        }
+                        // else mark it for the future
+                        collected[val] = true;
+                    }
+                    break;
+                case "monster":
+                    //TODO: monster
+                    break;
+                default:
+                    continue;
+            }
+            // mark it as collected
+            if (result) {
+                other.Collected = true;
+                other.UpdateUI();
+            }
+        }
+    }
+
     CanReachTile(tile, character) {
         let weapons = character.Weapons;
         return weapons.CanReachTile(tile, this.Grid);
