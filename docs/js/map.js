@@ -27,6 +27,20 @@ class Map {
         dungeon.UpdateUI();
     }
 
+    GetMonsterXP(monsters) {
+        let xp = 0;
+        for (let i in monsters) {
+            let monster = monsters[i];
+            let m = this.Monsters.find(m => m.Type == monster);
+            if (m == null) {
+                console.error(`Did not find monster ${monster}`);
+                continue;
+            }
+            xp += m.XP;
+        }
+        return xp;
+    }
+
     //TODO: can we do this automatically
     ToJson() {
         let ret = {
@@ -199,6 +213,34 @@ class Dungeon {
         return false;
     }
 
+    CalculateXP() {
+        let xp = 0;
+        let enemies = [];
+        for (let x = 0; x < this.Grid.length; x++) {
+            let complete = true;
+            for (let y = 0; y < this.Grid[x].length; y++) {
+                let tile = this.Grid[x][y];
+                // Add defeated monsters to the list
+                if (tile.Type == "monster" && tile.Collected) {
+                    enemies.push(tile);
+                }
+
+                if (tile.IsTraversable() && !tile.IsExplored()) {
+                    complete = false;
+                    break;
+                }
+            }
+            // Completed columns give one xp
+            if (complete) {
+                xp += 1;
+            }
+        }
+        return {
+            "xp": xp,
+            "enemies": enemies
+        };
+    }
+
     CanReachTile(tile, character) {
         let weapons = character.Weapons;
         return weapons.CanReachTile(tile, this.Grid);
@@ -341,6 +383,7 @@ class Tile {
     Value = null;
     X = 0;
     Y = 0;
+    Collected = false;
 
     ToJson() {
         let ret = {
@@ -408,6 +451,7 @@ class Tile {
         this.DOMObject.classList.add(`tile-${this.Type}`);
         if (this.Subtype)
             this.DOMObject.classList.add(`tile-${this.Subtype}`);
+        this.DOMObject.classList.toggle("collected", this.Collected);
         this.DOMObject.style.setProperty("grid-column-end", `span ${this.Width}`);
         this.DOMObject.style.setProperty("grid-row-end", `span ${this.Height}`);
         this.DOMObject.innerText = this.Value;

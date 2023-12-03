@@ -81,14 +81,20 @@
             // use dice
             if (!Global.dice.UseDice(dungeon, tile, Global.character))
                 return;
+            //TODO: check for item collection/monster defeat
 
             if (dungeon.IsFinished())
             {
                 console.log(`Finished Dungeon ${dungeon.Name}`);
                 Global.map.FinishDungeon();
+                //TODO: calc rewards
+                let rewards = dungeon.CalculateXP();
+                let xp = rewards.xp;
+                let enemies = rewards.enemies;
+                let monsterXP = Global.map.GetMonsterXP(enemies);
+                console.log(`Got ${xp + monsterXP} experience. (${xp} + ${monsterXP})`);
             }
-            //TODO: check for finish
-            //TODO: if finish calc rewards
+            
         }
 
         function OnDiceClick(dice) {
