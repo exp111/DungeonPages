@@ -332,6 +332,8 @@ class Weapon {
         for (let i in this.Effects) {
             let effect = this.Effects[i];
             let func = null;
+            //TODO: actually we would need to add more tiles if our w/h is > 1, 
+            //      but this isn't really important as we dont have traversable tiles with w/h>1
             switch (effect) {
                 case "ortho":
                     func = function (tile, grid) {

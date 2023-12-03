@@ -19,6 +19,14 @@ class Map {
         dungeon.UpdateUI();
     }
 
+    FinishDungeon() {
+        let dungeon = this.SelectedDungeon;
+        this.SelectedDungeon = null;
+        dungeon.Active = false;
+        dungeon.Completed = true;
+        dungeon.UpdateUI();
+    }
+
     //TODO: can we do this automatically
     ToJson() {
         let ret = {
@@ -138,6 +146,59 @@ class Dungeon {
         return ret;
     }
 
+    // Check if the dungeon has a path between entry and exit
+    IsFinished() {
+        // find the entry
+        let entry = null;
+        for (let i in this.Tiles) {
+            let tile = this.Tiles[i];
+            if (tile.Type == "entry") {
+                entry = tile;
+                break;
+            }
+        }
+        if (entry == null) {
+            console.error("No entry found");
+            return false;
+        }
+
+        let marked = {};
+
+        function findExit(tile, grid) {
+            // get next step tiles
+            let tiles = [];
+            if (tile.X > 0) // left
+                tiles.push(grid[tile.X - 1][tile.Y]);
+            if (tile.Y > 0) // top
+                tiles.push(grid[tile.X][tile.Y - 1]);
+            if ((tile.X + tile.Width) < grid.length) // right
+                tiles.push(grid[tile.X + tile.Width][tile.Y]);
+            if ((tile.Y + tile.Height) < grid[tile.X].length) // down
+                tiles.push(grid[tile.X][tile.Y + tile.Height]);
+
+            for (let i in tiles) {
+                let newTile = tiles[i];
+                let id = `${newTile.X},${newTile.Y}`;
+                if (marked[id] != null) // skip already marked ones
+                    continue;
+                marked[id] = true;
+                // check
+                if (newTile.Type == "exit")
+                    return true;
+                // no need to check for traversable as we cant explore non traversable ones?
+                if (newTile.IsExplored()) {
+                    if (findExit(newTile, grid)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        if (findExit(entry, this.Grid))
+            return true;
+        return false;
+    }
+
     CanReachTile(tile, character) {
         let weapons = character.Weapons;
         return weapons.CanReachTile(tile, this.Grid);
@@ -206,6 +267,7 @@ class Dungeon {
     UpdateUI() {
         let obj = this.DOMObject;
         obj.classList.toggle("active", this.Active);
+        obj.classList.toggle("completed", this.Completed);
     }
 
     CalculateGrid() {
@@ -306,7 +368,6 @@ class Tile {
     IsExplored() {
         switch (this.Type) {
             case "entry":
-                return true
                 return true;
             case "trap":
             case "space":

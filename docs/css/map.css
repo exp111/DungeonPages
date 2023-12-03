@@ -16,6 +16,10 @@
     filter: opacity(40%);
 }
 
+.dungeon.completed {
+    filter: grayscale(100%);
+}
+
 .dungeon-title {
     padding: 5px 0;
     display: flex;

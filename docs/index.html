@@ -79,7 +79,14 @@
             }
             //TODO: move most non dice logic from usedice to here
             // use dice
-            Global.dice.UseDice(dungeon, tile, Global.character);
+            if (!Global.dice.UseDice(dungeon, tile, Global.character))
+                return;
+
+            if (dungeon.IsFinished())
+            {
+                console.log(`Finished Dungeon ${dungeon.Name}`);
+                Global.map.FinishDungeon();
+            }
             //TODO: check for finish
             //TODO: if finish calc rewards
         }
