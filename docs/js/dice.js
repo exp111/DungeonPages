@@ -131,6 +131,9 @@ class DicePool {
 
     UnselectDice() {
         let dice = this.SelectedDice;
+        if (dice == null)
+            return;
+        
         dice.Active = false;
         dice.UpdateUI();
     }
