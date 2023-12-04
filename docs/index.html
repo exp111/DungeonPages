@@ -80,10 +80,8 @@
             // use dice
             if (!Global.dice.UseDice(dungeon, tile, Global.character))
                 return;
-            //TODO: check for traps
             // check for item collection/monster defeat
             dungeon.CheckForCollection(tile, Global.map.Monsters);
-            //TODO: give items to the player?
 
             // Need to recheck fully everytime
             if (dungeon.IsFinished()) {
@@ -107,8 +105,11 @@
                 } else {
                     console.log("Dungeon did not finish with a sequential path");
                 }
+                return;
             }
 
+            // check for trap, needs to be done after item collection + dungeon finish
+            Global.map.CheckTrap(tile);
         }
 
         function OnDicePoolButton() {

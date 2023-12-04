@@ -27,6 +27,21 @@ class Map {
         dungeon.UpdateUI();
     }
 
+    CheckTrap(tile) {
+        if (tile.Type != "trap")
+            return;
+        // get trap
+        let trap = this.Traps.find(t => t.Type == tile.Subtype);
+        if (trap == null) {
+            console.error(`Did not find trap ${tile.Subtype}`);
+            return;
+        }
+        if (trap.Disarm <= tile.Value) // disarmed
+            return;
+        //TODO: do effect
+        console.log(`Activated trap ${trap.Name} with effect ${trap.Effect}`);
+    }
+
     CheckWanderingMonsters(results) {
         // Check if any two evil dice have the same value
         let dungeon = this.SelectedDungeon;
@@ -526,6 +541,7 @@ class Tile {
     X = 0;
     Y = 0;
     Collected = false;
+    Used = false;
 
     GetID() {
         return `${this.X},${this.Y}`;
@@ -598,6 +614,7 @@ class Tile {
         if (this.Subtype)
             this.DOMObject.classList.add(`tile-${this.Subtype}`);
         this.DOMObject.classList.toggle("collected", this.Collected);
+        this.DOMObject.classList.toggle("used", this.Used);
         this.DOMObject.style.setProperty("grid-column-end", `span ${this.Width}`);
         this.DOMObject.style.setProperty("grid-row-end", `span ${this.Height}`);
         this.DOMObject.innerText = this.Value;
