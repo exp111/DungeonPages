@@ -95,6 +95,18 @@
     background-position: center center;
 }
 
+.tile-monster.collected:after {
+    content: "\2718"; /* cross */
+    color: red;
+}
+.tile-item.collected {
+    box-shadow: 0 0 0 2px green;
+}
+.tile-item.collected.used:after {
+    content: "\2714"; /* checkmark */
+    color: green;
+}
+
 .tile-entry {
     background-image: url("../assets/img/door.svg");
 }

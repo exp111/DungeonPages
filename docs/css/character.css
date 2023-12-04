@@ -45,7 +45,7 @@
 }
 
 .character-health-icon.checked:after {
-    content: "\2718";
+    content: "\2718"; /* cross */
     position: relative;
     top: -7px;
     left: -2px;
