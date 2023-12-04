@@ -345,6 +345,24 @@ class Weapon {
                         return ret;
                     }
                     break;
+                case "diag":
+                    func = function (tile) {
+                        let ret = [];
+                        let xPrev = tile.X > 0;
+                        let yPrev = tile.Y > 0;
+                        let xNext = (tile.X + tile.Width) < grid.length;
+                        let yNext = (tile.Y + tile.Height) < grid[tile.X].length;
+                        if (xPrev && yPrev) // top left
+                            ret.push(grid[tile.X - 1][tile.Y - 1]);
+                        if (xNext && yPrev) // top right
+                            ret.push(grid[tile.X + 1][tile.Y - 1]);
+                        if (xPrev && yNext) // bot left
+                            ret.push(grid[tile.X - 1][tile.Y + 1]);
+                        if (xNext && yNext) // bot right
+                            ret.push(grid[tile.X + 1][tile.Y + 1]);
+                        return ret;
+                    }
+                    break;
                 default:
                     console.log(`Unknown Effect: ${effect}`);
             }
