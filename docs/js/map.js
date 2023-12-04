@@ -236,6 +236,7 @@ class Dungeon {
         }
 
         let marked = {};
+        marked[entry.GetID()] = true;
         let queue = [entry];
         // basic dfs
         while (queue.length > 0) {
@@ -248,7 +249,6 @@ class Dungeon {
                 let id = newTile.GetID();
                 if (marked[id] != null) // skip already marked ones
                     continue;
-                marked[id] = true;
                 // end check
                 if (newTile.Type == "exit")
                     return true;
@@ -262,6 +262,7 @@ class Dungeon {
                             Math.abs(tile.Value - newTile.Value) > 1)
                             continue;
                     }
+                    marked[id] = true;
                     queue.push(newTile);
                 }
             }
