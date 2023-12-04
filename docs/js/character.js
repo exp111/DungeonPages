@@ -353,17 +353,17 @@ class Weapon {
                 let range = {};
                 let queue = [tile];
                 // start range
-                range[`${tile.X},${tile.Y}`] = 0;
+                range[tile.GetID()] = 0;
                 // basic dfs
                 while (queue.length > 0) {
                     let t = queue.pop();
                     // get reachable tiles
                     let tiles = func(t);
-                    let tID = `${t.X},${t.Y}`;
+                    let tID = t.GetID();
                     for (let i in tiles) {
                         let newTile = tiles[i];
                         // check if marked
-                        let id = `${newTile.X},${newTile.Y}`;
+                        let id = newTile.GetID();
                         if (range[id] != null) // skip already marked ones
                             continue;
 

@@ -69,7 +69,7 @@
         }
 
         function OnTileClick(dungeon, tile) {
-            console.log(`Clicked tile ${tile.Type} (${tile.X}, ${tile.Y}) in dungeon ${dungeon.Name}`);
+            console.log(`Clicked tile ${tile.Type} (${tile.GetID()}) in dungeon ${dungeon.Name}`);
 
             if (!dungeon.Active) {
                 console.error(`Dungeon ${dungeon.Name} is not active`);

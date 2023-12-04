@@ -186,7 +186,7 @@ class Dungeon {
             for (let i in tiles) {
                 let newTile = tiles[i];
                 // check if marked
-                let id = `${newTile.X},${newTile.Y}`;
+                let id = newTile.GetID();
                 if (marked[id] != null) // skip already marked ones
                     continue;
                 marked[id] = true;
@@ -275,7 +275,7 @@ class Dungeon {
                     // get the monster
                     let monster = monsters.find(m => m.Type == other.Subtype);
                     if (monster == null) {
-                        console.error(`Monster ${other.Subtype} in Tile (${other.X},${other.Y}) not found.`);
+                        console.error(`Monster ${other.Subtype} in Tile (${other.GetID()}) not found.`);
                         continue;
                     }
                     // check if number of (adjacent values >= DEF) is >= than hp
@@ -465,6 +465,10 @@ class Tile {
     X = 0;
     Y = 0;
     Collected = false;
+
+    GetID() {
+        return `${this.X},${this.Y}`;
+    }
 
     ToJson() {
         let ret = {
