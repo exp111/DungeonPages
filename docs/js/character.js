@@ -6,6 +6,25 @@ class Character {
     Weapons = null;
     Relics = [];
     DOMObject = null;
+    // Runtime
+    GoodDice = 1;
+
+    GotExperience(xp) {
+        let bonuses = this.Experience.GotExperience(xp);
+        for (let i in bonuses) {
+            let bonus = bonuses[i];
+            switch (bonus.Type) {
+                case "dice":
+                    this.GoodDice += bonus.Amount;
+                    break;
+                case "potion":
+                    this.Health.GotPotion(bonus.Amount);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     CreateDOM() {
         let ret = document.createElement("div");
@@ -49,6 +68,11 @@ class Health {
     Lost = 0;
     Unlocked = 0;
     DOMObject = null;
+
+    GotPotion(amount) {
+        this.Unlocked += amount;
+        this.UpdateUI();
+    }
 
     CreateDOM() {
         // Wrapper
@@ -136,9 +160,23 @@ class Ability {
 
 class Experience {
     Bonuses = []; // XP Bonuses
-    BonusesUnlocked = 0;
     Earned = 0;
     DOMObject = null;
+
+    GotExperience(xp) {
+        this.Earned += xp;
+        this.UpdateUI();
+        let ret = [];
+        for (let i in this.Bonuses) {
+            let bonus = this.Bonuses[i];
+            if (this.Earned >= bonus.Treshold) {
+                bonus.Unlocked = true;
+                bonus.UpdateUI();
+                ret.push(bonus);
+            }
+        }
+        return ret;
+    }
 
     CreateDOM() {
         let ret = document.createElement("div");
@@ -194,7 +232,7 @@ class Experience {
 }
 class Bonus {
     Treshold = 0;
-    Type = ""; // die, potion, tactics, range, rerollGood, rerollEvil, rerollAny
+    Type = ""; // dice, potion, tactics, range, rerollGood, rerollEvil, rerollAny
     Amount = 1;
     Unlocked = false;
     DOMObject = null;
@@ -385,6 +423,7 @@ class Weapon {
                         if (range[id] != null) // skip already marked ones
                             continue;
 
+                        //TODO: do we need to move this next to the push?
                         range[id] = range[tID] + 1;
                         // end check
                         if (newTile.IsExplored())

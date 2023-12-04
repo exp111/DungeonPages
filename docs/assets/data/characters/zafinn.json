@@ -15,7 +15,7 @@
     ],
     "bonuses": [{
             "treshold": 8,
-            "type": "die"
+            "type": "dice"
         },
         {
             "treshold": 13,
@@ -23,7 +23,7 @@
         },
         {
             "treshold": 20,
-            "type": "die"
+            "type": "dice"
         },
         {
             "treshold": 23,

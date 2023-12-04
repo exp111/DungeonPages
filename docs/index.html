@@ -82,6 +82,7 @@
                 return;
             // check for item collection/monster defeat
             dungeon.CheckForCollection(tile, Global.map.Monsters);
+            //TODO: give items to the player?
 
             // Need to recheck fully everytime
             if (dungeon.IsFinished()) {
@@ -94,8 +95,13 @@
                     let xp = rewards.xp;
                     let enemies = rewards.enemies;
                     let monsterXP = Global.map.GetMonsterXP(enemies);
-                    console.log(`Got ${xp + monsterXP} experience. (${xp} + ${monsterXP})`);
+                    let total = xp + monsterXP;
+                    console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
                     //TODO: give rewards to the player
+                    let char = Global.character;
+                    char.GotExperience(total);
+                    let pool = Global.dice;
+                    pool.SetAvailableDice(char.GoodDice, 0);
                 } else {
                     console.log("Dungeon did not finish with a sequential path");
                 }

@@ -139,6 +139,15 @@ class DicePool {
         dice.UpdateUI();
     }
 
+    SetDice(results) {
+        for (let i in results) {
+            let res = results[i];
+            let dice = this.Dice[i];
+            dice.Value = res;
+            dice.UpdateUI();
+        }
+    }
+
     Reroll() {
         // check if all dice were used
         for (let i in this.Dice) {
