@@ -305,32 +305,6 @@ class Weapon {
         if (this.Range == 0)
             return false;
 
-        function canMark(tile, grid, depth, range, getAvailableTiles) {
-            //TODO: add marked array for optimization?
-            // get tiles that are available from here
-            let tiles = getAvailableTiles(tile, grid);
-            let canGoDeeper = depth < (range - 1);
-            for (let i in tiles) {
-                let newTile = tiles[i];
-                // is it explored? then we mark our origin
-                if (newTile.IsExplored())
-                    return true;
-                // is it traversable? next tile
-                if (!newTile.IsTraversable())
-                    continue;
-
-                // we can move through so get the next tile, if we still have range
-                if (canGoDeeper)
-                {
-                    // if we can mark any tiles from this one, we can mark our origin
-                    if (canMark(newTile, grid, depth + 1, range, getAvailableTiles)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
         for (let i in this.Effects) {
             let effect = this.Effects[i];
             let func = null;
@@ -338,7 +312,7 @@ class Weapon {
             //      but this isn't really important as we dont have traversable tiles with w/h>1
             switch (effect) {
                 case "ortho":
-                    func = function (tile, grid) {
+                    func = function (tile) {
                         let ret = [];
                         if (tile.X > 0) // left
                             ret.push(grid[tile.X - 1][tile.Y]);
@@ -352,7 +326,7 @@ class Weapon {
                     }
                     break;
                 case "straightVert":
-                    func = function (tile, grid) {
+                    func = function (tile) {
                         let ret = [];
                         if (tile.Y > 0) // prev
                             ret.push(grid[tile.X][tile.Y - 1]);
@@ -362,7 +336,7 @@ class Weapon {
                     }
                     break;
                 case "straightHori":
-                    func = function (tile, grid) {
+                    func = function (tile) {
                         let ret = [];
                         if (tile.X > 0) // prev
                             ret.push(grid[tile.X - 1][tile.Y]);
@@ -374,9 +348,40 @@ class Weapon {
                 default:
                     console.log(`Unknown Effect: ${effect}`);
             }
+
             if (func) {
-                if (canMark(tile, grid, 0, this.Range, func))
-                    return true;
+                let range = {};
+                let queue = [tile];
+                // start range
+                range[`${tile.X},${tile.Y}`] = 0;
+                // basic dfs
+                while (queue.length > 0) {
+                    let t = queue.pop();
+                    // get reachable tiles
+                    let tiles = func(t);
+                    let tID = `${t.X},${t.Y}`;
+                    for (let i in tiles) {
+                        let newTile = tiles[i];
+                        // check if marked
+                        let id = `${newTile.X},${newTile.Y}`;
+                        if (range[id] != null) // skip already marked ones
+                            continue;
+
+                        range[id] = range[tID] + 1;
+                        // end check
+                        if (newTile.IsExplored())
+                            return true;
+
+                        // valid searchtarget check
+                        if (!newTile.IsTraversable())
+                            continue;
+
+                        // if this tile is at the edge of our range, dont search further from it
+                        if (range[id] >= this.Range)
+                            continue;
+                        queue.push(newTile);
+                    }
+                }
             }
         }
         return false;
