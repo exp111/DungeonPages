@@ -27,6 +27,65 @@ class Map {
         dungeon.UpdateUI();
     }
 
+    CheckWanderingMonsters(results) {
+        // Check if any two evil dice have the same value
+        let dungeon = this.SelectedDungeon;
+        if (dungeon == null)
+            return false;
+        if (dungeon.Dice < 2)
+            return false;
+        let rolled = {};
+        for (let i in results) {
+            let dice = results[i];
+            // only check evil dice
+            if (!dice.IsEvil)
+                continue;
+
+            let val = dice.Value;
+            // check if the value has been rolled before
+            if (rolled[val] != null)
+                return true;
+            // add to the storage
+            rolled[val] = true;
+        }
+        return false;
+    }
+
+    CheckMonsterAttack(results) {
+        let damage = 0;
+        let dungeon = this.SelectedDungeon;
+        if (dungeon == null)
+            return damage;
+        // get a dict which contains which evil dice values or lower were rolled
+        let rolled = {};
+        for (let i in results) {
+            let dice = results[i];
+            if (!dice.IsEvil)
+                continue;
+
+            // set all values higher than the value to true
+            for (let j = 1; j <= dice.Value; j++) {
+                rolled[j] = true;
+            }
+        }
+        // check which alive monsters can attack
+        for (let i in dungeon.Tiles) {
+            let tile = dungeon.Tiles[i];
+            // check if its a alive monster
+            if (!tile.Collected && tile.Type == "monster") {
+                let m = this.Monsters.find(m => m.Type == tile.Subtype);
+                if (m == null) {
+                    console.log(`Did not find monster ${tile.Subtype}`);
+                    continue;
+                }
+                // check if the attack value or higher was rolled
+                if (rolled[m.Attack] != null)
+                    damage += m.Damage;
+            }
+        }
+        return damage;
+    }
+
     GetMonsterXP(monsters) {
         let xp = 0;
         for (let i in monsters) {
