@@ -80,6 +80,7 @@
             // use dice
             if (!Global.dice.UseDice(dungeon, tile, Global.character))
                 return;
+            //TODO: check for traps
             // check for item collection/monster defeat
             dungeon.CheckForCollection(tile, Global.map.Monsters);
             //TODO: give items to the player?
@@ -97,11 +98,12 @@
                     let monsterXP = Global.map.GetMonsterXP(enemies);
                     let total = xp + monsterXP;
                     console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
-                    //TODO: give rewards to the player
+                    // give rewards to the player
                     let char = Global.character;
                     char.GotExperience(total);
                     let pool = Global.dice;
                     pool.SetAvailableDice(char.GoodDice, 0);
+                    //TODO: allow player to choose weapon/relic
                 } else {
                     console.log("Dungeon did not finish with a sequential path");
                 }
@@ -129,7 +131,9 @@
             let damage = map.CheckMonsterAttack(results);
             if (damage > 0) {
                 console.log(`Received ${damage} damage`);
-                //TODO: damage
+                // give the player damage
+                Global.character.GotDamage(damage);
+                //TODO: check for death
             }
         }
 

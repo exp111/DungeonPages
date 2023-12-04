@@ -200,6 +200,7 @@ class Dungeon {
     Grid = [];
     Active = false;
     Completed = false;
+    //TODO: runtime cache monsters, items, entry+exit
     //TODO: dots
 
     ToJson() {

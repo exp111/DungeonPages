@@ -9,6 +9,10 @@ class Character {
     // Runtime
     GoodDice = 1;
 
+    GotDamage(damage) {
+        this.Health.GotDamage(damage);
+    }
+    
     GotExperience(xp) {
         let bonuses = this.Experience.GotExperience(xp);
         for (let i in bonuses) {
@@ -68,6 +72,11 @@ class Health {
     Lost = 0;
     Unlocked = 0;
     DOMObject = null;
+
+    GotDamage(amount) {
+        this.Lost += amount;
+        this.UpdateUI();
+    }
 
     GotPotion(amount) {
         this.Unlocked += amount;
