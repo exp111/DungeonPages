@@ -58,5 +58,33 @@
             "effects": ["ortho"]
         }
     ],
-    "relics": []
+    "relics": [{
+            "name": "Ring of Good Fortune",
+            "treshold": 9,
+            "charges": 2,
+            "effect": "rerollGood",
+            "amount": 1
+        },
+        {
+            "name": "Enchanted Chainmail",
+            "treshold": 20,
+            "charges": 3,
+            "effect": "ignoreDmg",
+            "amount": 1
+        },
+        {
+            "name": "Wand of Repeat",
+            "treshold": 20,
+            "charges": 2,
+            "effect": "markDice",
+            "amount": 1
+        },
+        {
+            "name": "Sara's Amulet",
+            "treshold": 25,
+            "charges": 2,
+            "effect": "discardEvil",
+            "amount": 3
+        }
+    ]
 }

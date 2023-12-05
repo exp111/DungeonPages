@@ -45,7 +45,8 @@
 }
 
 .character-health-icon.checked:after {
-    content: "\2718"; /* cross */
+    content: "\2718";
+    /* cross */
     position: relative;
     top: -7px;
     left: -2px;
@@ -67,6 +68,7 @@
     gap: 4px;
     border-right: solid #c9cacb 1px;
 }
+
 .character-xp-points-part:last-child {
     border-right: none;
 }
@@ -101,24 +103,27 @@
     font-size: 18px;
 }
 
-.character-weapons-list {
+.character-weapons-list,
+.character-relics-list {
     display: grid;
     grid-template-columns: 1fr;
     row-gap: 3px;
 }
+
 .character-weapons-weapon {
     display: grid;
     grid-template-columns: 2fr 0.5fr 1fr;
     gap: 2px;
 }
 
-.character-weapons-weapon > div {
+.character-weapons-weapon>div {
     color: #315067;
     background-color: white;
     border: 1px solid #bfbfc0;
     border-radius: var(--border-radius);
 }
-.character-weapons-weapon > div:not(:first-child) {
+
+.character-weapons-weapon>div:not(:first-child) {
     text-align: center;
 }
 
@@ -126,6 +131,22 @@
     display: flex;
     align-items: center;
     padding-left: 5px;
+}
+
+.character-relics-relic {
+    display: flex;
+    color: #315067;
+    background-color: white;
+    border: 1px solid #bfbfc0;
+    border-radius: var(--border-radius);
+}
+
+.character-relics-relic-text {
+    flex-grow: 1;
+}
+
+.character-relics-relic-charges {
+    padding: 2px 5px;
 }
 
 .bonus {
@@ -139,12 +160,32 @@
 .bonus-dice {
     background-image: url("../assets/img/goodDice.svg");
 }
+
 .bonus-potion {
     background-image: url("../assets/img/items/potion.svg");
 }
+
 .bonus-range {
     background-image: url("../assets/img/range.svg");
 }
+
 .bonus-rerollAny {
     background-image: url("../assets/img/rerollAny.svg");
+}
+
+.charge {
+    width: 10px;
+    height: 10px;
+    background-image: url("../assets/img/charge.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+}
+
+.charge.used:after {
+    content: "\2718"; /* cross */
+    color: black;
+    position: relative;
+    top: -6px;
+    font-size: 13px;
 }

@@ -4,7 +4,7 @@ class Character {
     Health = null;
     Experience = null;
     Weapons = null;
-    Relics = [];
+    Relics = null;
     DOMObject = null;
     // Runtime
     GoodDice = 1;
@@ -21,7 +21,7 @@ class Character {
     CanReachTile(tile, grid) {
         return this.Weapons.CanReachTile(tile, grid, this.RangeMod);
     }
-    
+
     GotExperience(xp) {
         let bonuses = this.Experience.GotExperience(xp);
         for (let i in bonuses) {
@@ -60,6 +60,7 @@ class Character {
         // Weapons
         ret.appendChild(this.Weapons.DOMObject);
         // Relics
+        ret.appendChild(this.Relics.DOMObject);
         return ret;
     }
 
@@ -70,10 +71,7 @@ class Character {
         ret.Health = Health.FromJson(json.health);
         ret.Experience = Experience.FromJson(json.bonuses);
         ret.Weapons = Weapons.FromJson(json.weapons);
-        for (let i in json.relics) {
-            let r = json.relics[i];
-            ret.Relics.push(Relic.FromJson(r));
-        }
+        ret.Relics = Relics.FromJson(json.relics);
         ret.CreateDOM();
         return ret;
     }
@@ -323,6 +321,7 @@ class Bonus {
 
 class Weapons {
     Weapons = [];
+    // Runtime
     DOMObject = null;
 
     CanReachTile(tile, grid, rangeMod) {
@@ -367,6 +366,7 @@ class Weapon {
     Range = 1;
     Effects = []; // Ortho,Diag,straightVert,StraightHori,DiagLine //TODO: enum
     //TODO: alt effects like reroll 1
+    // Runtime
     DOMObject = null;
     Unlocked = false;
 
@@ -488,7 +488,10 @@ class Weapon {
         check.classList.add("character-weapons-weapon-checkbox");
         check.type = "checkbox";
         check.disabled = true;
-        name.innerText = `${this.Name} (${this.Treshold})`;
+        if (this.Treshold > 0)
+            name.innerText = `${this.Name} (${this.Treshold} XP)`;
+        else
+            name.innerText = `${this.Name} (${this.Treshold} XP)`;
         name.prepend(check);
         ret.appendChild(name);
         // Range
@@ -532,16 +535,122 @@ class Weapon {
     }
 }
 
+class Relics {
+    Relics = [];
+    //Runtime
+    DOMObject = null;
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        ret.classList.add("character-relics");
+        this.DOMObject = ret;
+        let relics = document.createElement("div");
+        relics.classList.add("character-relics-list");
+        ret.appendChild(relics);
+        for (let i in this.Relics) {
+            let r = this.Relics[i];
+            relics.appendChild(r.DOMObject);
+        }
+        return ret;
+    }
+
+    static FromJson(json) {
+        let ret = new Relics();
+        for (let i in json) {
+            let r = json[i];
+            ret.Relics.push(Relic.FromJson(r));
+        }
+        ret.CreateDOM();
+        return ret;
+    }
+}
+
 class Relic {
     Name = "";
     Treshold = 0;
-    Ability = ""; //TODO: these
+    Charges = 0;
+    Effect = "";
+    Amount = 1;
+    // Runtime
+    DOMObject = null;
+    Unlocked = false;
+    ChargesUsed = 0;
+
+    GetDescription() {
+        switch (this.Effect) {
+            case "rerollGood":
+                return `You may reroll ${this.Amount} Good Die.`;
+            case "ignoreDmg":
+                return `Ignore ${this.Amount} damage (Once per turn)`;
+            case "markDice":
+                return `Choose a die. Mark that result ${this.Amount + 1} times (Once per turn).`;
+            case "discardEvil":
+                return `Discard ${this.Amount} Evil Dice after resolving Wandering Monsters.`;
+            default:
+                return `Unknown Effect: ${this.Effect}`;
+        }
+    }
+
+    CreateDOM() {
+        let ret = document.createElement("div");
+        ret.classList.add("character-relics-relic");
+        this.DOMObject = ret;
+        // Checkbox 
+        let check = document.createElement("input");
+        check.classList.add("character-relics-relic-checkbox");
+        check.type = "checkbox";
+        check.disabled = true;
+        ret.appendChild(check);
+        // Text
+        let txt = document.createElement("span");
+        txt.classList.add("character-relics-relic-text");
+        ret.appendChild(txt);
+        /// Name
+        let name = document.createElement("b");
+        name.innerText = `${this.Name} (${this.Treshold} XP):`;
+        txt.appendChild(name);
+        /// Desc
+        let desc = document.createElement("span");
+        desc.innerText = this.GetDescription();
+        txt.appendChild(desc);
+        // Charges
+        let charges = document.createElement("div");
+        charges.classList.add("character-relics-relic-charges");
+        ret.appendChild(charges);
+        for (let i = 0; i < this.Charges; i++) {
+            let charge = document.createElement("div");
+            charge.classList.add("charge");
+            charges.appendChild(charge);
+        }
+        // update ui
+        this.UpdateUI();
+        return ret;
+    }
+
+    UpdateUI() {
+        // unlock checkboxes
+        let checks = this.DOMObject.getElementsByClassName("character-relics-relic-checkbox");
+        for (let i = 0; i < checks.length; i++) {
+            let check = checks[i];
+            check.checked = this.Unlocked;
+        }
+        // charges
+        let charges = this.DOMObject.getElementsByClassName("charge");
+        for (let i = 0; i < charges.length; i++) {
+            let charge = charges[i];
+            charge.classList.toggle("used", this.ChargesUsed > i);
+        }
+    }
 
     static FromJson(json) {
         let ret = new Relic();
         ret.Name = json.name;
         ret.Treshold = json.treshold;
-        ret.Ability = json.ability;
+        ret.Charges = json.charges;
+        ret.Effect = json.effect;
+        if (json.Amount)
+            ret.Amount = json.amount;
+        ret.CreateDOM();
         return ret;
     }
 }

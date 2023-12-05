@@ -820,7 +820,7 @@ class Trap {
             case "fog":
                 return "When Marked, reroll all dice and begin a new turn. Reduce your Range by 2 this turn (But no lower than 1).";
             default:
-                return "Unknown";
+                return `Unknown Effect: ${this.Effect}`;
         }
     }
 
