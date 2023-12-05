@@ -396,8 +396,7 @@ class Dungeon {
     }
 
     CanReachTile(tile, character) {
-        let weapons = character.Weapons;
-        return weapons.CanReachTile(tile, this.Grid);
+        return character.CanReachTile(tile, this.Grid);
     }
 
     GetTileNeighbours(tile) {

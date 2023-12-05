@@ -8,7 +8,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - move root code into game class
 - add relic ui
 - do trap effects
-- implement other bonus effects (range (add mod into Character class), rerollAny (click on reroll?))
+- implement other bonus effects (rerollAny (click on reroll?))
 - do monster effects (use dynamic GetDEF/GetATK func for monsters which check the effect)
 - add locks
 

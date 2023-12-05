@@ -8,6 +8,7 @@ class Character {
     DOMObject = null;
     // Runtime
     GoodDice = 1;
+    RangeMod = 0;
 
     GotDamage(damage) {
         this.Health.GotDamage(damage);
@@ -15,6 +16,10 @@ class Character {
 
     IsDead() {
         return this.Health.IsDead();
+    }
+
+    CanReachTile(tile, grid) {
+        return this.Weapons.CanReachTile(tile, grid, this.RangeMod);
     }
     
     GotExperience(xp) {
@@ -27,6 +32,9 @@ class Character {
                     break;
                 case "potion":
                     this.Health.GotPotion(bonus.Amount);
+                    break;
+                case "range":
+                    this.RangeMod += bonus.Amount;
                     break;
                 default:
                     break;
@@ -317,12 +325,12 @@ class Weapons {
     Weapons = [];
     DOMObject = null;
 
-    CanReachTile(tile, grid) {
+    CanReachTile(tile, grid, rangeMod) {
         for (let i in this.Weapons) {
             let weapon = this.Weapons[i];
             if (!weapon.Unlocked)
                 continue;
-            if (weapon.CanReachTile(tile, grid))
+            if (weapon.CanReachTile(tile, grid, rangeMod))
                 return true;
         }
         return false;
@@ -363,8 +371,9 @@ class Weapon {
     Unlocked = false;
 
     //TODO: move these out of here? idk
-    CanReachTile(tile, grid) {
-        if (this.Range == 0)
+    CanReachTile(tile, grid, rangeMod) {
+        let totalRange = this.Range + rangeMod;
+        if (totalRange == 0)
             return false;
 
         for (let i in this.Effects) {
@@ -458,7 +467,7 @@ class Weapon {
                             continue;
 
                         // if this tile is at the edge of our range, dont search further from it
-                        if (range[id] >= this.Range)
+                        if (range[id] >= totalRange)
                             continue;
                         queue.push(newTile);
                     }
