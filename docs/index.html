@@ -89,7 +89,7 @@
                 return;
 
             // use dice
-            if (!dice.UseDice(dungeon, tile, char))
+            if (!dice.UseDice(tile))
                 return;
             // check for item collection/monster defeat
             dungeon.CheckForCollection(tile, Global.map.Monsters);
