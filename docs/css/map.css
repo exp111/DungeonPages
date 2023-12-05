@@ -102,9 +102,15 @@
 .tile-item.collected {
     box-shadow: 0 0 0 2px green;
 }
+.tile-item.collected.selected {
+    box-shadow: 0 0 0 2px yellow;
+}
 .tile-item.collected.used:after {
     content: "\2714"; /* checkmark */
     color: green;
+}
+.tile-item.collected:not(.used) {
+    cursor: pointer;
 }
 
 .tile-entry {

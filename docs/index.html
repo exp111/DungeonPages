@@ -32,7 +32,7 @@
             dice: null,
             map: null,
             character: null,
-            selectedDice: null,
+            selectedItem: null,
         };
         // Dice
         Global.dice = new DicePool();
@@ -59,6 +59,16 @@
             console.log(Global.map);
         });
 
+        function UnselectItem() {
+            let item = Global.selectedItem;
+            if (item == null)
+                return;
+
+            Global.selectedItem = null;
+            item.Selected = false;
+            item.UpdateUI();
+        }
+
         function OnDungeonClick(dungeon) {
             console.log(`Clicked dungeon ${dungeon.Name}`);
             let map = Global.map;
@@ -80,18 +90,29 @@
 
             // Activate item?
             if (tile.Type == "item" && tile.Collected && !tile.Used) {
+                console.debug(`Use item ${tile.Subtype}`);
                 switch (tile.Subtype) {
                     case "potion":
                         Global.character.GotPotion(1);
                         tile.Used = true;
                         tile.UpdateUI();
                         break;
-                    //TODO: other items
+                    case "coin":
+                        // unselect item
+                        let prev = Global.selectedItem;
+                        UnselectItem();
+                        if (prev == tile) // just deselected
+                            break;
+                        Global.selectedItem = tile;
+                        tile.Selected = true;
+                        tile.UpdateUI();
+                        break;
+                        //TODO: other items
                 }
                 return;
             }
             let dice = Global.dice;
-            if (!dice.CanUseDice())
+            if (!dice.CanUseDice(dice.SelectedDice))
                 return;
 
             if (!tile.CanBeMarked())
@@ -169,6 +190,24 @@
 
         function OnDiceClick(dice) {
             console.log(`Clicked dice ${dice}`);
+            if (Global.selectedItem != null) {
+                let item = Global.selectedItem;
+                switch (item.Subtype) {
+                    case "coin": {
+                        if (!Global.dice.CanUseDice(dice))
+                            break;
+                        // change dice //TODO: make this better
+                        let result = confirm("Press OK for +1, Cancel for -1") ? 1 : -1;
+                        dice.Value += result;
+                        dice.UpdateUI();
+                        // unselect item
+                        UnselectItem();
+                        item.Used = true;
+                        item.UpdateUI();
+                        return;
+                    }
+                }
+            }
             Global.dice.SelectDice(dice);
         }
     </script>

@@ -94,13 +94,12 @@ class DicePool {
         }
     }
 
-    CanUseDice() {
-        let dice = this.SelectedDice;
+    CanUseDice(dice) {
         return dice != null && !dice.Used && !dice.Disabled;
     }
 
     UseDice(tile) {
-        if (!this.CanUseDice())
+        if (!this.CanUseDice(this.SelectedDice))
             return false;
 
         let dice = this.SelectedDice;

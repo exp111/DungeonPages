@@ -601,6 +601,7 @@ class Tile {
     Y = 0;
     Collected = false;
     Used = false;
+    Selected = false;
 
     GetID() {
         return `${this.X},${this.Y}`;
@@ -674,6 +675,7 @@ class Tile {
             this.DOMObject.classList.add(`tile-${this.Subtype}`);
         this.DOMObject.classList.toggle("collected", this.Collected);
         this.DOMObject.classList.toggle("used", this.Used);
+        this.DOMObject.classList.toggle("selected", this.Selected);
         this.DOMObject.style.setProperty("grid-column-end", `span ${this.Width}`);
         this.DOMObject.style.setProperty("grid-row-end", `span ${this.Height}`);
         this.DOMObject.innerText = this.Value;
