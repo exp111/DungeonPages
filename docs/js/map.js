@@ -93,13 +93,13 @@ class Map {
             }
         }
         // check which alive monsters can attack
-        for (let i in dungeon.Tiles) {
-            let tile = dungeon.Tiles[i];
+        for (let i in dungeon.Monsters) {
+            let monster = dungeon.Monsters[i];
             // check if its a alive monster
-            if (!tile.Collected && tile.Type == "monster") {
-                let m = this.Monsters.find(m => m.Type == tile.Subtype);
+            if (!monster.Collected) {
+                let m = this.Monsters.find(m => m.Type == monster.Subtype);
                 if (m == null) {
-                    console.log(`Did not find monster ${tile.Subtype}`);
+                    console.log(`Did not find monster ${monster.Subtype}`);
                     continue;
                 }
                 // check if the attack value or higher was rolled
@@ -226,7 +226,11 @@ class Dungeon {
     Grid = [];
     Active = false;
     Completed = false;
-    //TODO: runtime cache monsters, items, entry+exit
+    Monsters = [];
+    Items = [];
+    Entry = [];
+    Exit = [];
+
     //TODO: dots
 
     ToJson() {
@@ -249,14 +253,7 @@ class Dungeon {
     // Check if the dungeon has a path between entry and exit
     IsFinished(sequential = false) {
         // find the entry
-        let entry = null;
-        for (let i in this.Tiles) {
-            let tile = this.Tiles[i];
-            if (tile.Type == "entry") {
-                entry = tile;
-                break;
-            }
-        }
+        let entry = this.Entry;
         if (entry == null) {
             console.error("No entry found");
             return false;
@@ -479,6 +476,30 @@ class Dungeon {
         obj.classList.toggle("completed", this.Completed);
     }
 
+    Init() {
+        this.CalculateGrid();
+        // cache monsters, items, entry+exit
+        for (let i in this.Tiles) {
+            let tile = this.Tiles[i];
+            switch (tile.Type) {
+                case "monster":
+                    this.Monsters.push(tile);
+                    break;
+                case "item":
+                    this.Items.push(tile);
+                    break;
+                case "entry":
+                    this.Entry = tile;
+                    break;
+                case "exit":
+                    this.Exit = tile;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     CalculateGrid() {
         // preallocate grid
         this.Grid = new Array(this.Columns);
@@ -534,7 +555,7 @@ class Dungeon {
         if (count != should) {
             console.error(`Not enough/Too many Tiles in dungeon ${dungeon.Name} (has: ${count}, should: ${should})`)
         }
-        dungeon.CalculateGrid();
+        dungeon.Init();
         dungeon.CreateDOM();
         return dungeon;
     }
