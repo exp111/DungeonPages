@@ -390,9 +390,8 @@ class Weapon {
 
     //TODO: move these out of here? idk
     CanReachTile(tile, grid, rangeMod) {
-        let totalRange = this.Range + rangeMod;
-        if (totalRange == 0)
-            return false;
+        // can not go lower than 1 range
+        let totalRange = Math.max(this.Range + rangeMod, 1);
 
         for (let i in this.Effects) {
             let effect = this.Effects[i];

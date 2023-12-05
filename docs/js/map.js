@@ -65,6 +65,13 @@ class Map {
             return;
         //TODO: do effect
         console.log(`Activated trap ${trap.Name} with effect ${trap.Effect}`);
+        trap.ActivateEffect();
+    }
+
+    OnReroll() {
+        for (let i in this.Traps) {
+            this.Traps[i].OnReroll();
+        }
     }
 
     CheckWanderingMonsters(results) {
@@ -813,7 +820,51 @@ class Trap {
     Type = "";
     Disarm = 0;
     Effect = null; //Fog //TODO: enum
+    // Runtime
     DOMObject = null;
+    Counter = 0;
+    Storage = 0;
+
+    ActivateEffect() {
+        switch (this.Effect) {
+            case "fog":
+                // set all dice as used and reduce range by 2 (no lower than 1)
+                //TODO: we got a dependency :weary:
+                let pool = Global.dice;
+                for (let i in pool.Dice) {
+                    let dice = pool.Dice[i];
+                    dice.Used = true;
+                    dice.UpdateUI();
+                }
+                let char = Global.character;
+                char.RangeMod -= 2;
+                // set the counter to 2 (next round should be skipped, round after gets range back)
+                this.Counter = 2;
+                break;
+            default:
+                console.error(`Unknown Trap Effect ${this.Effect}`);
+                break;
+        }
+    }
+
+    OnReroll() {
+        switch (this.Effect) {
+            case "fog":
+                switch (this.Counter) {
+                    case 2: // first round after effect
+                        this.Counter--;
+                        break;
+                    case 1: // restore the range
+                        //TODO: another dependency
+                        let char = Global.character;
+                        char.RangeMod += 2;
+                        this.Storage = 0;
+                        this.Counter = 0;
+                        break;
+                }
+                break;
+        }
+    }
 
     GetDescription() {
         switch (this.Effect) {

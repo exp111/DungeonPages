@@ -131,9 +131,10 @@
             let pool = Global.dice;
             let results = pool.Reroll();
             if (!results) {
-                console.log("Not all dice rolled");
+                console.log("Can't reroll dice.");
                 return;
             }
+            Global.map.OnReroll(); //TODO: do this as an event
             console.debug(results);
             let damage = 0;
             if (map.CheckWanderingMonsters(results)) {
