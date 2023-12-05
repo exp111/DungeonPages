@@ -758,6 +758,7 @@
         "dice": 3,
         "width": 2,
         "height": 1,
+        "boss": true,
         "tiles": [{
             "type": "wall",
             "subtype": "",

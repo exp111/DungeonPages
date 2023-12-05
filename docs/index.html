@@ -63,7 +63,7 @@
             console.log(`Clicked dungeon ${dungeon.Name}`);
             let map = Global.map;
             let character = Global.character;
-            if (!dungeon.Completed && !map.HasActiveDungeon() && !character.IsDead()) {
+            if (map.CanSelectDungeon(dungeon) && !character.IsDead()) {
                 map.SelectDungeon(dungeon);
                 let pool = Global.dice;
                 pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);

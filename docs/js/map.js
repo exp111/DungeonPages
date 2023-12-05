@@ -22,6 +22,22 @@ class Map {
         return this.SelectedDungeon != null;
     }
 
+    CanSelectDungeon(dungeon) {
+        if (dungeon.Completed)
+            return false;
+
+        if (this.HasActiveDungeon())
+            return false;
+
+        if (dungeon.IsBoss) {
+            // gets if every non boss dungeon is complete
+            let nonBossComplete = this.Dungeons.every(d => d.IsBoss || d.Completed);
+            if (!nonBossComplete)
+                return false;
+        }
+        return true;
+    }
+
     SelectDungeon(dungeon) {
         this.SelectedDungeon = dungeon;
         dungeon.Active = true;
@@ -216,7 +232,7 @@ class Map {
 
 class Dungeon {
     Name = "";
-    isBoss = false;
+    IsBoss = false;
     Rows = 6;
     Columns = 6;
     Dice = 1;
@@ -544,7 +560,7 @@ class Dungeon {
         if (json.height != null)
             dungeon.Height = json.height;
         if (json.boss != null)
-            dungeon.isBoss = json.boss;
+            dungeon.IsBoss = json.boss;
         dungeon.Dice = json.dice;
         for (let i in json.tiles) {
             let t = json.tiles[i];

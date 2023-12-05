@@ -11,7 +11,6 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - implement other bonus effects (rerollAny (click on reroll?))
 - add advanced monster effects
 - add locks
-- only allow boss dungeon as the last dungeon
 
 ### Later:
 - rules + help
