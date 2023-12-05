@@ -103,9 +103,11 @@ class Map {
                     continue;
                 }
                 // check if the attack value or higher was rolled
-                if (rolled[m.Attack] != null) {
-                    damage += m.Damage;
-                    console.debug(`Received ${m.Damage} dmg from ${m.Name} with a roll ${m.Attack}+`)
+                let atk = m.GetATK(monster, dungeon);
+                if (rolled[atk] != null) {
+                    let dmg = m.GetDMG(monster, dungeon);
+                    damage += dmg;
+                    console.debug(`Received ${dmg} (${m.Damage} + ${dmg - m.Damage}) dmg from ${m.Name} with a roll ${atk}+ (${m.Attack} + ${atk - m.Attack})`)
                 }
             }
         }
@@ -366,18 +368,21 @@ class Dungeon {
                     //TODO: code probably also shouldnt be here?
                     let dmg = 0;
                     let adjacent = this.GetTileNeighbours(other);
+                    let def = monster.GetDEF(other, this);
+                    let hp = monster.GetHP(other, this);
                     for (let i in adjacent) {
                         let adj = adjacent[i];
                         let value = adj.Value;
                         // no number => not important
                         if (value == null)
                             continue;
-                        if (value >= monster.Defense) {
+                        if (value >= def) {
                             dmg += 1;
+                            if (dmg >= hp) {
+                                result = true
+                                break;
+                            }
                         }
-                    }
-                    if (dmg >= monster.HP) {
-                        result = true;
                     }
                     break;
                 }
@@ -685,6 +690,43 @@ class Monster {
             default:
                 return "Unknown";
         }
+    }
+
+    GetATK(tile, dungeon) {
+        switch (this.Effect) {
+            default:
+                return this.Attack;
+        }
+    }
+
+    GetDMG(tile, dungeon) {
+        switch (this.Effect) {
+            case "berserk":
+                // Check if any adjacent tiles are marked
+                let adjacent = dungeon.GetTileNeighbours(tile);
+                if (adjacent.some(t => t.Value != null))
+                    return this.Damage + 1;
+                return this.Damage;
+            default:
+                return this.Damage;
+        }
+    }
+
+    GetDEF(tile, dungeon) {
+        switch (this.Effect) {
+            case "steadfast":
+                // get the amount of alive monsters of this monster's type
+                let amount = dungeon.Monsters.filter(m => !m.Collected && m.Subtype == tile.Subtype).length;
+                if (amount == 1)
+                    return this.Defense + 1;
+                return this.Defense;
+            default:
+                return this.Defense;
+        }
+    }
+
+    GetHP(tile, dungeon) {
+        return this.HP;
     }
 
     CreateDOM() {

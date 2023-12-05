@@ -9,8 +9,9 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - add relic ui
 - do trap effects
 - implement other bonus effects (rerollAny (click on reroll?))
-- do monster effects (use dynamic GetDEF/GetATK func for monsters which check the effect)
+- add advanced monster effects
 - add locks
+- only allow boss dungeon as the last dungeon
 
 ### Later:
 - rules + help
