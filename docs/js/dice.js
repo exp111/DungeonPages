@@ -99,7 +99,7 @@ class DicePool {
         return dice != null && !dice.Used && !dice.Disabled;
     }
 
-    UseDice(dungeon, tile, character) {
+    UseDice(tile) {
         if (!this.CanUseDice())
             return false;
 
