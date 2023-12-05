@@ -62,7 +62,8 @@
         function OnDungeonClick(dungeon) {
             console.log(`Clicked dungeon ${dungeon.Name}`);
             let map = Global.map;
-            if (!dungeon.Completed && !map.HasActiveDungeon()) {
+            let character = Global.character;
+            if (!dungeon.Completed && !map.HasActiveDungeon() && !character.IsDead()) {
                 map.SelectDungeon(dungeon);
                 let pool = Global.dice;
                 pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
@@ -134,7 +135,11 @@
                 console.log(`Received ${damage} damage`);
                 // give the player damage
                 Global.character.GotDamage(damage);
-                //TODO: check for death
+                // check for death
+                if (Global.character.IsDead()) {
+                    Global.map.UnselectDungeon();
+                    //TODO: notify the user
+                }
             }
         }
 

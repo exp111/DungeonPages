@@ -9,6 +9,15 @@ class Map {
     OnTileClick = null;
     OnDungeonClick = null;
 
+    UnselectDungeon() {
+        let dungeon = this.SelectedDungeon;
+        if (dungeon != null) {
+            dungeon.Active = false;
+            dungeon.UpdateUI();
+            this.SelectedDungeon = null;
+        }
+    }
+
     HasActiveDungeon() {
         return this.SelectedDungeon != null;
     }
@@ -21,10 +30,10 @@ class Map {
 
     FinishDungeon() {
         let dungeon = this.SelectedDungeon;
-        this.SelectedDungeon = null;
-        dungeon.Active = false;
-        dungeon.Completed = true;
-        dungeon.UpdateUI();
+        if (dungeon != null) {
+            dungeon.Completed = true;
+            this.UnselectDungeon();
+        }
     }
 
     CheckTrap(tile) {
@@ -94,8 +103,10 @@ class Map {
                     continue;
                 }
                 // check if the attack value or higher was rolled
-                if (rolled[m.Attack] != null)
+                if (rolled[m.Attack] != null) {
                     damage += m.Damage;
+                    console.debug(`Received ${m.Damage} dmg from ${m.Name} with a roll ${m.Attack}+`)
+                }
             }
         }
         return damage;
@@ -274,7 +285,7 @@ class Dungeon {
                     // if we need a sequential path, check for val diff > 1
                     if (sequential) {
                         // doesnt matter for the entry
-                        if (tile.Type != "entry" && 
+                        if (tile.Type != "entry" &&
                             Math.abs(tile.Value - newTile.Value) > 1)
                             continue;
                     }

@@ -12,6 +12,10 @@ class Character {
     GotDamage(damage) {
         this.Health.GotDamage(damage);
     }
+
+    IsDead() {
+        return this.Health.IsDead();
+    }
     
     GotExperience(xp) {
         let bonuses = this.Experience.GotExperience(xp);
@@ -72,13 +76,23 @@ class Health {
     Lost = 0;
     Unlocked = 0;
     DOMObject = null;
+    // Runtime
+    Max = 0;
+
+    IsDead() {
+        return this.Lost >= this.Max;
+    }
 
     GotDamage(amount) {
-        this.Lost += amount;
+        let now = this.Lost + amount;
+        this.Lost = Math.min(Math.max(now, 0), this.Max);
         this.UpdateUI();
     }
 
     GotPotion(amount) {
+        for (let i = 1; i <= amount; i++) {
+            this.Max += this.Elements[this.Unlocked + i];
+        }
         this.Unlocked += amount;
         this.UpdateUI();
     }
@@ -137,6 +151,7 @@ class Health {
         let ret = new Health();
         ret.Elements = json;
         ret.CreateDOM();
+        ret.Max = ret.Elements[0];
         return ret;
     }
 }
