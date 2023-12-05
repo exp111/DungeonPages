@@ -127,10 +127,12 @@
                 return;
             }
             console.debug(results);
+            let damage = 0;
             if (map.CheckWanderingMonsters(results)) {
                 console.log("Natural Doubles activated Wandering Monsters effect.");
+                damage += 1;
             }
-            let damage = map.CheckMonsterAttack(results);
+            damage += map.CheckMonsterAttack(results);
             if (damage > 0) {
                 console.log(`Received ${damage} damage`);
                 // give the player damage
