@@ -165,16 +165,34 @@ class Health {
 class Ability {
     Name = "";
     Type = "";
+    // Runtime
     DOMObject = null;
+
+    GetDescription() {
+        switch (this.Type) {
+            case "sacrificeDouble":
+                return "Sacrifice a Good Die. Choose a die result of 3 or less and double it.";
+            default:
+                return `Unknown Ability ${this.Type}`;
+        }
+    }
 
     CreateDOM() {
         let ret = document.createElement("div");
+        ret.classList.add("character-ability");
         this.DOMObject = ret;
-        // Name
-        let name = document.createElement("div");
-        name.innerText = this.Name;
-        ret.appendChild(name);
-        //TODO: description?
+        // Text
+        let txt = document.createElement("span");
+        txt.classList.add("character-ability-text");
+        ret.appendChild(txt);
+        /// Name
+        let name = document.createElement("b");
+        name.innerText = `${this.Name}:`;
+        txt.appendChild(name);
+        /// Description
+        let desc = document.createElement("span");
+        desc.innerText = this.GetDescription();
+        txt.appendChild(desc);
         // return it
         return ret;
     }

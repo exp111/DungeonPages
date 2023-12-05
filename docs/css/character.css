@@ -103,6 +103,10 @@
     font-size: 18px;
 }
 
+.character-ability-text {
+    color: #315067;
+}
+
 .character-weapons-list,
 .character-relics-list {
     display: grid;

@@ -2,7 +2,7 @@
     "name": "Zafinn",
     "ability": {
         "name": "Beam of Energy",
-        "type": "SACRIFICE_DOUBLE"
+        "type": "sacrificeDouble"
     },
     "health": [
         10,
