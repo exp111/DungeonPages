@@ -77,6 +77,19 @@
                 console.error(`Dungeon ${dungeon.Name} is not active`);
                 return;
             }
+
+            // Activate item?
+            if (tile.Type == "item" && tile.Collected && !tile.Used) {
+                switch (tile.Subtype) {
+                    case "potion":
+                        Global.character.GotPotion(1);
+                        tile.Used = true;
+                        tile.UpdateUI();
+                        break;
+                    //TODO: other items
+                }
+                return;
+            }
             let dice = Global.dice;
             if (!dice.CanUseDice())
                 return;

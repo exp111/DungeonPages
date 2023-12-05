@@ -42,6 +42,10 @@ class Character {
         }
     }
 
+    GotPotion(amount) {
+        this.Health.GotPotion(amount);
+    }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("character");
@@ -97,6 +101,8 @@ class Health {
 
     GotPotion(amount) {
         for (let i = 1; i <= amount; i++) {
+            if (i >= this.Elements.length) // sanity check
+                break;
             this.Max += this.Elements[this.Unlocked + i];
         }
         this.Unlocked += amount;
