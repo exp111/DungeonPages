@@ -94,18 +94,17 @@ class DicePool {
         }
     }
 
-    UseDice(dungeon, tile, character) {
+    CanUseDice() {
         let dice = this.SelectedDice;
-        if (dice == null || dice.Used || dice.Disabled)
+        return dice != null && !dice.Used && !dice.Disabled;
+    }
+
+    UseDice(dungeon, tile, character) {
+        if (!this.CanUseDice())
             return false;
 
+        let dice = this.SelectedDice;
         // mark tile
-        if (!tile.CanBeMarked())
-            return false;
-
-        if (!dungeon.CanReachTile(tile, character))
-            return false;
-
         tile.Value = dice.Value;
         tile.UpdateUI();
         // use dice
