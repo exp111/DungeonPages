@@ -165,6 +165,9 @@
     background-color: #b9b5b3;
     background-image: url("../assets/img/lock.svg");
 }
+.tile-lock.collected {
+    background-image: url("../assets/img/unlock.svg");
+}
 
 .legend {
     padding: 10px;

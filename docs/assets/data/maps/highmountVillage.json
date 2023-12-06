@@ -365,8 +365,8 @@
             "width": 1,
             "height": 1
         }, {
-            "type": "lock",
-            "subtype": null,
+            "type": "toggleable",
+            "subtype": "lock",
             "width": 1,
             "height": 1
         }, {

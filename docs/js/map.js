@@ -590,8 +590,8 @@ class Dungeon {
 }
 
 class Tile {
-    Type = ""; // space, wall, monster, trap, entry, exit, item //TODO: enum
-    Subtype = ""; // depends on the monster/trap/item
+    Type = ""; // space, wall, monster, trap, entry, exit, item, toggleable //TODO: enum
+    Subtype = ""; // depends on the monster/trap/item/toggleable
     Width = 1;
     Height = 1;
     // Runtime
@@ -625,6 +625,14 @@ class Tile {
                 return this.Value != null; // only marked traps can be traversed
             case "space":
                 return true;
+            case "toggleable": {
+                switch (this.Subtype) {
+                    case "lock":
+                        return this.Collected;
+                    default:
+                        return false;
+                }
+            }
             default:
                 return false;
         }
@@ -634,6 +642,7 @@ class Tile {
         switch (this.Type) {
             case "entry":
                 return true;
+            case "toggleable":
             case "trap":
             case "space":
                 return this.Value != null; // marked
@@ -651,6 +660,14 @@ class Tile {
             case "trap":
             case "space":
                 return true;
+            case "toggleable": {
+                switch (this.Subtype) {
+                    case "lock":
+                        return this.Collected;
+                    default:
+                        return false;
+                }
+            }
             default:
                 return false;
         }
