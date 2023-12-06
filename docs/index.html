@@ -83,26 +83,22 @@
         function OnTileClick(dungeon, tile) {
             console.log(`Clicked tile ${tile.Type} (${tile.GetID()}) in dungeon ${dungeon.Name}`);
 
-            if (!dungeon.Active) {
-                console.error(`Dungeon ${dungeon.Name} is not active`);
-                return;
-            }
-
             // Activate item?
             if (tile.Type == "item" && tile.Collected && !tile.Used) {
                 console.debug(`Use item ${tile.Subtype}`);
+                let prev = Global.selectedItem;
+                UnselectItem();
+                if (prev == tile) // just deselected
+                    return;
                 switch (tile.Subtype) {
                     case "potion":
                         Global.character.GotPotion(1);
                         tile.Used = true;
                         tile.UpdateUI();
                         break;
+                    case "key":
                     case "coin":
-                        // unselect item
-                        let prev = Global.selectedItem;
-                        UnselectItem();
-                        if (prev == tile) // just deselected
-                            break;
+                        // select coin
                         Global.selectedItem = tile;
                         tile.Selected = true;
                         tile.UpdateUI();
@@ -110,6 +106,32 @@
                         //TODO: other items
                 }
                 return;
+            }
+            
+            if (!dungeon.Active) {
+                console.error(`Dungeon ${dungeon.Name} is not active`);
+                return;
+            }
+
+            // use item?
+            if (Global.selectedItem != null) {
+                let item = Global.selectedItem;
+                switch (item.Subtype) {
+                    case "key":
+                        // only useable on locks
+                        if (tile.Type != "toggleable" || tile.Subtype != "lock")
+                            break;
+                        // lets say only useable on reachable tiles
+                        if (!dungeon.CanReachTile(tile, Global.character))
+                            break;
+                        tile.Collected = true;
+                        tile.UpdateUI();
+                        item.Used = true;
+                        UnselectItem();
+                        break;
+                    default:
+                        break;
+                }
             }
             let dice = Global.dice;
             if (!dice.CanUseDice(dice.SelectedDice))
@@ -191,6 +213,7 @@
 
         function OnDiceClick(dice) {
             console.log(`Clicked dice ${dice}`);
+            // Use item on dice?
             if (Global.selectedItem != null) {
                 let item = Global.selectedItem;
                 switch (item.Subtype) {
