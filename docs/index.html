@@ -84,7 +84,9 @@
         function OnAbilityClick(ability) {
             console.log(`Clicked ability ${ability.Name}`);
             let prev = Global.selectedAbility;
+            UnselectItem();
             UnselectAbility();
+            Global.dice.UnselectDice();
             if (prev == ability) // toggle
                 return;
             
@@ -112,6 +114,8 @@
                 console.debug(`Use item ${tile.Subtype}`);
                 let prev = Global.selectedItem;
                 UnselectItem();
+                UnselectAbility();
+                Global.dice.UnselectDice();
                 if (prev == tile) // just deselected
                     return;
                 switch (tile.Subtype) {
@@ -256,7 +260,10 @@
                     }
                 }
             }
-            Global.dice.SelectDice(dice);
+            if (!Global.dice.SelectDice(dice))
+                return;
+            UnselectItem();
+            UnselectAbility();
         }
     </script>
 </body>
