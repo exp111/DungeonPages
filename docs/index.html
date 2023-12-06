@@ -32,7 +32,9 @@
             dice: null,
             map: null,
             character: null,
+            selectedAbility: null,
             selectedItem: null,
+            selectedDice: null,
         };
         // Dice
         Global.dice = new DicePool();
@@ -46,6 +48,7 @@
             let c = document.getElementById("character");
             c.parentNode.replaceChild(char.DOMObject, c);
             Global.character = char;
+            Global.character.OnAbilityClick = (e) => OnAbilityClick(e.ability);
             console.log(Global.character);
         });
         // Map
@@ -67,6 +70,27 @@
             Global.selectedItem = null;
             item.Selected = false;
             item.UpdateUI();
+        }
+
+        function UnselectAbility() {
+            let ability = Global.selectedAbility;
+            if (ability == null)
+                return;
+            Global.selectedAbility = null;
+            ability.Selected = false;
+            ability.UpdateUI();
+        }
+
+        function OnAbilityClick(ability) {
+            console.log(`Clicked ability ${ability.Name}`);
+            let prev = Global.selectedAbility;
+            UnselectAbility();
+            if (prev == ability) // toggle
+                return;
+            
+            Global.selectedAbility = ability;
+            ability.Selected = true;
+            ability.UpdateUI();
         }
 
         function OnDungeonClick(dungeon) {
@@ -107,7 +131,7 @@
                 }
                 return;
             }
-            
+
             if (!dungeon.Active) {
                 console.error(`Dungeon ${dungeon.Name} is not active`);
                 return;

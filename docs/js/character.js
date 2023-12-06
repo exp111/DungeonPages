@@ -5,10 +5,12 @@ class Character {
     Experience = null;
     Weapons = null;
     Relics = null;
-    DOMObject = null;
     // Runtime
+    DOMObject = null;
     GoodDice = 1;
     RangeMod = 0;
+    // Events
+    OnAbilityClick = null;
 
     GotDamage(damage) {
         this.Health.GotDamage(damage);
@@ -59,6 +61,14 @@ class Character {
         ret.appendChild(this.Health.DOMObject);
         // Ability
         ret.appendChild(this.Ability.DOMObject)
+        this.Ability.DOMObject.onclick = (e) => {
+            if (this.OnAbilityClick) {
+                this.OnAbilityClick({
+                    "character": this,
+                    "ability": this.Ability,
+                });
+            }
+        }
         // XP
         ret.appendChild(this.Experience.DOMObject);
         // Weapons
@@ -173,6 +183,7 @@ class Ability {
     Type = "";
     // Runtime
     DOMObject = null;
+    Selected = false;
 
     GetDescription() {
         switch (this.Type) {
@@ -201,6 +212,10 @@ class Ability {
         txt.appendChild(desc);
         // return it
         return ret;
+    }
+
+    UpdateUI() {
+        this.DOMObject.classList.toggle("selected", this.Selected);
     }
 
     static FromJson(json) {
