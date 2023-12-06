@@ -2,7 +2,7 @@
 https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 
 ## TODO:
-- allow item + ability + relic usage (click on them to activate)
+- allow item + relic usage (click on them to activate)
 - allow weapon + relic selection after finishing a dungeon
 - implement phase system
 - move root code into game class
@@ -19,3 +19,5 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - rules + help
 - fix up character ui
 - mobile design
+- collected indicator
+- disable ability/items/relics if they cant be used

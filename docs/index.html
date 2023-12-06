@@ -81,15 +81,25 @@
             ability.UpdateUI();
         }
 
+        function UnselectDice() {
+            let dice = Global.selectedDice;
+            if (dice == null)
+                return;
+            Global.selectedDice = null;
+            dice.Selected = false;
+            dice.UpdateUI();
+        }
+
         function OnAbilityClick(ability) {
             console.log(`Clicked ability ${ability.Name}`);
             let prev = Global.selectedAbility;
             UnselectItem();
             UnselectAbility();
+            UnselectDice();
             Global.dice.UnselectDice();
             if (prev == ability) // toggle
                 return;
-            
+
             Global.selectedAbility = ability;
             ability.Selected = true;
             ability.UpdateUI();
@@ -115,6 +125,7 @@
                 let prev = Global.selectedItem;
                 UnselectItem();
                 UnselectAbility();
+                UnselectDice();
                 Global.dice.UnselectDice();
                 if (prev == tile) // just deselected
                     return;
@@ -260,8 +271,49 @@
                     }
                 }
             }
+            if (Global.selectedAbility != null) {
+                let ability = Global.selectedAbility;
+                switch (ability.Type) {
+                    case "sacrificeDouble": {
+                        // only use it on dice
+                        if (!Global.dice.CanUseDice(dice))
+                            return;
+
+                        if (Global.selectedDice == null) {
+                            // only good dice can be selected
+                            if (dice.IsEvil)
+                                return;
+                            // select
+                            Global.selectedDice = dice;
+                            dice.Selected = true;
+                            dice.UpdateUI();
+                        } else {
+                            // dont sacrifice yourself, toggle instead
+                            if (Global.selectedDice == dice) {
+                                UnselectDice();
+                                return;
+                            }
+                            // only dice values
+                            if (dice.Value > 3)
+                                return;
+
+                            // double selected dice
+                            dice.Value *= 2;
+                            dice.UpdateUI();
+                            // sacrifice dice
+                            Global.selectedDice.Used = true;
+                            // unselect other stuff
+                            UnselectDice();
+                            UnselectAbility();
+                        }
+                        return;
+                    }
+                }
+            }
+
             if (!Global.dice.SelectDice(dice))
                 return;
+            UnselectDice();
             UnselectItem();
             UnselectAbility();
         }

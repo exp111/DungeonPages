@@ -41,6 +41,10 @@
 }
 /*TODO: extra case for evil dice?*/
 
+.dicepool-dice.selected {
+    box-shadow: 0 0 0 2px yellow;
+}
+
 .pip {
     display: block;
     align-self: center;

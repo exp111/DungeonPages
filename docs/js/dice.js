@@ -9,6 +9,7 @@ class Dice {
     Used = true;
     Active = false;
     Disabled = true;
+    Selected = false; // selected for abilities/items
 
     constructor(evil) {
         this.IsEvil = evil;
@@ -39,6 +40,8 @@ class Dice {
         obj.classList.toggle("active", this.Active);
         // disabled
         obj.classList.toggle("disabled", this.Disabled);
+        // selected
+        obj.classList.toggle("selected", this.Selected);
         // mark pips
         let pips = obj.getElementsByClassName("pip");
         for (let i = 0; i < pips.length; i++) {
