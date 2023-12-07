@@ -41,7 +41,7 @@
         let d = document.getElementById("dice");
         d.parentNode.replaceChild(Global.dice.DOMObject, d);
         Global.dice.OnDiceClick = (e) => OnDiceClick(e.dice);
-        Global.dice.OnButtonClick = (e) => OnDicePoolButton();
+        Global.dice.OnButtonClick = (_) => OnDicePoolButton();
         // Character
         loadCharacterJson("zafinn.json").then((json) => {
             let char = Character.FromJson(json);
