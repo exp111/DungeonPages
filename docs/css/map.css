@@ -51,6 +51,7 @@
 .dungeon-dice {
     background-image: url("../assets/img/evilDice.svg");
 }
+
 .dungeon-wandering-dice {
     background-image: url("../assets/img/wanderingMonster.svg");
     margin-right: var(--gap-size);
@@ -99,16 +100,20 @@
     content: "\2718"; /* cross */
     color: red;
 }
+
 .tile-item.collected {
     box-shadow: 0 0 0 2px green;
 }
+
 .tile-item.collected.selected {
     box-shadow: 0 0 0 2px yellow;
 }
+
 .tile-item.collected.used:after {
     content: "\2714"; /* checkmark */
     color: green;
 }
+
 .tile-item.collected:not(.used) {
     cursor: pointer;
 }
@@ -129,8 +134,34 @@
     background-image: url("../assets/img/items/potion.svg");
 }
 
-.tile-doubleCoin {
+/*Double coin*/
+.tile-coin.uses-2 {
     background-image: url("../assets/img/items/doubleCoin.svg");
+}
+
+.tile-coin.used-1:after {
+    content: "\2714"; /* checkmark */
+    color: green;
+    position: relative;
+    top: -5px;
+    left: -5px;
+    font-size: 21px;
+}
+.tile-coin.used:before {
+    content: "\2714"; /* checkmark */
+    color: green;
+    position: relative;
+    top: -5px;
+    left: 4px;
+    font-size: 21px;
+}
+.tile-coin.used:after {
+    content: "\2714"; /* checkmark */
+    color: green;
+    position: relative;
+    top: 6px;
+    left: -3px;
+    font-size: 21px;
 }
 
 .tile-key {
@@ -165,6 +196,7 @@
     background-color: #b9b5b3;
     background-image: url("../assets/img/lock.svg");
 }
+
 .tile-lock.collected {
     background-image: url("../assets/img/unlock.svg");
 }
@@ -182,11 +214,13 @@
     padding-right: 5px;
     border-right: 1px solid black;
 }
+
 .monsters-monster-title, .traps-trap-title {
     display: flex;
     align-items: start;
     margin-bottom: 2px;
 }
+
 .monsters-monster-title-icon, .traps-trap-title-icon {
     background-position: center center;
     background-repeat: no-repeat;
@@ -194,6 +228,7 @@
     width: 24px;
     height: 24px;
 }
+
 .monsters-monster-title-name, .traps-trap-title-name {
     font-family: Cambria;
     font-variant: small-caps;
@@ -206,6 +241,7 @@
     border: 1px solid black;
     border-radius: var(--border-radius);
 }
+
 .monsters-monster-stats-stat, .traps-trap-stats-stat {
     padding: 1px;
     text-align: center;
@@ -213,10 +249,12 @@
     background-color: #e7e6e5;
     color: #315067;
 }
+
 .monsters-monster-stats-stat:nth-child(-n+2), .traps-trap-stats-stat:first-child {
     color: white;
     background-color: #315067;
 }
+
 .monsters-monster-stats-stat:last-child, .traps-trap-stats-stat:last-child {
     border-right: none;
     background-color: white;
@@ -229,6 +267,7 @@
     width: 16px;
     height: 16px;
 }
+
 .effect-ortho {
     background-image: url("../assets/img/effects/orthogonal.svg");
 }

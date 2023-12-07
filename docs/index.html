@@ -3,321 +3,329 @@
 
 <head>
     <title>Dungeon Pages</title>
-    <link rel="stylesheet" type="text/css" href="css/main.css" />
-    <link rel="stylesheet" type="text/css" href="css/dice.css" />
-    <link rel="stylesheet" type="text/css" href="css/character.css" />
-    <link rel="stylesheet" type="text/css" href="css/map.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/dice.css"/>
+    <link rel="stylesheet" type="text/css" href="css/character.css"/>
+    <link rel="stylesheet" type="text/css" href="css/map.css"/>
 </head>
 
 <body>
-    <div class="wrapper">
-        <div id="dice">
+<div class="wrapper">
+    <div id="dice">
+
+    </div>
+    <div class="game">
+        <div id="character">
 
         </div>
-        <div class="game">
-            <div id="character">
+        <div id="map">
 
-            </div>
-            <div id="map">
-
-            </div>
         </div>
     </div>
-    <script src="js/dice.js"></script>
-    <script src="js/map.js"></script>
-    <script src="js/character.js"></script>
-    <script src="js/data.js"></script>
-    <script>
-        Global = {
-            dice: null,
-            map: null,
-            character: null,
-            selectedAbility: null,
-            selectedItem: null,
-            selectedDice: null,
-        };
-        // Dice
-        Global.dice = new DicePool();
-        let d = document.getElementById("dice");
-        d.parentNode.replaceChild(Global.dice.DOMObject, d);
-        Global.dice.OnDiceClick = (e) => OnDiceClick(e.dice);
-        Global.dice.OnButtonClick = (_) => OnDicePoolButton();
-        // Character
-        loadCharacterJson("zafinn.json").then((json) => {
-            let char = Character.FromJson(json);
-            let c = document.getElementById("character");
-            c.parentNode.replaceChild(char.DOMObject, c);
-            Global.character = char;
-            Global.character.OnAbilityClick = (e) => OnAbilityClick(e.ability);
-            console.log(Global.character);
-        });
-        // Map
-        loadMapJson("highmountVillage.json").then((json) => {
-            let map = Map.FromJson(json);
-            let m = document.getElementById("map");
-            m.parentNode.replaceChild(map.DOMObject, m);
-            Global.map = map;
-            Global.map.OnDungeonClick = (e) => OnDungeonClick(e.dungeon);
-            Global.map.OnTileClick = (e) => OnTileClick(e.dungeon, e.tile);
-            console.log(Global.map);
-        });
+</div>
+<script src="js/dice.js"></script>
+<script src="js/map.js"></script>
+<script src="js/character.js"></script>
+<script src="js/data.js"></script>
+<script>
+    Global = {
+        dice: null,
+        map: null,
+        character: null,
+        selectedAbility: null,
+        selectedItem: null,
+        selectedDice: null,
+    };
+    // Dice
+    Global.dice = new DicePool();
+    let d = document.getElementById("dice");
+    d.parentNode.replaceChild(Global.dice.DOMObject, d);
+    Global.dice.OnDiceClick = (e) => OnDiceClick(e.dice);
+    Global.dice.OnButtonClick = (_) => OnDicePoolButton();
+    // Character
+    loadCharacterJson("zafinn.json").then((json) => {
+        let char = Character.FromJson(json);
+        let c = document.getElementById("character");
+        c.parentNode.replaceChild(char.DOMObject, c);
+        Global.character = char;
+        Global.character.OnAbilityClick = (e) => OnAbilityClick(e.ability);
+        console.log(Global.character);
+    });
+    // Map
+    loadMapJson("highmountVillage.json").then((json) => {
+        let map = Map.FromJson(json);
+        let m = document.getElementById("map");
+        m.parentNode.replaceChild(map.DOMObject, m);
+        Global.map = map;
+        Global.map.OnDungeonClick = (e) => OnDungeonClick(e.dungeon);
+        Global.map.OnTileClick = (e) => OnTileClick(e.dungeon, e.tile);
+        console.log(Global.map);
+    });
 
-        function UnselectItem() {
-            let item = Global.selectedItem;
-            if (item == null)
-                return;
+    function UnselectItem() {
+        let item = Global.selectedItem;
+        if (item == null)
+            return;
 
-            Global.selectedItem = null;
-            item.Selected = false;
-            item.UpdateUI();
+        Global.selectedItem = null;
+        item.Selected = false;
+        item.UpdateUI();
+    }
+
+    function UnselectAbility() {
+        let ability = Global.selectedAbility;
+        if (ability == null)
+            return;
+        Global.selectedAbility = null;
+        ability.Selected = false;
+        ability.UpdateUI();
+    }
+
+    function UnselectDice() {
+        let dice = Global.selectedDice;
+        if (dice == null)
+            return;
+        Global.selectedDice = null;
+        dice.Selected = false;
+        dice.UpdateUI();
+    }
+
+    function OnAbilityClick(ability) {
+        console.log(`Clicked ability ${ability.Name}`);
+        let prev = Global.selectedAbility;
+        UnselectItem();
+        UnselectAbility();
+        UnselectDice();
+        Global.dice.UnselectDice();
+        if (prev == ability) // toggle
+            return;
+
+        Global.selectedAbility = ability;
+        ability.Selected = true;
+        ability.UpdateUI();
+    }
+
+    function OnDungeonClick(dungeon) {
+        console.log(`Clicked dungeon ${dungeon.Name}`);
+        let map = Global.map;
+        let character = Global.character;
+        if (map.CanSelectDungeon(dungeon) && !character.IsDead()) {
+            map.SelectDungeon(dungeon);
+            let pool = Global.dice;
+            pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
         }
+    }
 
-        function UnselectAbility() {
-            let ability = Global.selectedAbility;
-            if (ability == null)
-                return;
-            Global.selectedAbility = null;
-            ability.Selected = false;
-            ability.UpdateUI();
-        }
+    function OnTileClick(dungeon, tile) {
+        console.log(`Clicked tile ${tile.Type} (${tile.GetID()}) in dungeon ${dungeon.Name}`);
 
-        function UnselectDice() {
-            let dice = Global.selectedDice;
-            if (dice == null)
-                return;
-            Global.selectedDice = null;
-            dice.Selected = false;
-            dice.UpdateUI();
-        }
-
-        function OnAbilityClick(ability) {
-            console.log(`Clicked ability ${ability.Name}`);
-            let prev = Global.selectedAbility;
+        // Activate item?
+        if (tile.Type == "item" && tile.Collected && !tile.Used) {
+            console.debug(`Use item ${tile.Subtype}`);
+            let prev = Global.selectedItem;
             UnselectItem();
             UnselectAbility();
             UnselectDice();
             Global.dice.UnselectDice();
-            if (prev == ability) // toggle
+            if (prev == tile) // just deselected
                 return;
-
-            Global.selectedAbility = ability;
-            ability.Selected = true;
-            ability.UpdateUI();
+            switch (tile.Subtype) {
+                case "potion":
+                    Global.character.GotPotion(1);
+                    tile.Used = true;
+                    tile.UpdateUI();
+                    break;
+                case "key":
+                case "coin":
+                    // select coin
+                    Global.selectedItem = tile;
+                    tile.Selected = true;
+                    tile.UpdateUI();
+                    break;
+                //TODO: other items
+            }
+            return;
         }
 
-        function OnDungeonClick(dungeon) {
-            console.log(`Clicked dungeon ${dungeon.Name}`);
-            let map = Global.map;
-            let character = Global.character;
-            if (map.CanSelectDungeon(dungeon) && !character.IsDead()) {
-                map.SelectDungeon(dungeon);
-                let pool = Global.dice;
-                pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
-            }
+        if (!dungeon.Active) {
+            console.error(`Dungeon ${dungeon.Name} is not active`);
+            return;
         }
 
-        function OnTileClick(dungeon, tile) {
-            console.log(`Clicked tile ${tile.Type} (${tile.GetID()}) in dungeon ${dungeon.Name}`);
-
-            // Activate item?
-            if (tile.Type == "item" && tile.Collected && !tile.Used) {
-                console.debug(`Use item ${tile.Subtype}`);
-                let prev = Global.selectedItem;
-                UnselectItem();
-                UnselectAbility();
-                UnselectDice();
-                Global.dice.UnselectDice();
-                if (prev == tile) // just deselected
-                    return;
-                switch (tile.Subtype) {
-                    case "potion":
-                        Global.character.GotPotion(1);
-                        tile.Used = true;
-                        tile.UpdateUI();
+        // use item?
+        if (Global.selectedItem != null) {
+            let item = Global.selectedItem;
+            switch (item.Subtype) {
+                case "key":
+                    // only useable on locks
+                    if (tile.Type != "toggleable" || tile.Subtype != "lock")
                         break;
-                    case "key":
-                    case "coin":
-                        // select coin
-                        Global.selectedItem = tile;
-                        tile.Selected = true;
-                        tile.UpdateUI();
+                    // lets say only useable on reachable tiles
+                    if (!dungeon.CanReachTile(tile, Global.character))
                         break;
-                        //TODO: other items
-                }
-                return;
+                    tile.Collected = true;
+                    tile.UpdateUI();
+                    item.Used = true;
+                    UnselectItem();
+                    break;
+                default:
+                    break;
             }
+            // let items that do nothing fall through?
+        }
+        let dice = Global.dice;
+        if (!dice.CanUseDice(dice.SelectedDice))
+            return;
 
-            if (!dungeon.Active) {
-                console.error(`Dungeon ${dungeon.Name} is not active`);
-                return;
+        if (!tile.CanBeMarked())
+            return;
+
+        let char = Global.character;
+        if (!dungeon.CanReachTile(tile, char))
+            return;
+
+        // use dice
+        if (!dice.UseDice(tile))
+            return;
+        // check for item collection/monster defeat
+        dungeon.CheckForCollection(tile, Global.map.Monsters);
+
+        // Need to recheck fully everytime
+        if (dungeon.IsFinished()) {
+            console.log(`Finished Dungeon ${dungeon.Name}`);
+            Global.map.FinishDungeon();
+            // check if there is a sequential path
+            if (dungeon.IsFinished(true)) {
+                //TODO: move this into the map?
+                let rewards = dungeon.CalculateXP();
+                let xp = rewards.xp;
+                let enemies = rewards.enemies;
+                let monsterXP = Global.map.GetMonsterXP(enemies);
+                let total = xp + monsterXP;
+                console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
+                // give rewards to the player
+                char.GotExperience(total);
+                dice.SetAvailableDice(char.GoodDice, 0);
+                //TODO: allow player to choose weapon/relic
+            } else {
+                console.log("Dungeon did not finish with a sequential path");
             }
-
-            // use item?
-            if (Global.selectedItem != null) {
-                let item = Global.selectedItem;
-                switch (item.Subtype) {
-                    case "key":
-                        // only useable on locks
-                        if (tile.Type != "toggleable" || tile.Subtype != "lock")
-                            break;
-                        // lets say only useable on reachable tiles
-                        if (!dungeon.CanReachTile(tile, Global.character))
-                            break;
-                        tile.Collected = true;
-                        tile.UpdateUI();
-                        item.Used = true;
-                        UnselectItem();
-                        break;
-                    default:
-                        break;
-                }
-            }
-            let dice = Global.dice;
-            if (!dice.CanUseDice(dice.SelectedDice))
-                return;
-
-            if (!tile.CanBeMarked())
-                return;
-
-            let char = Global.character;
-            if (!dungeon.CanReachTile(tile, char))
-                return;
-
-            // use dice
-            if (!dice.UseDice(tile))
-                return;
-            // check for item collection/monster defeat
-            dungeon.CheckForCollection(tile, Global.map.Monsters);
-
-            // Need to recheck fully everytime
-            if (dungeon.IsFinished()) {
-                console.log(`Finished Dungeon ${dungeon.Name}`);
-                Global.map.FinishDungeon();
-                // check if there is a sequential path
-                if (dungeon.IsFinished(true)) {
-                    //TODO: move this into the map?
-                    let rewards = dungeon.CalculateXP();
-                    let xp = rewards.xp;
-                    let enemies = rewards.enemies;
-                    let monsterXP = Global.map.GetMonsterXP(enemies);
-                    let total = xp + monsterXP;
-                    console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
-                    // give rewards to the player
-                    char.GotExperience(total);
-                    dice.SetAvailableDice(char.GoodDice, 0);
-                    //TODO: allow player to choose weapon/relic
-                } else {
-                    console.log("Dungeon did not finish with a sequential path");
-                }
-                return;
-            }
-
-            // check for trap, needs to be done after item collection + dungeon finish
-            Global.map.CheckTrap(tile);
+            return;
         }
 
-        function OnDicePoolButton() {
-            console.log(`Clicked reroll`);
-            let map = Global.map;
-            if (!map.HasActiveDungeon()) {
-                console.log("No active dungeon");
-                return;
-            }
-            let pool = Global.dice;
-            let results = pool.Reroll();
-            if (!results) {
-                console.log("Can't reroll dice.");
-                return;
-            }
-            Global.map.OnReroll(); //TODO: do this as an event
-            console.debug(results);
-            let damage = 0;
-            if (map.CheckWanderingMonsters(results)) {
-                console.log("Natural Doubles activated Wandering Monsters effect.");
-                damage += 1;
-            }
-            damage += map.CheckMonsterAttack(results);
-            if (damage > 0) {
-                console.log(`Received ${damage} damage`);
-                // give the player damage
-                Global.character.GotDamage(damage);
-                // check for death
-                if (Global.character.IsDead()) {
-                    Global.map.UnselectDungeon();
-                    // notify the user //TODO: better notification
-                    alert("You're dead.");
-                }
+        // check for trap, needs to be done after item collection + dungeon finish
+        Global.map.CheckTrap(tile);
+    }
+
+    function OnDicePoolButton() {
+        console.log(`Clicked reroll`);
+        let map = Global.map;
+        if (!map.HasActiveDungeon()) {
+            console.log("No active dungeon");
+            return;
+        }
+        let pool = Global.dice;
+        let results = pool.Reroll();
+        if (!results) {
+            console.log("Can't reroll dice.");
+            return;
+        }
+        Global.map.OnReroll(); //TODO: do this as an event
+        console.debug(results);
+        let damage = 0;
+        if (map.CheckWanderingMonsters(results)) {
+            console.log("Natural Doubles activated Wandering Monsters effect.");
+            damage += 1;
+        }
+        damage += map.CheckMonsterAttack(results);
+        if (damage > 0) {
+            console.log(`Received ${damage} damage`);
+            // give the player damage
+            Global.character.GotDamage(damage);
+            // check for death
+            if (Global.character.IsDead()) {
+                Global.map.UnselectDungeon();
+                // notify the user //TODO: better notification
+                alert("You're dead.");
             }
         }
+    }
 
-        function OnDiceClick(dice) {
-            console.log(`Clicked dice ${dice}`);
-            // Use item on dice?
-            if (Global.selectedItem != null) {
-                let item = Global.selectedItem;
-                switch (item.Subtype) {
-                    case "coin": {
-                        if (!Global.dice.CanUseDice(dice))
-                            break;
-                        // change dice //TODO: make this better
-                        let result = confirm("Press OK for +1, Cancel for -1") ? 1 : -1;
-                        dice.Value += result;
-                        dice.UpdateUI();
-                        // unselect item
-                        UnselectItem();
-                        item.Used = true;
-                        item.UpdateUI();
+    function OnDiceClick(dice) {
+        console.log(`Clicked dice ${dice}`);
+        // Use item on dice?
+        if (Global.selectedItem != null) {
+            let item = Global.selectedItem;
+            switch (item.Subtype) {
+                case "coin": {
+                    if (!Global.dice.CanUseDice(dice))
+                        break;
+                    // change dice //TODO: make this better
+                    let result = confirm("Press OK for +1, Cancel for -1") ? 1 : -1;
+                    let newRes = dice.Value + result;
+                    if (newRes > 6 || newRes < 1) {
+                        alert("Dice Value can't go lower than 1 or higher 6.")
                         return;
                     }
+                    dice.Value = newRes;
+                    dice.UpdateUI();
+                    // unselect item
+                    UnselectItem();
+                    item.UsedCount++;
+                    if (item.UsedCount >= item.Uses)
+                        item.Used = true;
+                    item.UpdateUI();
+                    return;
                 }
             }
-            if (Global.selectedAbility != null) {
-                let ability = Global.selectedAbility;
-                switch (ability.Type) {
-                    case "sacrificeDouble": {
-                        // only use it on dice
-                        if (!Global.dice.CanUseDice(dice))
+        }
+        if (Global.selectedAbility != null) {
+            let ability = Global.selectedAbility;
+            switch (ability.Type) {
+                case "sacrificeDouble": {
+                    // only use it on dice
+                    if (!Global.dice.CanUseDice(dice))
+                        return;
+
+                    if (Global.selectedDice == null) {
+                        // only good dice can be selected
+                        if (dice.IsEvil)
+                            return;
+                        // select
+                        Global.selectedDice = dice;
+                        dice.Selected = true;
+                        dice.UpdateUI();
+                    } else {
+                        // dont sacrifice yourself, toggle instead
+                        if (Global.selectedDice == dice) {
+                            UnselectDice();
+                            return;
+                        }
+                        // only dice values
+                        if (dice.Value > 3)
                             return;
 
-                        if (Global.selectedDice == null) {
-                            // only good dice can be selected
-                            if (dice.IsEvil)
-                                return;
-                            // select
-                            Global.selectedDice = dice;
-                            dice.Selected = true;
-                            dice.UpdateUI();
-                        } else {
-                            // dont sacrifice yourself, toggle instead
-                            if (Global.selectedDice == dice) {
-                                UnselectDice();
-                                return;
-                            }
-                            // only dice values
-                            if (dice.Value > 3)
-                                return;
-
-                            // double selected dice
-                            dice.Value *= 2;
-                            dice.UpdateUI();
-                            // sacrifice dice
-                            Global.selectedDice.Used = true;
-                            // unselect other stuff
-                            UnselectDice();
-                            UnselectAbility();
-                        }
-                        return;
+                        // double selected dice
+                        dice.Value *= 2;
+                        dice.UpdateUI();
+                        // sacrifice dice
+                        Global.selectedDice.Used = true;
+                        // unselect other stuff
+                        UnselectDice();
+                        UnselectAbility();
                     }
+                    return;
                 }
             }
-
-            if (!Global.dice.SelectDice(dice))
-                return;
-            UnselectDice();
-            UnselectItem();
-            UnselectAbility();
         }
-    </script>
+
+        if (!Global.dice.SelectDice(dice))
+            return;
+        UnselectDice();
+        UnselectItem();
+        UnselectAbility();
+    }
+</script>
 </body>
 
 </html>

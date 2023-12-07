@@ -276,9 +276,10 @@
             "height": 1
         }, {
             "type": "item",
-            "subtype": "doubleCoin",
+            "subtype": "coin",
             "width": 1,
-            "height": 1
+            "height": 1,
+            "uses": 2
         }, {
             "type": "space",
             "subtype": "",
@@ -509,9 +510,10 @@
             "height": 1
         }, {
             "type": "item",
-            "subtype": "doubleCoin",
+            "subtype": "coin",
             "width": 1,
-            "height": 1
+            "height": 1,
+            "uses": 2
         }, {
             "type": "space",
             "subtype": "",
@@ -657,9 +659,10 @@
             "height": 1
         }, {
             "type": "item",
-            "subtype": "doubleCoin",
+            "subtype": "coin",
             "width": 1,
-            "height": 1
+            "height": 1,
+            "uses": 2
         }, {
             "type": "entry",
             "subtype": "",
@@ -697,9 +700,10 @@
             "height": 1
         }, {
             "type": "item",
-            "subtype": "doubleCoin",
+            "subtype": "coin",
             "width": 1,
-            "height": 1
+            "height": 1,
+            "uses": 2
         }, {
             "type": "wall",
             "subtype": "",
@@ -826,9 +830,10 @@
             "height": 1
         }, {
             "type": "item",
-            "subtype": "doubleCoin",
+            "subtype": "coin",
             "width": 1,
-            "height": 1
+            "height": 1,
+            "uses": 2
         }, {
             "type": "entry",
             "subtype": "",
@@ -1126,9 +1131,10 @@
             "height": 1
         }, {
             "type": "item",
-            "subtype": "doubleCoin",
+            "subtype": "coin",
             "width": 1,
-            "height": 1
+            "height": 1,
+            "uses": 2
         }, {
             "type": "wall",
             "subtype": "",

@@ -594,6 +594,7 @@ class Tile {
     Subtype = ""; // depends on the monster/trap/item/toggleable
     Width = 1;
     Height = 1;
+    Uses = 1;
     // Runtime
     DOMObject = null;
     Value = null;
@@ -601,6 +602,7 @@ class Tile {
     Y = 0;
     Collected = false;
     Used = false;
+    UsedCount = 0;
     Selected = false;
 
     GetID() {
@@ -612,7 +614,8 @@ class Tile {
             "type": this.Type,
             "subtype": this.Subtype,
             "width": this.Width,
-            "height": this.Height
+            "height": this.Height,
+            "uses": this.Uses
         };
         //TODO: dont add values if they're default
         return ret;
@@ -690,6 +693,10 @@ class Tile {
         this.DOMObject.classList.add(`tile-${this.Type}`);
         if (this.Subtype)
             this.DOMObject.classList.add(`tile-${this.Subtype}`);
+        if (this.Uses > 1)
+            this.DOMObject.classList.add(`uses-${this.Uses}`);
+        if (this.UsedCount > 0 && this.UsedCount < this.Uses)
+            this.DOMObject.classList.add(`used-${this.UsedCount}`);
         this.DOMObject.classList.toggle("collected", this.Collected);
         this.DOMObject.classList.toggle("used", this.Used);
         this.DOMObject.classList.toggle("selected", this.Selected);
@@ -707,6 +714,8 @@ class Tile {
             tile.Width = json.width;
         if (json.height != null)
             tile.Height = json.height;
+        if (json.uses != null)
+            tile.Uses = json.uses;
         tile.CreateDOM(tile);
         return tile;
     }
