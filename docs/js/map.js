@@ -600,6 +600,7 @@ class Tile {
     Value = null;
     X = 0;
     Y = 0;
+    Unlocked = false;
     Collected = false;
     Used = false;
     UsedCount = 0;
@@ -623,7 +624,8 @@ class Tile {
 
     IsTraversable() {
         switch (this.Type) {
-            //TODO: locked door
+            case "wall":
+                return this.Unlocked;
             case "trap":
                 return this.Value != null; // only marked traps can be traversed
             case "space":
@@ -631,7 +633,7 @@ class Tile {
             case "toggleable": {
                 switch (this.Subtype) {
                     case "lock":
-                        return this.Collected;
+                        return this.Unlocked;
                     default:
                         return false;
                 }
@@ -645,6 +647,7 @@ class Tile {
         switch (this.Type) {
             case "entry":
                 return true;
+            case "wall":
             case "toggleable":
             case "trap":
             case "space":
@@ -660,13 +663,15 @@ class Tile {
             return false;
 
         switch (this.Type) {
+            case "wall":
+                return this.Unlocked;
             case "trap":
             case "space":
                 return true;
             case "toggleable": {
                 switch (this.Subtype) {
                     case "lock":
-                        return this.Collected;
+                        return this.Unlocked;
                     default:
                         return false;
                 }
@@ -697,6 +702,7 @@ class Tile {
             this.DOMObject.classList.add(`uses-${this.Uses}`);
         if (this.UsedCount > 0 && this.UsedCount < this.Uses)
             this.DOMObject.classList.add(`used-${this.UsedCount}`);
+        this.DOMObject.classList.toggle("unlocked", this.Unlocked);
         this.DOMObject.classList.toggle("collected", this.Collected);
         this.DOMObject.classList.toggle("used", this.Used);
         this.DOMObject.classList.toggle("selected", this.Selected);

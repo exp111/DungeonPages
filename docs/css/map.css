@@ -84,6 +84,9 @@
 .tile-wall {
     background-color: #b9b5b3;
 }
+.tile-wall.unlocked {
+    filter: opacity(60%);
+}
 
 .tile-monster,
 .tile-item,
@@ -197,7 +200,7 @@
     background-image: url("../assets/img/lock.svg");
 }
 
-.tile-lock.collected {
+.tile-lock.unlocked {
     background-image: url("../assets/img/unlock.svg");
 }
 

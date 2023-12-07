@@ -135,6 +135,7 @@
                     tile.Used = true;
                     tile.UpdateUI();
                     break;
+                case "teleportPotion":
                 case "key":
                 case "coin":
                     // select coin
@@ -156,14 +157,33 @@
         if (Global.selectedItem != null) {
             let item = Global.selectedItem;
             switch (item.Subtype) {
+                //TODO: merge them pls?
+                case "teleportPotion":
+                    // dont unlock unlocked tiles
+                    if (tile.Unlocked)
+                        break;
+                    // useable on locks + doors
+                    if ((tile.Type != "toggleable" || tile.Subtype != "lock") &&
+                        (tile.Type != "wall"))
+                        break;
+                    // only useable on reachable tiles
+                    if (!dungeon.CanReachTile(tile, Global.character))
+                        break;
+                    tile.Unlocked = true;
+                    tile.UpdateUI();
+                    item.Used = true;
+                    UnselectItem();
                 case "key":
+                    // dont unlock unlocked tiles
+                    if (tile.Unlocked)
+                        break;
                     // only useable on locks
                     if (tile.Type != "toggleable" || tile.Subtype != "lock")
                         break;
-                    // lets say only useable on reachable tiles
+                    // only useable on reachable tiles
                     if (!dungeon.CanReachTile(tile, Global.character))
                         break;
-                    tile.Collected = true;
+                    tile.Unlocked = true;
                     tile.UpdateUI();
                     item.Used = true;
                     UnselectItem();

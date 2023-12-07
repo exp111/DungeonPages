@@ -3,7 +3,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 
 ## TODO:
 - allow relic usage (click on them to activate)
-- add items (teleport potion)
+- add other items
 - allow weapon + relic selection after finishing a dungeon
 - implement phase system
 - move root code into game class
@@ -16,6 +16,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - find better way to mark dungeons as completed as we also make useable items harder to see
 
 ### Later:
+- more maps/characters
 - rules + help
 - fix up character ui
 - mobile design
