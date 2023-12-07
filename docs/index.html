@@ -164,10 +164,12 @@
         if (results == null)
             return false;
         let damage = map.CheckMonsterAttack(results);
-        DoDamage(damage);
+        if (!DoDamage(damage))
+            return false;
         return true;
     }
 
+    // Returns false if the player died
     function DoDamage(damage) {
         if (damage > 0) {
             console.log(`Received ${damage} damage`);
@@ -176,10 +178,21 @@
             // check for death
             if (Global.character.IsDead()) {
                 Global.map.UnselectDungeon();
-                // notify the user //TODO: better notification
-                alert("You're dead.");
+                // notify the user
+                Global.phases.SelectPhase("End");
+                Global.phases.SetStatus("You're dead.");
+                // disable all dice
+                let pool = Global.dice;
+                for (let i in pool.Dice) {
+                    let dice = pool.Dice[i];
+                    dice.Used = true;
+                    dice.UpdateUI();
+                }
+                //alert("You're dead.");
+                return false;
             }
         }
+        return true;
     }
 
     //TODO: instead use a "CanGoToPhase" callback (which checks if we can change) + a OnPhaseSelected event (which does stuff)
@@ -416,6 +429,9 @@
                 }
             }
         }
+
+        if (Global.phases.Phase != "Explore")
+            return;
 
         if (!Global.dice.SelectDice(dice))
             return;

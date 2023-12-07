@@ -5,7 +5,7 @@ class Phases {
     Monster Damage
     Explore
     Finish
-    TODO: dead
+    End
      */
     Phase = "SelectDungeon";
     // Runtime
@@ -16,11 +16,17 @@ class Phases {
     Monster = null;
     Explore = null;
     Finish = null;
+    End = null;
+    Status = null;
     // Events
     OnPhaseSelected = null;
 
     constructor() {
         this.CreateDOM();
+    }
+
+    SetStatus(text) {
+        this.Status.textContent = text;
     }
 
     SelectPhase(phase) {
@@ -60,6 +66,11 @@ class Phases {
         this.Monster = addPhase("Monster");
         this.Explore = addPhase("Explore");
         this.Finish = addPhase("Finish");
+        this.End = addPhase("End");
+        // Status text
+        this.Status = document.createElement("span");
+        this.Status.classList.add("phase-status");
+        ret.appendChild(this.Status);
         this.UpdateUI();
         return ret;
     }
@@ -75,5 +86,7 @@ class Phases {
         this.Explore.classList.toggle("active", this.Phase == "Explore");
         this.Finish.disabled = true;
         this.Finish.classList.toggle("active", this.Phase == "Finish");
+        this.End.disabled = true;
+        this.End.classList.toggle("active", this.Phase == "End");
     }
 }

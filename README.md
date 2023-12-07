@@ -3,7 +3,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 
 ## TODO:
 - allow relic usage (click on them to activate)
-- add other items
+- add other items (poison)
 - move root code into game class
 - implement other bonus effects (rerollAny (click on reroll?))
 - add advanced monster effects
