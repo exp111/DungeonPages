@@ -122,20 +122,28 @@
     function StartFinishPhase(dungeon) {
         let char = Global.character;
         let dice = Global.dice;
+        let map = Global.map;
+        let phases = Global.phases;
 
-        Global.phases.SelectPhase("Finish");
-        Global.map.FinishDungeon();
+        phases.SelectPhase("Finish");
+        map.FinishDungeon();
         // check if there is a sequential path
         if (dungeon.IsFinished(true)) {
             //TODO: move this into the map?
             let rewards = dungeon.CalculateXP();
             let xp = rewards.xp;
             let enemies = rewards.enemies;
-            let monsterXP = Global.map.GetMonsterXP(enemies);
+            let monsterXP = map.GetMonsterXP(enemies);
             let total = xp + monsterXP;
             console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
             // give rewards to the player
             char.GotExperience(total);
+            if (map.HasFinishedGame()) {
+                EndGame("You've won.");
+                console.log("Won");
+                //TODO: score?
+                return;
+            }
             dice.SetAvailableDice(char.GoodDice, 0);
             //TODO: allow player to choose weapon/relic
             char.AllowWeaponSelection(true);
@@ -146,6 +154,18 @@
 
     function EndFinishPhase() {
         Global.character.AllowWeaponSelection(false);
+    }
+
+    function EndGame(status) {
+        Global.phases.SelectPhase("End");
+        Global.phases.SetStatus(status);
+        // disable all dice
+        let pool = Global.dice;
+        for (let i in pool.Dice) {
+            let dice = pool.Dice[i];
+            dice.Used = true;
+            dice.UpdateUI();
+        }
     }
 
     function WanderingMonsters(results) {
@@ -179,15 +199,7 @@
             if (Global.character.IsDead()) {
                 Global.map.UnselectDungeon();
                 // notify the user
-                Global.phases.SelectPhase("End");
-                Global.phases.SetStatus("You're dead.");
-                // disable all dice
-                let pool = Global.dice;
-                for (let i in pool.Dice) {
-                    let dice = pool.Dice[i];
-                    dice.Used = true;
-                    dice.UpdateUI();
-                }
+                EndGame("You're dead");
                 //alert("You're dead.");
                 return false;
             }
@@ -245,6 +257,9 @@
         console.log(`Clicked dungeon ${dungeon.Name}`);
         let map = Global.map;
         let character = Global.character;
+        if (Global.phases.Phase != "SelectDungeon")
+            return;
+        
         if (map.CanSelectDungeon(dungeon) && !character.IsDead()) {
             map.SelectDungeon(dungeon);
             let pool = Global.dice;

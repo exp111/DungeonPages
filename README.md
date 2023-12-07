@@ -8,7 +8,6 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - implement other bonus effects (rerollAny (click on reroll?))
 - add advanced monster effects
 - add other weapon effects (reroll X, magic X)
-- end game check
 - proper event system
 - reset selectable item on dice click and vice-versa
 - find better way to mark dungeons as completed as we also make useable items harder to see

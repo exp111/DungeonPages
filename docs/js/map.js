@@ -22,6 +22,15 @@ class Map {
         return this.SelectedDungeon != null;
     }
 
+    HasFinishedGame() {
+        for (let i in this.Dungeons) {
+            let dungeon = this.Dungeons[i];
+            if (!dungeon.Completed)
+                return false;
+        }
+        return true;
+    }
+
     CanSelectDungeon(dungeon) {
         if (dungeon.Completed)
             return false;
