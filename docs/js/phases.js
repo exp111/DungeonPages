@@ -5,6 +5,7 @@ class Phases {
     Monster Damage
     Explore
     Finish
+    TODO: dead
      */
     Phase = "SelectDungeon";
     // Runtime

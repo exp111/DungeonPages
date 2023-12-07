@@ -127,6 +127,11 @@
     gap: 2px;
 }
 
+.character-weapons-weapon.selectionAllowed {
+    box-shadow: 0 0 0 1px red;
+    border-radius: var(--border-radius);
+}
+
 .character-weapons-weapon>div {
     color: #315067;
     background-color: white;
