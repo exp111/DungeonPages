@@ -62,7 +62,6 @@ class DicePool {
     AvailableEvil = 0;
     // Events
     OnDiceClick = null;
-    OnButtonClick = null;
 
     constructor() {
         this.CreateDice();
@@ -149,13 +148,31 @@ class DicePool {
         }
     }
 
-    Reroll() {
-        // check if all dice were used
+    GetRollResults() {
+        let ret = [];
+        for (let i in this.Dice) {
+            let dice = this.Dice[i];
+            if (dice.Disabled)
+                continue;
+
+            ret.push(dice);
+        }
+        return ret;
+    }
+
+    CanReroll() {
         for (let i in this.Dice) {
             let dice = this.Dice[i];
             if (!dice.Used)
-                return null;
+                return false;
         }
+        return true;
+    }
+
+    Reroll() {
+        // check if all dice were used
+        if (!this.CanReroll())
+            return null;
 
         // go through each dice and reroll
         let ret = [];
@@ -177,16 +194,6 @@ class DicePool {
         let ret = document.createElement("div");
         ret.classList.add("dicepool");
         this.DOMObject = ret;
-        // add button
-        let reroll = document.createElement("button");
-        reroll.classList.add("dicepool-button");
-        reroll.onclick = (e) => {
-            if (this.OnButtonClick) {
-                this.OnButtonClick();
-            }
-        };
-        reroll.innerText = "Reroll";
-        ret.appendChild(reroll);
         // add dice
         for (let i in this.Dice) {
             let d = this.Dice[i];

@@ -1,0 +1,7 @@
+.phase {
+    border-radius: var(--border-radius);
+}
+
+.phase.active {
+    border-color: blue;
+}

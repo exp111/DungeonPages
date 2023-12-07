@@ -8,5 +8,20 @@
 .wrapper {
     display: grid;
     grid-template-columns: 0.5fr auto;
+    grid-template-rows: 0.5fr auto;
     gap: 10px;
+}
+
+.phases {
+    width: 100%;
+    grid-row-end: 1;
+    grid-column-start: span 2;
+}
+
+.dicepool {
+    grid-row-start: 1;
+}
+
+.game {
+    grid-row-start: 1;
 }

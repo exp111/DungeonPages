@@ -7,10 +7,14 @@
     <link rel="stylesheet" type="text/css" href="css/dice.css"/>
     <link rel="stylesheet" type="text/css" href="css/character.css"/>
     <link rel="stylesheet" type="text/css" href="css/map.css"/>
+    <link rel="stylesheet" type="text/css" href="css/phases.css"/>
 </head>
 
 <body>
 <div class="wrapper">
+    <div id="phases">
+
+    </div>
     <div id="dice">
 
     </div>
@@ -27,6 +31,7 @@
 <script src="js/map.js"></script>
 <script src="js/character.js"></script>
 <script src="js/data.js"></script>
+<script src="js/phases.js"></script>
 <script>
     Global = {
         dice: null,
@@ -35,13 +40,19 @@
         selectedAbility: null,
         selectedItem: null,
         selectedDice: null,
+        phases: null
     };
+    // Phase
+    Global.phases = new Phases();
+    let p = document.getElementById("phases");
+    p.parentNode.replaceChild(Global.phases.DOMObject, p);
+    Global.phases.OnPhaseSelected = (e) => OnPhaseSelected(e.current, e.phase);
+    //TODO: event
     // Dice
     Global.dice = new DicePool();
     let d = document.getElementById("dice");
     d.parentNode.replaceChild(Global.dice.DOMObject, d);
     Global.dice.OnDiceClick = (e) => OnDiceClick(e.dice);
-    Global.dice.OnButtonClick = (_) => OnDicePoolButton();
     // Character
     loadCharacterJson("zafinn.json").then((json) => {
         let char = Character.FromJson(json);
@@ -90,6 +101,88 @@
         dice.UpdateUI();
     }
 
+    function StartRollPhase() {
+        let map = Global.map;
+        if (!map.HasActiveDungeon()) {
+            console.log("No active dungeon");
+            return;
+        }
+        let pool = Global.dice;
+        let results = pool.Reroll();
+        if (!results) {
+            console.log("Can't reroll dice.");
+            return;
+        }
+        Global.map.OnReroll(); //TODO: do this as an event
+        Global.phases.SelectPhase("Roll");
+        // Wandering monsters
+        WanderingMonsters(results);
+    }
+
+    function WanderingMonsters(results) {
+        let map = Global.map;
+        let damage = 0;
+        if (map.CheckWanderingMonsters(results)) {
+            console.log("Natural Doubles activated Wandering Monsters effect.");
+            damage += 1;
+        }
+        DoDamage(damage);
+    }
+
+    function DoMonsterAttack() {
+        let map = Global.map;
+        let results = Global.dice.GetRollResults();
+        if (results == null)
+            return false;
+        let damage = map.CheckMonsterAttack(results);
+        DoDamage(damage);
+        return true;
+    }
+
+    function DoDamage(damage) {
+        if (damage > 0) {
+            console.log(`Received ${damage} damage`);
+            // give the player damage
+            Global.character.GotDamage(damage);
+            // check for death
+            if (Global.character.IsDead()) {
+                Global.map.UnselectDungeon();
+                // notify the user //TODO: better notification
+                alert("You're dead.");
+            }
+        }
+    }
+
+    //TODO: instead use a "CanGoToPhase" callback (which checks if we can change) + a OnPhaseSelected event (which does stuff)
+    function OnPhaseSelected(current, phase) {
+        switch (phase) {
+            case "SelectDungeon":
+                if (current != "Finish")
+                    return;
+                Global.phases.SelectPhase("SelectDungeon");
+                break;
+            case "Roll":
+                if (current != "Explore")
+                    return;
+                StartRollPhase();
+                break;
+            case "Monster":
+                if (current != "Roll")
+                    return;
+                if (!DoMonsterAttack())
+                    return;
+                Global.phases.SelectPhase("Monster");
+                break;
+            case "Explore":
+                if (current != "Monster")
+                    return;
+                Global.phases.SelectPhase("Explore");
+                break;
+            default:
+                break;
+        }
+    }
+
     function OnAbilityClick(ability) {
         console.log(`Clicked ability ${ability.Name}`);
         let prev = Global.selectedAbility;
@@ -113,12 +206,13 @@
             map.SelectDungeon(dungeon);
             let pool = Global.dice;
             pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
+            // Run roll phase
+            StartRollPhase();
         }
     }
 
     function OnTileClick(dungeon, tile) {
         console.log(`Clicked tile ${tile.Type} (${tile.GetID()}) in dungeon ${dungeon.Name}`);
-
         // Activate item?
         if (tile.Type == "item" && tile.Collected && !tile.Used) {
             console.debug(`Use item ${tile.Subtype}`);
@@ -193,6 +287,10 @@
             }
             // let items that do nothing fall through?
         }
+        // Use dice
+        if (Global.phases.Phase != "Explore")
+            return;
+
         let dice = Global.dice;
         if (!dice.CanUseDice(dice.SelectedDice))
             return;
@@ -213,6 +311,7 @@
         // Need to recheck fully everytime
         if (dungeon.IsFinished()) {
             console.log(`Finished Dungeon ${dungeon.Name}`);
+            Global.phases.SelectPhase("Finish");
             Global.map.FinishDungeon();
             // check if there is a sequential path
             if (dungeon.IsFinished(true)) {
@@ -235,40 +334,6 @@
 
         // check for trap, needs to be done after item collection + dungeon finish
         Global.map.CheckTrap(tile);
-    }
-
-    function OnDicePoolButton() {
-        console.log(`Clicked reroll`);
-        let map = Global.map;
-        if (!map.HasActiveDungeon()) {
-            console.log("No active dungeon");
-            return;
-        }
-        let pool = Global.dice;
-        let results = pool.Reroll();
-        if (!results) {
-            console.log("Can't reroll dice.");
-            return;
-        }
-        Global.map.OnReroll(); //TODO: do this as an event
-        console.debug(results);
-        let damage = 0;
-        if (map.CheckWanderingMonsters(results)) {
-            console.log("Natural Doubles activated Wandering Monsters effect.");
-            damage += 1;
-        }
-        damage += map.CheckMonsterAttack(results);
-        if (damage > 0) {
-            console.log(`Received ${damage} damage`);
-            // give the player damage
-            Global.character.GotDamage(damage);
-            // check for death
-            if (Global.character.IsDead()) {
-                Global.map.UnselectDungeon();
-                // notify the user //TODO: better notification
-                alert("You're dead.");
-            }
-        }
     }
 
     function OnDiceClick(dice) {
