@@ -430,25 +430,48 @@ class Dungeon {
     }
 
     CanReachTile(tile, character) {
-        return character.CanReachTile(tile, this.Grid);
+        return character.CanReachTile(this, tile);
+    }
+
+    CheckTileReachable(tile, totalRange, stepFunc) {
+        let range = {};
+        let queue = [tile];
+        // start range
+        range[tile.GetID()] = 0;
+        // basic dfs
+        while (queue.length > 0) {
+            let t = queue.pop();
+            // get reachable tiles
+            let tiles = stepFunc(t, this.Grid);
+            let tID = t.GetID();
+            for (let i in tiles) {
+                let newTile = tiles[i];
+                // check if marked
+                let id = newTile.GetID();
+                if (range[id] != null) // skip already marked ones
+                    continue;
+
+                //TODO: do we need to move this next to the push?
+                range[id] = range[tID] + 1;
+                // end check
+                if (newTile.IsExplored())
+                    return true;
+
+                // valid searchtarget check
+                if (!newTile.IsTraversable())
+                    continue;
+
+                // if this tile is at the edge of our range, dont search further from it
+                if (range[id] >= totalRange)
+                    continue;
+                queue.push(newTile);
+            }
+        }
+        return false;
     }
 
     GetTileNeighbours(tile) {
-        //INFO: this assumes we have a rectangular grid
-        let ret = [];
-        if (tile.X > 0) // left
-            for (let i = 0; i < tile.Height; i++)
-                ret.push(this.Grid[tile.X - 1][tile.Y + i]);
-        if (tile.Y > 0) // top
-            for (let i = 0; i < tile.Width; i++)
-                ret.push(this.Grid[tile.X + i][tile.Y - 1]);
-        if ((tile.X + tile.Width) < this.Grid.length) // right
-            for (let i = 0; i < tile.Height; i++)
-                ret.push(this.Grid[tile.X + tile.Width][tile.Y + i]);
-        if ((tile.Y + tile.Height) < this.Grid[tile.X].length) // down
-            for (let i = 0; i < tile.Width; i++)
-                ret.push(this.Grid[tile.X + i][tile.Y + tile.Height]);
-        return ret;
+        return Tile.GetOrthogonalNeighbours(tile, this.Grid);
     }
 
     CreateDOM() {
@@ -688,6 +711,24 @@ class Tile {
             default:
                 return false;
         }
+    }
+
+    static GetOrthogonalNeighbours(tile, grid) {
+        //INFO: this assumes we have a rectangular grid
+        let ret = [];
+        if (tile.X > 0) // left
+            for (let i = 0; i < tile.Height; i++)
+                ret.push(grid[tile.X - 1][tile.Y + i]);
+        if (tile.Y > 0) // top
+            for (let i = 0; i < tile.Width; i++)
+                ret.push(grid[tile.X + i][tile.Y - 1]);
+        if ((tile.X + tile.Width) < grid.length) // right
+            for (let i = 0; i < tile.Height; i++)
+                ret.push(grid[tile.X + tile.Width][tile.Y + i]);
+        if ((tile.Y + tile.Height) < grid[tile.X].length) // down
+            for (let i = 0; i < tile.Width; i++)
+                ret.push(grid[tile.X + i][tile.Y + tile.Height]);
+        return ret;
     }
 
     CreateDOM() {

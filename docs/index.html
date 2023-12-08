@@ -259,7 +259,7 @@
         let character = Global.character;
         if (Global.phases.Phase != "SelectDungeon")
             return;
-        
+
         if (map.CanSelectDungeon(dungeon) && !character.IsDead()) {
             map.SelectDungeon(dungeon);
             let pool = Global.dice;
@@ -287,6 +287,7 @@
                     tile.Used = true;
                     tile.UpdateUI();
                     break;
+                case "poison":
                 case "teleportPotion":
                 case "key":
                 case "coin":
@@ -336,6 +337,18 @@
                     if (!dungeon.CanReachTile(tile, Global.character))
                         break;
                     tile.Unlocked = true;
+                    tile.UpdateUI();
+                    item.Used = true;
+                    UnselectItem();
+                    break;
+                case "poison":
+                    // normal tile rules
+                    if (!tile.CanBeMarked())
+                        break;
+                    // check if its orthogonally
+                    if (!dungeon.CheckTileReachable(tile, 1, Tile.GetOrthogonalNeighbours))
+                        break;
+                    tile.Value = 4;
                     tile.UpdateUI();
                     item.Used = true;
                     UnselectItem();

@@ -25,8 +25,8 @@ class Character {
         return this.Health.IsDead();
     }
 
-    CanReachTile(tile, grid) {
-        return this.Weapons.CanReachTile(tile, grid, this.RangeMod);
+    CanReachTile(dungeon, tile) {
+        return this.Weapons.CanReachTile(dungeon, tile, this.RangeMod);
     }
 
     GotExperience(xp) {
@@ -385,12 +385,12 @@ class Weapons {
         }
     }
 
-    CanReachTile(tile, grid, rangeMod) {
+    CanReachTile(dungeon, tile, rangeMod) {
         for (let i in this.Weapons) {
             let weapon = this.Weapons[i];
             if (!weapon.Unlocked)
                 continue;
-            if (weapon.CanReachTile(tile, grid, rangeMod))
+            if (weapon.CanReachTile(dungeon, tile, rangeMod))
                 return true;
         }
         return false;
@@ -447,7 +447,7 @@ class Weapon {
     }
 
     //TODO: move these out of here? idk
-    CanReachTile(tile, grid, rangeMod) {
+    CanReachTile(dungeon, tile, rangeMod) {
         // can not go lower than 1 range
         let totalRange = Math.max(this.Range + rangeMod, 1);
 
@@ -458,21 +458,10 @@ class Weapon {
             //      but this isn't really important as we dont have traversable tiles with w/h>1
             switch (effect) {
                 case "ortho":
-                    func = function (tile) {
-                        let ret = [];
-                        if (tile.X > 0) // left
-                            ret.push(grid[tile.X - 1][tile.Y]);
-                        if (tile.Y > 0) // top
-                            ret.push(grid[tile.X][tile.Y - 1]);
-                        if ((tile.X + tile.Width) < grid.length) // right
-                            ret.push(grid[tile.X + tile.Width][tile.Y]);
-                        if ((tile.Y + tile.Height) < grid[tile.X].length) // down
-                            ret.push(grid[tile.X][tile.Y + tile.Height]);
-                        return ret;
-                    }
+                    func = Tile.GetOrthogonalNeighbours;
                     break;
                 case "straightVert":
-                    func = function (tile) {
+                    func = function (tile, grid) {
                         let ret = [];
                         if (tile.Y > 0) // prev
                             ret.push(grid[tile.X][tile.Y - 1]);
@@ -482,7 +471,7 @@ class Weapon {
                     }
                     break;
                 case "straightHori":
-                    func = function (tile) {
+                    func = function (tile, grid) {
                         let ret = [];
                         if (tile.X > 0) // prev
                             ret.push(grid[tile.X - 1][tile.Y]);
@@ -492,7 +481,7 @@ class Weapon {
                     }
                     break;
                 case "diag":
-                    func = function (tile) {
+                    func = function (tile, grid) {
                         let ret = [];
                         let xPrev = tile.X > 0;
                         let yPrev = tile.Y > 0;
@@ -514,39 +503,8 @@ class Weapon {
             }
 
             if (func) {
-                let range = {};
-                let queue = [tile];
-                // start range
-                range[tile.GetID()] = 0;
-                // basic dfs
-                while (queue.length > 0) {
-                    let t = queue.pop();
-                    // get reachable tiles
-                    let tiles = func(t);
-                    let tID = t.GetID();
-                    for (let i in tiles) {
-                        let newTile = tiles[i];
-                        // check if marked
-                        let id = newTile.GetID();
-                        if (range[id] != null) // skip already marked ones
-                            continue;
-
-                        //TODO: do we need to move this next to the push?
-                        range[id] = range[tID] + 1;
-                        // end check
-                        if (newTile.IsExplored())
-                            return true;
-
-                        // valid searchtarget check
-                        if (!newTile.IsTraversable())
-                            continue;
-
-                        // if this tile is at the edge of our range, dont search further from it
-                        if (range[id] >= totalRange)
-                            continue;
-                        queue.push(newTile);
-                    }
-                }
+                if (dungeon.CheckTileReachable(tile, totalRange, func))
+                    return true;
             }
         }
         return false;

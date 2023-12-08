@@ -3,7 +3,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 
 ## TODO:
 - allow relic usage (click on them to activate)
-- add other items (poison)
+- add other items
 - move root code into game class
 - implement other bonus effects (rerollAny (click on reroll?))
 - add advanced monster effects
@@ -15,6 +15,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - add automatic phase switching
 - allow damage ignore/block effect (do dmg on phase end)
 - add status indicator ("you'll receive 1 damage")
+- fix dicepool being too wide
 
 ### Later:
 - more maps/characters
