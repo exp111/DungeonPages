@@ -37,10 +37,11 @@
         dice: null,
         map: null,
         character: null,
+        phases: null,
         selectedAbility: null,
         selectedItem: null,
         selectedDice: null,
-        phases: null
+        selectedRelic: null
     };
     // Phase
     Global.phases = new Phases();
@@ -60,6 +61,7 @@
         c.parentNode.replaceChild(char.DOMObject, c);
         Global.character = char;
         Global.character.OnAbilityClick = (e) => OnAbilityClick(e.ability);
+        Global.character.OnRelicClick = (e) => OnRelicClick(e.relic);
         console.log(Global.character);
     });
     // Map
@@ -99,6 +101,15 @@
         Global.selectedDice = null;
         dice.Selected = false;
         dice.UpdateUI();
+    }
+
+    function UnselectRelic() {
+        let relic = Global.selectedRelic;
+        if (relic == null)
+            return;
+        Global.selectedRelic = null;
+        relic.Selected = false;
+        relic.UpdateUI();
     }
 
     function StartRollPhase() {
@@ -238,12 +249,29 @@
         }
     }
 
+    function OnRelicClick(relic) {
+        console.log(`Clicked relic ${relic.Name}`);
+        let prev = Global.selectedRelic;
+        UnselectItem();
+        UnselectAbility();
+        UnselectDice();
+        UnselectRelic();
+        Global.dice.UnselectDice();
+        if (prev == relic) // toggle
+            return;
+
+        Global.selectedRelic = relic;
+        relic.Selected = true;
+        relic.UpdateUI();
+    }
+
     function OnAbilityClick(ability) {
         console.log(`Clicked ability ${ability.Name}`);
         let prev = Global.selectedAbility;
         UnselectItem();
         UnselectAbility();
         UnselectDice();
+        UnselectRelic();
         Global.dice.UnselectDice();
         if (prev == ability) // toggle
             return;
@@ -278,6 +306,7 @@
             UnselectItem();
             UnselectAbility();
             UnselectDice();
+            UnselectRelic();
             Global.dice.UnselectDice();
             if (prev == tile) // just deselected
                 return;
@@ -466,6 +495,7 @@
         UnselectDice();
         UnselectItem();
         UnselectAbility();
+        UnselectRelic();
     }
 </script>
 </body>

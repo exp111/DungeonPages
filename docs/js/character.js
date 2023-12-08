@@ -11,6 +11,7 @@ class Character {
     RangeMod = 0;
     // Events
     OnAbilityClick = null;
+    OnRelicClick = null;
 
     AllowWeaponSelection(val) {
         this.Weapons.AllowSelection(val, this);
@@ -27,6 +28,13 @@ class Character {
 
     CanReachTile(dungeon, tile) {
         return this.Weapons.CanReachTile(dungeon, tile, this.RangeMod);
+    }
+
+    UnlockAll() {
+        this.GotExperience(75);
+        this.Weapons.UnlockAll();
+        this.Relics.UnlockAll();
+        this.Health.GotPotion(this.Health.Elements.length - 1);
     }
 
     GotExperience(xp) {
@@ -78,10 +86,15 @@ class Character {
         ret.appendChild(this.Experience.DOMObject);
         // Weapons
         ret.appendChild(this.Weapons.DOMObject);
-        this.Weapons.OnWeaponUnlocked = (e) => this.OnWeaponRelicUnlock({"weapon": e.weapon});
+        this.Weapons.OnWeaponUnlocked = (e) => this.OnWeaponRelicUnlock(e);
         // Relics
         ret.appendChild(this.Relics.DOMObject);
-        this.Relics.OnRelicUnlocked = (e) => this.OnWeaponRelicUnlock({"relic": e.relic});
+        this.Relics.OnRelicUnlocked = (e) => this.OnWeaponRelicUnlock(e);
+        this.Relics.OnRelicClick = (e) => {
+            if (this.OnRelicClick) {
+                this.OnRelicClick(e);
+            }
+        };
         return ret;
     }
 
@@ -385,6 +398,14 @@ class Weapons {
         }
     }
 
+    UnlockAll() {
+        for (let i in this.Weapons) {
+            let weapon = this.Weapons[i];
+            weapon.Unlocked = true;
+            weapon.UpdateUI();
+        }
+    }
+
     CanReachTile(dungeon, tile, rangeMod) {
         for (let i in this.Weapons) {
             let weapon = this.Weapons[i];
@@ -576,11 +597,20 @@ class Relics {
     DOMObject = null;
     // Events
     OnRelicUnlocked = null;
+    OnRelicClick = null;
 
     AllowSelection(val, char) {
         for (let i in this.Relics) {
             let relic = this.Relics[i];
             relic.SelectionAllowed = val && relic.CanBeUnlocked(char.Experience.Earned);
+            relic.UpdateUI();
+        }
+    }
+
+    UnlockAll() {
+        for (let i in this.Relics) {
+            let relic = this.Relics[i];
+            relic.Unlocked = true;
             relic.UpdateUI();
         }
     }
@@ -595,15 +625,22 @@ class Relics {
         for (let i in this.Relics) {
             let r = this.Relics[i];
             relics.appendChild(r.DOMObject);
-            r.DOMObject.onclick = (_) => this.OnRelicClick(r);
+            r.DOMObject.onclick = (_) => this.OnRelicClicked(r);
         }
         return ret;
     }
 
-    OnRelicClick(relic) {
-        //TODO: relic abiltiy
-        if (!relic.SelectionAllowed)
+    OnRelicClicked(relic) {
+        if (!relic.SelectionAllowed) {
+            if (!relic.Unlocked)
+                return;
+            // relic ability
+            if (this.OnRelicClick) {
+                this.OnRelicClick({"relic": relic});
+            }
             return;
+        }
+        // else unlock it
         relic.Unlocked = true;
         if (this.OnRelicUnlocked) {
             this.OnRelicUnlocked({"relic": relic});
@@ -632,6 +669,7 @@ class Relic {
     Unlocked = false;
     ChargesUsed = 0;
     SelectionAllowed = false;
+    Selected = false;
 
     CanBeUnlocked(xp) {
         return !this.Unlocked && xp >= this.Treshold;
@@ -691,6 +729,7 @@ class Relic {
     UpdateUI() {
         let obj = this.DOMObject;
         obj.classList.toggle("selectionAllowed", this.SelectionAllowed);
+        obj.classList.toggle("selected", this.Selected);
         // unlock checkboxes
         let checks = obj.getElementsByClassName("character-relics-relic-checkbox");
         for (let i = 0; i < checks.length; i++) {

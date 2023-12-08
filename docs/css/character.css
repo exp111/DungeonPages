@@ -107,7 +107,7 @@
     border: 1px solid #315067;
     border-radius: var(--border-radius);
 }
-.character-ability.selected {
+.character-ability.selected, .character-relics-relic.selected {
     border: 1px solid yellow;
 }
 .character-ability-text {
