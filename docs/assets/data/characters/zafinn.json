@@ -84,7 +84,7 @@
             "treshold": 25,
             "charges": 2,
             "effect": "discardEvil",
-            "amount": 3
+            "amount": 1
         }
     ]
 }
