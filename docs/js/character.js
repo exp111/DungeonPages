@@ -708,7 +708,7 @@ class Relic {
         ret.appendChild(txt);
         /// Name
         let name = document.createElement("b");
-        name.innerText = `${this.Name} (${this.Treshold} XP):`;
+        name.innerText = `${this.Name} (${this.Treshold} XP): `;
         txt.appendChild(name);
         /// Desc
         let desc = document.createElement("span");
