@@ -16,6 +16,12 @@ class Dice {
         this.CreateDOM();
     }
 
+    Reroll() {
+        this.Value = Math.floor(Math.random() * 6) + 1;
+        this.Used = false;
+        this.UpdateUI();
+    }
+
     CreateDOM() {
         let ret = document.createElement("div");
         ret.classList.add("dicepool-dice");
@@ -181,10 +187,8 @@ class DicePool {
             if (dice.Disabled) // disabled
                 continue;
 
-            dice.Used = false;
             dice.Active = false;
-            dice.Value = Math.floor(Math.random() * 6) + 1;
-            dice.UpdateUI();
+            dice.Reroll();
             ret.push(dice);
         }
         return ret;

@@ -260,6 +260,7 @@
         if (prev == relic) // toggle
             return;
 
+        //TODO: instant activation relics
         Global.selectedRelic = relic;
         relic.Selected = true;
         relic.UpdateUI();
@@ -482,6 +483,21 @@
                         UnselectDice();
                         UnselectAbility();
                     }
+                    return;
+                }
+            }
+        }
+        if (Global.selectedRelic != null) {
+            let relic = Global.selectedRelic;
+            switch (relic.Effect) {
+                case "rerollGood": {
+                    if (dice.IsEvil)
+                        return;
+                    if (!Global.dice.CanUseDice(dice))
+                        return;
+                    dice.Reroll();
+                    relic.ChargesUsed += 1;
+                    UnselectRelic();
                     return;
                 }
             }

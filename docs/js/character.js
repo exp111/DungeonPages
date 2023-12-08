@@ -634,6 +634,8 @@ class Relics {
         if (!relic.SelectionAllowed) {
             if (!relic.Unlocked)
                 return;
+            if (relic.ChargesUsed >= relic.Charges)
+                return;
             // relic ability
             if (this.OnRelicClick) {
                 this.OnRelicClick({"relic": relic});
