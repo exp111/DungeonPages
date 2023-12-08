@@ -228,7 +228,7 @@ class Ability {
         ret.appendChild(txt);
         /// Name
         let name = document.createElement("b");
-        name.innerText = `${this.Name}:`;
+        name.innerText = `${this.Name}: `;
         txt.appendChild(name);
         /// Description
         let desc = document.createElement("span");
