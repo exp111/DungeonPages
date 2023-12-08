@@ -142,7 +142,7 @@
     background-image: url("../assets/img/items/doubleCoin.svg");
 }
 
-.tile-coin.used-1:after {
+.tile-coin.uses-2.used-1:after {
     content: "\2714"; /* checkmark */
     color: green;
     position: relative;
@@ -150,7 +150,7 @@
     left: -5px;
     font-size: 21px;
 }
-.tile-coin.used:before {
+.tile-coin.uses-2.used:before {
     content: "\2714"; /* checkmark */
     color: green;
     position: relative;
@@ -158,7 +158,7 @@
     left: 4px;
     font-size: 21px;
 }
-.tile-coin.used:after {
+.tile-coin.uses-2.used:after {
     content: "\2714"; /* checkmark */
     color: green;
     position: relative;
