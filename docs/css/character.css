@@ -127,7 +127,7 @@
     gap: 2px;
 }
 
-.character-weapons-weapon.selectionAllowed {
+.character-weapons-weapon.selectionAllowed, .character-relics-relic.selectionAllowed {
     box-shadow: 0 0 0 1px red;
     border-radius: var(--border-radius);
 }
