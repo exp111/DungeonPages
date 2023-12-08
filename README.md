@@ -15,7 +15,6 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - add automatic phase switching
 - allow damage ignore/block effect (do dmg on phase end)
 - add status indicator ("you'll receive 1 damage")
-- fix dicepool being too wide
 
 ### Later:
 - more maps/characters
