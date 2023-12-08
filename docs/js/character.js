@@ -545,7 +545,7 @@ class Weapon {
         if (this.Treshold > 0)
             name.innerText = `${this.Name} (${this.Treshold} XP)`;
         else
-            name.innerText = `${this.Name} (${this.Treshold} XP)`;
+            name.innerText = `${this.Name}`;
         name.prepend(check);
         ret.appendChild(name);
         // Range
@@ -708,7 +708,10 @@ class Relic {
         ret.appendChild(txt);
         /// Name
         let name = document.createElement("b");
-        name.innerText = `${this.Name} (${this.Treshold} XP): `;
+        if (this.Treshold > 0)
+            name.innerText = `${this.Name} (${this.Treshold} XP): `;
+        else
+            name.innerText = `${this.Name}: `;
         txt.appendChild(name);
         /// Desc
         let desc = document.createElement("span");
