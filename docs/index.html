@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/character.css"/>
     <link rel="stylesheet" type="text/css" href="css/map.css"/>
     <link rel="stylesheet" type="text/css" href="css/phases.css"/>
+    <link rel="stylesheet" type="text/css" href="css/debug.css"/>
 </head>
 
 <body>
@@ -26,18 +27,23 @@
 
         </div>
     </div>
+    <div id="debug">
+
+    </div>
 </div>
 <script src="js/dice.js"></script>
 <script src="js/map.js"></script>
 <script src="js/character.js"></script>
 <script src="js/data.js"></script>
 <script src="js/phases.js"></script>
+<script src="js/debug.js"></script>
 <script>
     Global = {
         dice: null,
         map: null,
         character: null,
         phases: null,
+        debug: null,
         selectedAbility: null,
         selectedItem: null,
         selectedDice: null,
@@ -75,6 +81,11 @@
         Global.map.OnTileClick = (e) => OnTileClick(e.dungeon, e.tile);
         console.log(Global.map);
     });
+    // Debug
+    Global.debug = new Debug();
+    let deb = document.getElementById("debug");
+    deb.parentNode.replaceChild(Global.debug.DOMObject, deb);
+    Global.debug.UnlockAll = () => Global.character.UnlockAll();
 
     function UnselectItem() {
         let item = Global.selectedItem;
@@ -121,6 +132,9 @@
         }
         let pool = Global.dice;
         let results = pool.Reroll();
+        if (Global.debug.IsDebug && Global.debug.ForceDiceResults) {
+            pool.SetDice(Global.debug.GetRollResults());
+        }
         if (!results) {
             console.log("Can't reroll dice.");
             return;

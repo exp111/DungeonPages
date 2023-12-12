@@ -9,7 +9,6 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - add advanced monster effects
 - add other weapon effects (reroll X, magic X)
 - proper event system
-- reset selectable item on dice click and vice-versa
 - find better way to mark dungeons as completed as we also make useable items harder to see
 - use proper constructors instead of static funcs
 - add automatic phase switching
