@@ -679,6 +679,11 @@ class Relic {
         return !this.Unlocked && xp >= this.Treshold;
     }
 
+    Use() {
+        this.ChargesUsed += 1;
+        this.UpdateUI();
+    }
+
     GetDescription() {
         switch (this.Effect) {
             case "rerollGood":

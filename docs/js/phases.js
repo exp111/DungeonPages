@@ -11,6 +11,7 @@ class Phases {
     // Runtime
     DOMObject = null;
     DamageToDeal = 0;
+    DamageReduction = 0;
     /// Objects
     SelectDungeon = null;
     Roll = null;
@@ -29,19 +30,33 @@ class Phases {
 
     SetDamage(dmg) {
         this.DamageToDeal = dmg;
-        if (dmg > 0) {
-            this.SetStatus(`You will receive ${dmg} damage.`);
-        }
+        this.UpdateDamageStatus();
+    }
+    AddDamageReduction(red) {
+        this.DamageReduction = red;
+        this.UpdateDamageStatus();
+    }
+
+    UpdateDamageStatus() {
+        let total = this.DamageToDeal - this.DamageReduction;
+        if (total > 0)
+            this.SetStatus(`You will receive ${total} damage.`);
     }
 
     SetStatus(text) {
         this.Status.textContent = text;
     }
 
+    Reset() {
+        this.DamageToDeal = 0;
+        this.DamageReduction = 0;
+    }
+
     SelectPhase(phase) {
         if (this.OnPhaseEnd) {
             this.OnPhaseEnd({"phase": this.Phase, "next": phase});
         }
+        this.Reset();
         this.Phase = phase;
         this.UpdateUI();
     }

@@ -280,7 +280,7 @@
                 if (nextPhase == "End")
                     return;
                 // take the cached dmg
-                let dmg = Global.phases.DamageToDeal;
+                let dmg = Global.phases.DamageToDeal - Global.phases.DamageReduction;
                 if (dmg > 0) {
                     if (!DoDamage(dmg))
                         return;
@@ -308,7 +308,19 @@
         if (prev == relic) // toggle
             return;
 
-        //TODO: instant activation relics
+        // instant activation relics
+        switch (relic.Effect) {
+            case "ignoreDmg":
+                let phases = Global.phases;
+                if (phases.DamageToDeal <= 0)
+                    return;
+
+                Global.phases.AddDamageReduction(relic.Amount);
+                relic.Use();
+                return;
+            default:
+                break;
+        }
         Global.selectedRelic = relic;
         relic.Selected = true;
         relic.UpdateUI();
@@ -544,7 +556,7 @@
                     if (!Global.dice.CanUseDice(dice))
                         return;
                     dice.Reroll();
-                    relic.ChargesUsed += 1;
+                    relic.Use();
                     UnselectRelic();
                     return;
                 }
