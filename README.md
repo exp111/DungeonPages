@@ -14,7 +14,6 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - use proper constructors instead of static funcs
 - add automatic phase switching
 - allow damage ignore/block effect
-- update dmg status during
 
 ### Later:
 - more maps/characters

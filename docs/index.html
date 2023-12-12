@@ -196,6 +196,24 @@
         return true;
     }
 
+    function CheckDungeon(dungeon, tile) {
+        // check for item collection/monster defeat
+        dungeon.CheckForCollection(tile, Global.map.Monsters);
+
+        // Need to recheck fully everytime
+        if (dungeon.IsFinished()) {
+            console.log(`Finished Dungeon ${dungeon.Name}`);
+            StartFinishPhase(dungeon);
+            return true;
+        }
+        return false;
+    }
+
+    function RecalculateDamage() {
+        let phases = Global.phases;
+        if (phases.Phase == "Monster")
+            DoMonsterAttack();
+    }
 
     function CalculateDamage(damage) {
         let phases = Global.phases;
@@ -220,7 +238,7 @@
         return true;
     }
 
-    //TODO: instead use a "CanGoToPhase" callback (which checks if we can change) + a OnPhaseSelected event (which does stuff)
+    //TODO: instead use a "CanGoToPhase" callback (which checks if we can change) + a OnPhaseStart event (which does stuff)
     function OnPhaseSelected(current, phase) {
         switch (phase) {
             case "SelectDungeon":
@@ -412,6 +430,9 @@
                     tile.UpdateUI();
                     item.Used = true;
                     UnselectItem();
+                    if (CheckDungeon(dungeon, tile))
+                        return;
+                    RecalculateDamage();
                     break;
                 default:
                     break;
@@ -436,13 +457,8 @@
         // use dice
         if (!dice.UseDice(tile))
             return;
-        // check for item collection/monster defeat
-        dungeon.CheckForCollection(tile, Global.map.Monsters);
 
-        // Need to recheck fully everytime
-        if (dungeon.IsFinished()) {
-            console.log(`Finished Dungeon ${dungeon.Name}`);
-            StartFinishPhase(dungeon);
+        if (CheckDungeon(dungeon, tile)) {
             return;
         }
 
@@ -474,6 +490,7 @@
                     if (item.UsedCount >= item.Uses)
                         item.Used = true;
                     item.UpdateUI();
+                    RecalculateDamage();
                     return;
                 }
             }
@@ -512,6 +529,7 @@
                         // unselect other stuff
                         UnselectDice();
                         UnselectAbility();
+                        RecalculateDamage();
                     }
                     return;
                 }
