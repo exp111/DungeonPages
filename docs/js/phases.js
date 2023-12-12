@@ -39,7 +39,7 @@ class Phases {
 
     UpdateDamageStatus() {
         let total = this.DamageToDeal - this.DamageReduction;
-        if (total > 0)
+        if (this.DamageToDeal > 0)
             this.SetStatus(`You will receive ${total} damage.`);
     }
 

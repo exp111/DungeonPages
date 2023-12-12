@@ -22,6 +22,10 @@ class Character {
         this.Health.GotDamage(damage);
     }
 
+    OnTurnEnd() {
+        this.Relics.OnTurnEnd();
+    }
+
     IsDead() {
         return this.Health.IsDead();
     }
@@ -609,6 +613,15 @@ class Relics {
         }
     }
 
+    OnTurnEnd() {
+        // Reset relic usage
+        for (let i in this.Relics) {
+            let relic = this.Relics[i];
+            relic.Used = false;
+            relic.UpdateUI();
+        }
+    }
+
     UnlockAll() {
         for (let i in this.Relics) {
             let relic = this.Relics[i];
@@ -635,6 +648,8 @@ class Relics {
     OnRelicClicked(relic) {
         if (!relic.SelectionAllowed) {
             if (!relic.Unlocked)
+                return;
+            if (relic.Used)
                 return;
             if (relic.ChargesUsed >= relic.Charges)
                 return;
@@ -674,6 +689,7 @@ class Relic {
     ChargesUsed = 0;
     SelectionAllowed = false;
     Selected = false;
+    Used = false;
 
     CanBeUnlocked(xp) {
         return !this.Unlocked && xp >= this.Treshold;
@@ -681,6 +697,13 @@ class Relic {
 
     Use() {
         this.ChargesUsed += 1;
+        //TODO: instead make it item based, not effect based?
+        switch (this.Effect) {
+            case "ignoreDmg":
+            case "markDice":
+                this.Used = true;
+                break;
+        }
         this.UpdateUI();
     }
 
@@ -741,6 +764,7 @@ class Relic {
     UpdateUI() {
         let obj = this.DOMObject;
         obj.classList.toggle("selectionAllowed", this.SelectionAllowed);
+        obj.classList.toggle("used", this.Used);
         obj.classList.toggle("selected", this.Selected);
         // unlock checkboxes
         let checks = obj.getElementsByClassName("character-relics-relic-checkbox");
