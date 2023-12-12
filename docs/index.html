@@ -48,6 +48,7 @@
     let p = document.getElementById("phases");
     p.parentNode.replaceChild(Global.phases.DOMObject, p);
     Global.phases.OnPhaseSelected = (e) => OnPhaseSelected(e.current, e.phase);
+    Global.phases.OnPhaseEnd = (e) => OnPhaseEnd(e.phase, e.next);
     //TODO: event
     // Dice
     Global.dice = new DicePool();
@@ -163,10 +164,6 @@
         }
     }
 
-    function EndFinishPhase() {
-        Global.character.AllowWeaponSelection(false);
-    }
-
     function EndGame(status) {
         Global.phases.SelectPhase("End");
         Global.phases.SetStatus(status);
@@ -224,7 +221,6 @@
             case "SelectDungeon":
                 if (current != "Finish")
                     return;
-                EndFinishPhase();
                 Global.phases.SelectPhase("SelectDungeon");
                 break;
             case "Roll":
@@ -243,6 +239,16 @@
                 if (current != "Monster")
                     return;
                 Global.phases.SelectPhase("Explore");
+                break;
+            default:
+                break;
+        }
+    }
+
+    function OnPhaseEnd(phase, nextPhase) {
+        switch (phase) {
+            case "Finish":
+                Global.character.AllowWeaponSelection(false);
                 break;
             default:
                 break;

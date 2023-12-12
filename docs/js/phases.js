@@ -20,6 +20,7 @@ class Phases {
     Status = null;
     // Events
     OnPhaseSelected = null;
+    OnPhaseEnd = null;
 
     constructor() {
         this.CreateDOM();
@@ -30,6 +31,9 @@ class Phases {
     }
 
     SelectPhase(phase) {
+        if (this.OnPhaseEnd) {
+            this.OnPhaseEnd({"phase": this.Phase, "next": phase});
+        }
         this.Phase = phase;
         this.UpdateUI();
     }
