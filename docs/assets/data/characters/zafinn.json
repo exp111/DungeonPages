@@ -83,8 +83,7 @@
             "name": "Sara's Amulet",
             "treshold": 25,
             "charges": 2,
-            "effect": "discardEvil",
-            "amount": 1
+            "effect": "discardEvil"
         }
     ]
 }

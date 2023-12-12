@@ -716,7 +716,7 @@ class Relic {
             case "markDice":
                 return `Choose a die. Mark that result ${this.Amount + 1} times (Once per turn).`;
             case "discardEvil":
-                return `Discard ${this.Amount} Evil Dice after resolving Wandering Monsters.`;
+                return `Discard all Evil Dice after resolving Wandering Monsters.`;
             default:
                 return `Unknown Effect: ${this.Effect}`;
         }

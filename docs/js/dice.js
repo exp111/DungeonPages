@@ -161,6 +161,9 @@ class DicePool {
             if (dice.Disabled)
                 continue;
 
+            if (dice.Used)
+                continue;
+
             ret.push(dice);
         }
         return ret;

@@ -2,7 +2,7 @@
 https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 
 ## TODO:
-- allow relic usage (click on them to activate)
+- add missing relics (markDice (click dice, then tile))
 - add other items
 - move root code into game class
 - implement other bonus effects (rerollAny (click on reroll?))
@@ -13,6 +13,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - find better way to mark dungeons as completed as we also make useable items harder to see
 - use proper constructors instead of static funcs
 - add automatic phase switching
+- add visual feedback for once per turn relics
 
 ### Later:
 - more maps/characters

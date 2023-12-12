@@ -321,6 +321,21 @@
                 Global.phases.AddDamageReduction(relic.Amount);
                 relic.Use();
                 return;
+            case "discardEvil":
+                let pool = Global.dice;
+                let counter = 0;
+                for (let i in pool.EvilDice) {
+                    let dice = pool.EvilDice[i];
+                    if (dice.Disabled || dice.Used)
+                        continue;
+                    counter++;
+                    dice.Used = true;
+                    dice.UpdateUI();
+                }
+                if (counter == 0) // we did nothing
+                    return;
+                relic.Use();
+                return;
             default:
                 break;
         }
