@@ -13,8 +13,8 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - find better way to mark dungeons as completed as we also make useable items harder to see
 - use proper constructors instead of static funcs
 - add automatic phase switching
-- allow damage ignore/block effect (do dmg on phase end)
-- add status indicator ("you'll receive 1 damage")
+- allow damage ignore/block effect
+- update dmg status during
 
 ### Later:
 - more maps/characters

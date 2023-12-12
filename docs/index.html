@@ -183,7 +183,7 @@
             console.log("Natural Doubles activated Wandering Monsters effect.");
             damage += 1;
         }
-        DoDamage(damage);
+        CalculateDamage(damage);
     }
 
     function DoMonsterAttack() {
@@ -192,9 +192,14 @@
         if (results == null)
             return false;
         let damage = map.CheckMonsterAttack(results);
-        if (!DoDamage(damage))
-            return false;
+        CalculateDamage(damage);
         return true;
+    }
+
+
+    function CalculateDamage(damage) {
+        let phases = Global.phases;
+        phases.SetDamage(damage);
     }
 
     // Returns false if the player died
@@ -231,9 +236,8 @@
             case "Monster":
                 if (current != "Roll")
                     return;
-                if (!DoMonsterAttack())
-                    return;
                 Global.phases.SelectPhase("Monster");
+                DoMonsterAttack();
                 break;
             case "Explore":
                 if (current != "Monster")
@@ -247,6 +251,26 @@
 
     function OnPhaseEnd(phase, nextPhase) {
         switch (phase) {
+            case "Monster": {
+                if (nextPhase == "End")
+                    return;
+                // Recalc the monster attack
+                DoMonsterAttack();
+                // Then do the Roll stuff
+            }
+            case "Roll": {
+                if (nextPhase == "End")
+                    return;
+                // take the cached dmg
+                let dmg = Global.phases.DamageToDeal;
+                if (dmg > 0) {
+                    if (!DoDamage(dmg))
+                        return;
+                    // reset status
+                    Global.phases.SetStatus("");
+                }
+                break;
+            }
             case "Finish":
                 Global.character.AllowWeaponSelection(false);
                 break;

@@ -10,6 +10,7 @@ class Phases {
     Phase = "SelectDungeon";
     // Runtime
     DOMObject = null;
+    DamageToDeal = 0;
     /// Objects
     SelectDungeon = null;
     Roll = null;
@@ -24,6 +25,13 @@ class Phases {
 
     constructor() {
         this.CreateDOM();
+    }
+
+    SetDamage(dmg) {
+        this.DamageToDeal = dmg;
+        if (dmg > 0) {
+            this.SetStatus(`You will receive ${dmg} damage.`);
+        }
     }
 
     SetStatus(text) {
