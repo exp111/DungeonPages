@@ -34,7 +34,7 @@ class Character {
         this.GotExperience(75);
         this.Weapons.UnlockAll();
         this.Relics.UnlockAll();
-        this.Health.GotPotion(this.Health.Elements.length - 1);
+        this.Health.GotPotion(this.Health.Elements.length - this.Health.Unlocked);
     }
 
     GotExperience(xp) {
@@ -118,7 +118,7 @@ class Character {
 class Health {
     Elements = [];
     Lost = 0;
-    Unlocked = 0;
+    Unlocked = 1;
     DOMObject = null;
     // Runtime
     Max = 0;
@@ -134,12 +134,14 @@ class Health {
     }
 
     GotPotion(amount) {
-        for (let i = 1; i <= amount; i++) {
-            if (i >= this.Elements.length) // sanity check
+        for (let i = 0; i < amount; i++) {
+            let index = this.Unlocked + i;
+            if (index >= this.Elements.length) // sanity check
                 break;
-            this.Max += this.Elements[this.Unlocked + i];
+            this.Max += this.Elements[index];
         }
-        this.Unlocked += amount;
+        let now = this.Unlocked + amount;
+        this.Unlocked = Math.min(now, this.Elements.length);
         this.UpdateUI();
     }
 
@@ -183,7 +185,7 @@ class Health {
         let checks = this.DOMObject.getElementsByClassName("character-health-check");
         for (let i = 0; i < checks.length; i++) {
             let check = checks[i];
-            check.checked = i <= this.Unlocked;
+            check.checked = i < this.Unlocked;
         }
         // Health
         let icons = this.DOMObject.getElementsByClassName("character-health-icon");

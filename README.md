@@ -20,5 +20,5 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - rules + help
 - fix up character ui
 - mobile design
-- collected indicator
+- collected indicator (what did he mean by this)
 - disable ability/items/relics if they cant be used
