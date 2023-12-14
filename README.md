@@ -5,7 +5,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - add other relics
 - add other items
 - move root code into game class
-- implement other bonus effects (rerollAny (click on reroll?))
+- add other bonus effects
 - add advanced monster effects
 - add other weapon effects (reroll X, magic X)
 - proper event system

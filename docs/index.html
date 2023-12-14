@@ -47,8 +47,8 @@
         selectedBonus: null,
         selectedAbility: null,
         selectedItem: null,
-        selectedDice: null,
-        selectedRelic: null
+        selectedRelic: null,
+        selectedDice: []
     };
     // Phase
     Global.phases = new Phases();
@@ -113,13 +113,17 @@
 
     function UnselectDice() {
         let dice = Global.selectedDice;
-        if (dice == null)
+        if (dice.length == 0)
             return;
         // clear dice buttons
         Global.dice.Buttons.innerHTML = "";
-        Global.selectedDice = null;
-        dice.Selected = false;
-        dice.UpdateUI();
+        // unselect dice
+        dice.forEach((d) => {
+            d.Selected = false;
+            d.UpdateUI();
+        })
+        // clear array
+        Global.selectedDice.length = 0;
     }
 
     function UnselectRelic() {
@@ -572,7 +576,7 @@
             switch (relic.Effect) {
                 case "markDice":
                     let dice = Global.selectedDice;
-                    if (dice == null)
+                    if (dice.length == 0)
                         return;
                     // normal tile rules
                     if (!tile.CanBeMarked())
@@ -581,7 +585,7 @@
                     let char = Global.character;
                     if (!dungeon.CanReachTile(tile, char))
                         return;
-                    tile.Value = dice.Value;
+                    tile.Value = dice[0].Value;
                     tile.UpdateUI();
                     relic.Use();
                     UnselectRelic();
@@ -631,14 +635,14 @@
                 case "coin": {
                     if (!Global.dice.CanUseDice(dice))
                         break;
-                    let prev = Global.selectedDice;
+                    let prev = Global.selectedDice[0] ?? null;
                     // unselect old one, if selected
                     UnselectDice();
                     if (prev == dice) { // if it was selected, toggle
                         return;
                     }
                     // select dice
-                    Global.selectedDice = dice;
+                    Global.selectedDice.push(dice);
                     dice.Selected = true;
                     dice.UpdateUI();
                     // create buttons
@@ -648,6 +652,7 @@
                     let minus = buttons[1];
                     plus.disabled = dice.Value + 1 > 6;
                     minus.disabled = dice.Value - 1 < 1;
+
                     function action(mod) {
                         let newRes = dice.Value + mod;
                         if (newRes > 6 || newRes < 1) {
@@ -662,6 +667,7 @@
                         item.UpdateUI();
                         RecalculateDamage();
                     }
+
                     plus.onclick = () => action(1);
                     minus.onclick = () => action(-1);
                     return;
@@ -676,17 +682,18 @@
                     if (!Global.dice.CanUseDice(dice))
                         return;
 
-                    if (Global.selectedDice == null) {
+                    if (Global.selectedDice.length == 0) {
                         // only good dice can be selected
                         if (dice.IsEvil)
                             return;
                         // select
-                        Global.selectedDice = dice;
+                        Global.selectedDice.push(dice);
                         dice.Selected = true;
                         dice.UpdateUI();
                     } else {
+                        let sacrifice = Global.selectedDice[0];
                         // dont sacrifice yourself, toggle instead
-                        if (Global.selectedDice == dice) {
+                        if (sacrifice == dice) {
                             UnselectDice();
                             return;
                         }
@@ -698,7 +705,7 @@
                         dice.Value *= 2;
                         dice.UpdateUI();
                         // sacrifice dice
-                        Global.selectedDice.Used = true;
+                        sacrifice.Used = true;
                         // unselect other stuff
                         UnselectDice();
                         UnselectAbility();
@@ -724,13 +731,13 @@
                 case "markDice": {
                     if (!Global.dice.CanUseDice(dice))
                         return;
-                    let prev = Global.selectedDice;
+                    let prev = Global.selectedDice[0] ?? null;
                     // unselect old one, if selected
                     UnselectDice();
                     if (prev == dice) { // if it was selected, toggle
                         return;
                     }
-                    Global.selectedDice = dice;
+                    Global.selectedDice.push(dice);
                     dice.Selected = true;
                     dice.UpdateUI();
                     return;
@@ -741,28 +748,37 @@
             let bonus = Global.selectedBonus;
             switch (bonus.Type) {
                 case "rerollAny": {
+                    //TODO: multi dice selection
                     if (!Global.dice.CanUseDice(dice))
                         break;
-                    let prev = Global.selectedDice;
-                    // unselect old one, if selected
-                    UnselectDice();
-                    if (prev == dice) { // if it was selected, toggle
+                    let index = Global.selectedDice.indexOf(dice);
+                    if (index > -1) {
+                        Global.selectedDice.splice(index, 1); // toggle dice
+                        if (Global.selectedDice.length == 0) {
+                            UnselectDice(); // clear everything
+                        } else {
+                            dice.Selected = false;
+                            dice.UpdateUI();
+                        }
                         return;
                     }
                     // select dice
-                    Global.selectedDice = dice;
+                    Global.selectedDice.push(dice);
                     dice.Selected = true;
                     dice.UpdateUI();
                     // create buttons
                     Global.dice.Buttons.innerHTML = `<button>Reroll</button>`;
                     let button = Global.dice.Buttons.querySelector("button");
                     button.onclick = () => {
-                        let dice = Global.selectedDice;
-                        dice.Reroll();
+                        for (let i in Global.selectedDice) {
+                            let dice = Global.selectedDice[i];
+                            dice.Reroll();
+                        }
                         UnselectDice();
                         UnselectBonus();
                         bonus.Use();
                         bonus.UpdateUI();
+
                         // recalculate monster dmg
                         RecalculateDamage();
                     }
