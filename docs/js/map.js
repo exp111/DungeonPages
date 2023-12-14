@@ -9,6 +9,27 @@ class Map {
     OnTileClick = null;
     OnDungeonClick = null;
 
+    CanChangeMonsterAttacks() {
+        //TODO: also check monster attack + dice diff to see if its possible?
+        for (let i in this.Dungeons) {
+            let dungeon = this.Dungeons[i];
+            // Can't have items collected here yet
+            if (!dungeon.Active && !dungeon.Completed)
+                continue;
+            for (let j in dungeon.Items) {
+                let item = dungeon.Items[j];
+                if (!item.CanBeUsed())
+                    continue;
+                switch (item.Subtype) {
+                    case "coin":
+                        return true;
+                    case "poison": // can kill monster
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
     UnselectDungeon() {
         let dungeon = this.SelectedDungeon;
         if (dungeon != null) {
@@ -652,6 +673,16 @@ class Tile {
         };
         //TODO: dont add values if they're default
         return ret;
+    }
+
+    CanBeUsed() {
+        return this.Collected && !this.Used;
+    }
+
+    Use() {
+        this.UsedCount++;
+        if (this.UsedCount >= this.Uses)
+            this.Used = true;
     }
 
     IsTraversable() {

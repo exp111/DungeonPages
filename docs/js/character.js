@@ -14,6 +14,18 @@ class Character {
     OnRelicClick = null;
     OnWeaponRelicUnlock = null;
 
+    CanBlockDamage() {
+        //TODO: weapons
+        return this.Relics.CanBlockDamage();
+    }
+
+    CanChangeMonsterAttacks() {
+        //TODO: ability
+        //TODO: bonuses
+        //TODO: weapons
+        return this.Relics.CanChangeMonsterAttacks();
+    }
+
     CanUnlockWeaponRelics() {
         return this.Weapons.CanUnlockWeapons(this) || this.Relics.CanUnlockRelics(this);
     }
@@ -621,6 +633,34 @@ class Relics {
     OnRelicUnlocked = null;
     OnRelicClick = null;
 
+    CanBlockDamage() {
+        for (let i in this.Relics) {
+            let relic = this.Relics[i];
+            if (!relic.CanBeUsed())
+                continue;
+
+            switch (relic.Effect) {
+                case "ignoreDmg":
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    CanChangeMonsterAttacks() {
+        for (let i in this.Relics) {
+            let relic = this.Relics[i];
+            if (!relic.CanBeUsed())
+                continue;
+
+            switch (relic.Effect) {
+                case "discardEvil":
+                    return true;
+            }
+        }
+        return false;
+    }
+
     CanUnlockRelics(char) {
         for (let i in this.Relics) {
             let relic = this.Relics[i];
@@ -672,11 +712,7 @@ class Relics {
 
     OnRelicClicked(relic) {
         if (!relic.SelectionAllowed) {
-            if (!relic.Unlocked)
-                return;
-            if (relic.Used)
-                return;
-            if (relic.ChargesUsed >= relic.Charges)
+            if (!relic.CanBeUsed())
                 return;
             // relic ability
             if (this.OnRelicClick) {
@@ -718,6 +754,10 @@ class Relic {
 
     CanBeUnlocked(xp) {
         return !this.Unlocked && xp >= this.Treshold;
+    }
+
+    CanBeUsed() {
+        return this.Unlocked && !this.Used && (this.ChargesUsed < this.Charges);
     }
 
     Use() {

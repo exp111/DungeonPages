@@ -132,11 +132,15 @@
         Global.phases.SetStatus(status);
     }
 
-    function WanderingMonsters() {
+    function HasWanderingMonsters() {
         let map = Global.map;
         let results = Global.dice.GetRollResults();
+        return map.CheckWanderingMonsters(results);
+    }
+
+    function WanderingMonsters() {
         let damage = 0;
-        if (map.CheckWanderingMonsters(results)) {
+        if (HasWanderingMonsters()) {
             console.log("Natural Doubles activated Wandering Monsters effect.");
             damage += 1;
         }
@@ -234,12 +238,32 @@
             case "Roll": {
                 // Wandering monsters
                 WanderingMonsters();
-                //TODO: check phase switch
+                // check phase switch
+                /// if we need to protect from wandering monsters
+                if (Global.phases.GetDamage() > 0) {
+                    // if we can ignore the damage somehow
+                    if (Global.character.CanBlockDamage()) {
+                        return;
+                    }
+                }
+                Global.phases.SwitchPhase("Monster");
                 break;
             }
             case "Monster": {
                 DoMonsterAttack();
-                //TODO: check phase switch
+                // check phase switch
+                /// if we need to protect from monster attacks
+                if (Global.phases.GetDamage() > 0) {
+                    // if we can block the damage or change
+                    if (Global.character.CanBlockDamage())
+                        return;
+
+                    // check dice changing effects like items or ability/weapons/relics
+                    if (Global.map.CanChangeMonsterAttacks() ||
+                        Global.character.CanChangeMonsterAttacks())
+                        return;
+                }
+                Global.phases.SwitchPhase("Explore");
                 break;
             }
             case "Finish": {
@@ -304,7 +328,7 @@
                 if (nextPhase == "End")
                     return true;
                 // take the cached dmg
-                let dmg = Global.phases.DamageToDeal - Global.phases.DamageReduction;
+                let dmg = Global.phases.GetDamage();
                 if (dmg > 0) {
                     if (!DoDamage(dmg))
                         return false;
@@ -411,7 +435,7 @@
     function OnTileClick(dungeon, tile) {
         console.log(`Clicked tile ${tile.Type} (${tile.GetID()}) in dungeon ${dungeon.Name}`);
         // Activate item?
-        if (tile.Type == "item" && tile.Collected && !tile.Used) {
+        if (tile.Type == "item" && tile.CanBeUsed()) {
             console.debug(`Use item ${tile.Subtype}`);
             let prev = Global.selectedItem;
             UnselectItem();
@@ -424,7 +448,7 @@
             switch (tile.Subtype) {
                 case "potion":
                     Global.character.GotPotion(1);
-                    tile.Used = true;
+                    tile.Use();
                     tile.UpdateUI();
                     break;
                 case "poison":
@@ -464,7 +488,7 @@
                         break;
                     tile.Unlocked = true;
                     tile.UpdateUI();
-                    item.Used = true;
+                    item.Use();
                     UnselectItem();
                 case "key":
                     // dont unlock unlocked tiles
@@ -478,7 +502,7 @@
                         break;
                     tile.Unlocked = true;
                     tile.UpdateUI();
-                    item.Used = true;
+                    item.Use();
                     UnselectItem();
                     break;
                 case "poison":
@@ -490,7 +514,7 @@
                         break;
                     tile.Value = 4;
                     tile.UpdateUI();
-                    item.Used = true;
+                    item.Use();
                     UnselectItem();
                     if (CheckDungeon(dungeon, tile))
                         return;
@@ -576,9 +600,7 @@
                     dice.UpdateUI();
                     // unselect item
                     UnselectItem();
-                    item.UsedCount++;
-                    if (item.UsedCount >= item.Uses)
-                        item.Used = true;
+                    item.Use();
                     item.UpdateUI();
                     RecalculateDamage();
                     return;

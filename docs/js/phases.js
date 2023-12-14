@@ -29,6 +29,10 @@ class Phases {
         this.CreateDOM();
     }
 
+    GetDamage() {
+        return this.DamageToDeal - this.DamageReduction;
+    }
+
     SetDamage(dmg) {
         this.DamageToDeal = dmg;
         this.UpdateDamageStatus();
@@ -40,7 +44,7 @@ class Phases {
     }
 
     UpdateDamageStatus() {
-        let total = this.DamageToDeal - this.DamageReduction;
+        let total = this.GetDamage();
         this.SetStatus(`You will receive ${total} damage.`);
     }
 
