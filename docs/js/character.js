@@ -12,7 +12,12 @@ class Character {
     // Events
     OnAbilityClick = null;
     OnRelicClick = null;
+    OnBonusClick = null;
     OnWeaponRelicUnlock = null;
+
+    OnReroll() {
+        this.Experience.OnReroll();
+    }
 
     CanBlockDamage() {
         //TODO: weapons
@@ -29,6 +34,7 @@ class Character {
     CanUnlockWeaponRelics() {
         return this.Weapons.CanUnlockWeapons(this) || this.Relics.CanUnlockRelics(this);
     }
+
     AllowWeaponSelection(val) {
         this.Weapons.AllowSelection(val, this);
         this.Relics.AllowSelection(val, this);
@@ -104,6 +110,11 @@ class Character {
         }
         // XP
         ret.appendChild(this.Experience.DOMObject);
+        this.Experience.OnBonusClick = (e) => {
+            if (this.OnBonusClick) {
+                this.OnBonusClick(e);
+            }
+        }
         // Weapons
         ret.appendChild(this.Weapons.DOMObject);
         this.Weapons.OnWeaponUnlocked = (e) => this.OnWeaponRelicUnlocked(e);
@@ -278,9 +289,18 @@ class Ability {
 
 class Experience {
     Bonuses = []; // XP Bonuses
+    // Runtime
     Earned = 0;
     DOMObject = null;
+    // Events
+    OnBonusClick = null;
 
+    OnReroll() {
+        for (let i in this.Bonuses) {
+            let bonus = this.Bonuses[i]; //TODO: move into bonuses?
+            bonus.Used = false;
+        }
+    }
     GotExperience(xp) {
         this.Earned += xp;
         this.UpdateUI();
@@ -322,6 +342,11 @@ class Experience {
         for (let i in this.Bonuses) {
             let bonus = this.Bonuses[i];
             bonuses.appendChild(bonus.DOMObject);
+            bonus.DOMObject.onclick = () => {
+                if (this.OnBonusClick) {
+                    this.OnBonusClick({"bonus": bonus});
+                }
+            }
         }
         ret.appendChild(bonuses);
         // update ui
@@ -353,8 +378,30 @@ class Bonus {
     Treshold = 0;
     Type = ""; // dice, potion, tactics, range, rerollGood, rerollEvil, rerollAny
     Amount = 1;
+    // Runtime
     Unlocked = false;
     DOMObject = null;
+    Used = false;
+    Selected = false;
+
+    CanBeUsed() {
+        switch (this.Type) {
+            case "rerollAny":
+                break;
+            default:
+                return false; // by default dont allow selection
+        }
+        return this.Unlocked && !this.Used;
+    }
+
+    Use() {
+        //TODO: dont do it per type but per bonus?
+        switch (this.Type) {
+            case "rerollAny":
+                this.Used = true;
+                break;
+        }
+    }
 
     CreateDOM() {
         let ret = document.createElement("div");
@@ -390,11 +437,15 @@ class Bonus {
     }
 
     UpdateUI() {
-        let checks = this.DOMObject.getElementsByClassName("character-xp-bonus-checkbox");
+        let obj = this.DOMObject;
+        obj.classList.toggle("selected", this.Selected);
+        obj.classList.toggle("used", this.Used);
+        let checks = obj.getElementsByClassName("character-xp-bonus-checkbox");
         for (let i = 0; i < checks.length; i++) {
             let check = checks[i];
             check.checked = this.Unlocked;
         }
+
     }
 
     static FromJson(json) {

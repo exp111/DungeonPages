@@ -43,7 +43,8 @@
         map: null,
         character: null,
         phases: null,
-        debug: null,
+        debug: null, //TODO: instead merge these next ones somehow
+        selectedBonus: null,
         selectedAbility: null,
         selectedItem: null,
         selectedDice: null,
@@ -69,6 +70,7 @@
         Global.character = char;
         Global.character.OnAbilityClick = (e) => OnAbilityClick(e.ability);
         Global.character.OnRelicClick = (e) => OnRelicClick(e.relic);
+        Global.character.OnBonusClick = (e) => OnBonusClick(e.bonus);
         Global.character.OnWeaponRelicUnlock = (e) => OnWeaponRelicUnlock(e);
         console.log(Global.character);
     });
@@ -127,6 +129,15 @@
         Global.selectedRelic = null;
         relic.Selected = false;
         relic.UpdateUI();
+    }
+
+    function UnselectBonus() {
+        let bonus = Global.selectedBonus;
+        if (bonus == null)
+            return;
+        Global.selectedBonus = null;
+        bonus.Selected = false;
+        bonus.UpdateUI();
     }
 
     function EndGame(status) {
@@ -221,7 +232,8 @@
                     console.log("Can't reroll dice.");
                     return false;
                 }
-                Global.map.OnReroll(); //TODO: do this as an event
+                Global.map.OnReroll(); //TODO: do this as an event, also change it to OnTurnStart
+                Global.character.OnReroll();
                 return true;
             case "Monster":
                 return current == "Roll";
@@ -356,6 +368,31 @@
         Global.phases.SwitchPhase("SelectDungeon");
     }
 
+    function OnBonusClick(bonus) {
+        console.log(`Clicked bonus ${bonus.Type}`);
+        // check if it can be clicked
+        if (!bonus.CanBeUsed())
+            return;
+        // unselect everything else
+        let prev = Global.selectedBonus;
+        UnselectItem();
+        UnselectAbility();
+        UnselectDice();
+        UnselectRelic();
+        UnselectBonus();
+        Global.dice.UnselectDice();
+        if (prev == bonus) // toggle
+            return;
+
+        //TODO: instant activation bonus?
+        /*switch (bonus.Type) {
+
+        }*/
+        Global.selectedBonus = bonus;
+        bonus.Selected = true;
+        bonus.UpdateUI();
+    }
+
     function OnRelicClick(relic) {
         console.log(`Clicked relic ${relic.Name}`);
         let prev = Global.selectedRelic;
@@ -363,6 +400,7 @@
         UnselectAbility();
         UnselectDice();
         UnselectRelic();
+        UnselectBonus();
         Global.dice.UnselectDice();
         if (prev == relic) // toggle
             return;
@@ -407,6 +445,7 @@
         UnselectAbility();
         UnselectDice();
         UnselectRelic();
+        UnselectBonus();
         Global.dice.UnselectDice();
         if (prev == ability) // toggle
             return;
@@ -444,6 +483,7 @@
             UnselectAbility();
             UnselectDice();
             UnselectRelic();
+            UnselectBonus();
             Global.dice.UnselectDice();
             if (prev == tile) // just deselected
                 return;
@@ -697,6 +737,39 @@
                 }
             }
         }
+        if (Global.selectedBonus != null) {
+            let bonus = Global.selectedBonus;
+            switch (bonus.Type) {
+                case "rerollAny": {
+                    if (!Global.dice.CanUseDice(dice))
+                        break;
+                    let prev = Global.selectedDice;
+                    // unselect old one, if selected
+                    UnselectDice();
+                    if (prev == dice) { // if it was selected, toggle
+                        return;
+                    }
+                    // select dice
+                    Global.selectedDice = dice;
+                    dice.Selected = true;
+                    dice.UpdateUI();
+                    // create buttons
+                    Global.dice.Buttons.innerHTML = `<button>Reroll</button>`;
+                    let button = Global.dice.Buttons.querySelector("button");
+                    button.onclick = () => {
+                        let dice = Global.selectedDice;
+                        dice.Reroll();
+                        UnselectDice();
+                        UnselectBonus();
+                        bonus.Use();
+                        bonus.UpdateUI();
+                        // recalculate monster dmg
+                        RecalculateDamage();
+                    }
+                    return;
+                }
+            }
+        }
 
         if (Global.phases.Phase != "Explore")
             return;
@@ -707,6 +780,7 @@
         UnselectItem();
         UnselectAbility();
         UnselectRelic();
+        UnselectBonus();
     }
 </script>
 </body>

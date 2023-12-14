@@ -11,7 +11,7 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - proper event system
 - find better way to mark dungeons as completed as we also make useable items harder to see
 - use proper constructors instead of static funcs
-- add visual feedback for once per turn relics
+- add visual feedback for once per turn relics/bonuses
 
 ### Later:
 - more maps/characters

@@ -52,6 +52,11 @@
     left: -2px;
 }
 
+.character-xp {
+    border: 1px solid #315067;
+    border-radius: var(--border-radius);
+    padding: 10px;
+}
 .character-xp-points {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -94,6 +99,12 @@
     display: flex;
     column-gap: 5px;
     font-size: 12px;
+    margin: 5px 0px;
+}
+
+.character-xp-bonus {
+    border: 1px solid #315067;
+    border-radius: var(--border-radius);
 }
 
 .character-xp-bonus-info {
@@ -107,7 +118,7 @@
     border: 1px solid #315067;
     border-radius: var(--border-radius);
 }
-.character-ability.selected, .character-relics-relic.selected {
+.character-ability.selected, .character-relics-relic.selected, .character-xp-bonus.selected {
     border: 1px solid yellow;
 }
 .character-ability-text {
