@@ -5,6 +5,9 @@ class Debug {
     DiceResults = [];
     // Events
     UnlockAll = null;
+    GiveXP = null;
+    GiveDmg = null;
+
     constructor() {
         if (window.location.protocol == "file:" || window.location.hostname == "localhost") {
             this.IsDebug = true;
@@ -28,6 +31,7 @@ class Debug {
         let ret = document.createElement("div");
         ret.classList.add("debug");
         this.DOMObject = ret;
+        // Unlock all
         let unlockAll = document.createElement("button");
         unlockAll.innerText = "Unlock All";
         unlockAll.onclick = (_) => {
@@ -35,6 +39,7 @@ class Debug {
                 this.UnlockAll();
             }
         }
+        ret.appendChild(unlockAll);
         // Dice results
         let resultCheckbox = document.createElement("input");
         resultCheckbox.type = "checkbox";
@@ -52,7 +57,36 @@ class Debug {
             this.DiceResults.push(res);
             ret.appendChild(res);
         }
-        ret.appendChild(unlockAll);
+        // Experrience
+        let xp = document.createElement("input");
+        xp.type = "number";
+        xp.value = "1";
+        xp.min = "0";
+        xp.max = "75";
+        ret.appendChild(xp);
+        let xpButton = document.createElement("button");
+        xpButton.innerText = "Give XP";
+        xpButton.onclick = (_) => {
+            if (this.GiveXP) {
+                this.GiveXP(Number(xp.value));
+            }
+        }
+        ret.appendChild(xpButton);
+        // Dmg
+        let dmg = document.createElement("input");
+        dmg.type = "number";
+        dmg.value = "1";
+        dmg.min = "0";
+        dmg.max = "30";
+        ret.appendChild(dmg);
+        let dmgButton = document.createElement("button");
+        dmgButton.innerText = "Give Dmg";
+        dmgButton.onclick = (_) => {
+            if (this.GiveDmg) {
+                this.GiveDmg(Number(dmg.value));
+            }
+        }
+        ret.appendChild(dmgButton);
         return ret;
     }
 }

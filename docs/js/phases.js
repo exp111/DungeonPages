@@ -74,7 +74,8 @@ class Phases {
 
     SelectPhase(phase) {
         if (this.OnPhaseEnd) {
-            this.OnPhaseEnd({"phase": this.Phase, "next": phase});
+            if (!this.OnPhaseEnd({"phase": this.Phase, "next": phase}))
+                return;
         }
         this.Reset();
         this.Phase = phase;

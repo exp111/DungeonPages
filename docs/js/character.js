@@ -12,7 +12,11 @@ class Character {
     // Events
     OnAbilityClick = null;
     OnRelicClick = null;
+    OnWeaponRelicUnlock = null;
 
+    CanUnlockWeaponRelics() {
+        return this.Weapons.CanUnlockWeapons(this) || this.Relics.CanUnlockRelics(this);
+    }
     AllowWeaponSelection(val) {
         this.Weapons.AllowSelection(val, this);
         this.Relics.AllowSelection(val, this);
@@ -90,10 +94,10 @@ class Character {
         ret.appendChild(this.Experience.DOMObject);
         // Weapons
         ret.appendChild(this.Weapons.DOMObject);
-        this.Weapons.OnWeaponUnlocked = (e) => this.OnWeaponRelicUnlock(e);
+        this.Weapons.OnWeaponUnlocked = (e) => this.OnWeaponRelicUnlocked(e);
         // Relics
         ret.appendChild(this.Relics.DOMObject);
-        this.Relics.OnRelicUnlocked = (e) => this.OnWeaponRelicUnlock(e);
+        this.Relics.OnRelicUnlocked = (e) => this.OnWeaponRelicUnlocked(e);
         this.Relics.OnRelicClick = (e) => {
             if (this.OnRelicClick) {
                 this.OnRelicClick(e);
@@ -102,8 +106,11 @@ class Character {
         return ret;
     }
 
-    OnWeaponRelicUnlock(e) {
+    OnWeaponRelicUnlocked(e) {
         this.AllowWeaponSelection(false);
+        if (this.OnWeaponRelicUnlock) {
+            this.OnWeaponRelicUnlock(e);
+        }
     }
 
     static FromJson(json) {
@@ -396,6 +403,15 @@ class Weapons {
     // Events
     OnWeaponUnlocked = null;
 
+    CanUnlockWeapons(char) {
+        for (let i in this.Weapons) {
+            let weapon = this.Weapons[i];
+            if (weapon.CanBeUnlocked(char.Experience.Earned))
+                return true;
+        }
+        return false;
+    }
+
     AllowSelection(val, char) {
         for (let i in this.Weapons) {
             let weapon = this.Weapons[i];
@@ -604,6 +620,15 @@ class Relics {
     // Events
     OnRelicUnlocked = null;
     OnRelicClick = null;
+
+    CanUnlockRelics(char) {
+        for (let i in this.Relics) {
+            let relic = this.Relics[i];
+            if (relic.CanBeUnlocked(char.Experience.Earned))
+                return true;
+        }
+        return false;
+    }
 
     AllowSelection(val, char) {
         for (let i in this.Relics) {

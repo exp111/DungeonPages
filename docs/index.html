@@ -69,6 +69,7 @@
         Global.character = char;
         Global.character.OnAbilityClick = (e) => OnAbilityClick(e.ability);
         Global.character.OnRelicClick = (e) => OnRelicClick(e.relic);
+        Global.character.OnWeaponRelicUnlock = (e) => OnWeaponRelicUnlock(e);
         console.log(Global.character);
     });
     // Map
@@ -86,6 +87,8 @@
     let deb = document.getElementById("debug");
     deb.parentNode.replaceChild(Global.debug.DOMObject, deb);
     Global.debug.UnlockAll = () => Global.character.UnlockAll();
+    Global.debug.GiveXP = (xp) => Global.character.GotExperience(xp);
+    Global.debug.GiveDmg = (dmg) => DoDamage(dmg);
 
     function UnselectItem() {
         let item = Global.selectedItem;
@@ -124,53 +127,14 @@
         relic.UpdateUI();
     }
 
-    function StartFinishPhase(dungeon) {
-        let char = Global.character;
-        let dice = Global.dice;
-        let map = Global.map;
-        let phases = Global.phases;
-
-        phases.SwitchPhase("Finish");
-        map.FinishDungeon();
-        // check if there is a sequential path
-        if (dungeon.IsFinished(true)) {
-            //TODO: move this into the map?
-            let rewards = dungeon.CalculateXP();
-            let xp = rewards.xp;
-            let enemies = rewards.enemies;
-            let monsterXP = map.GetMonsterXP(enemies);
-            let total = xp + monsterXP;
-            console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
-            // give rewards to the player
-            char.GotExperience(total);
-            if (map.HasFinishedGame()) {
-                EndGame("You've won.");
-                console.log("Won");
-                //TODO: score?
-                return;
-            }
-            dice.SetAvailableDice(char.GoodDice, 0);
-            // allow player to choose weapon/relic
-            char.AllowWeaponSelection(true);
-        } else {
-            console.log("Dungeon did not finish with a sequential path");
-        }
-    }
-
     function EndGame(status) {
         Global.phases.SwitchPhase("End");
         Global.phases.SetStatus(status);
-        // disable all dice
-        let pool = Global.dice;
-        for (let i in pool.Dice) {
-            let dice = pool.Dice[i];
-            dice.Used = true;
-            dice.UpdateUI();
-        }
     }
 
-    function WanderingMonsters(results) {
+    function WanderingMonsters() {
         let map = Global.map;
+        let results = Global.dice.GetRollResults();
         let damage = 0;
         if (map.CheckWanderingMonsters(results)) {
             console.log("Natural Doubles activated Wandering Monsters effect.");
@@ -196,7 +160,7 @@
         // Need to recheck fully everytime
         if (dungeon.IsFinished()) {
             console.log(`Finished Dungeon ${dungeon.Name}`);
-            StartFinishPhase(dungeon);
+            Global.phases.SwitchPhase("Finish");
             return true;
         }
         return false;
@@ -270,10 +234,58 @@
             case "Roll": {
                 // Wandering monsters
                 WanderingMonsters();
+                //TODO: check phase switch
                 break;
             }
             case "Monster": {
                 DoMonsterAttack();
+                //TODO: check phase switch
+                break;
+            }
+            case "Finish": {
+                let map = Global.map;
+                let dungeon = map.SelectedDungeon;
+                let char = Global.character;
+                let dice = Global.dice;
+
+                map.FinishDungeon();
+                // check if there is a sequential path
+                if (dungeon.IsFinished(true)) {
+                    //TODO: move this into the map?
+                    let rewards = dungeon.CalculateXP();
+                    let xp = rewards.xp;
+                    let enemies = rewards.enemies;
+                    let monsterXP = map.GetMonsterXP(enemies);
+                    let total = xp + monsterXP;
+                    console.log(`Got ${total} experience. (${xp} + ${monsterXP})`);
+                    // give rewards to the player
+                    char.GotExperience(total);
+                    if (map.HasFinishedGame()) {
+                        EndGame("You've won.");
+                        console.log("Won");
+                        //TODO: score?
+                        break;
+                    }
+                    dice.SetAvailableDice(char.GoodDice, 0);
+                    // allow player to choose weapon/relic
+                    if (char.CanUnlockWeaponRelics())
+                        char.AllowWeaponSelection(true);
+                    else // switch to next phase if not possible
+                        Global.phases.SwitchPhase("SelectDungeon");
+                } else {
+                    console.log("Dungeon did not finish with a sequential path");
+                    Global.phases.SwitchPhase("SelectDungeon");
+                }
+                break;
+            }
+            case "End": {
+                // disable all dice
+                let pool = Global.dice;
+                for (let i in pool.Dice) {
+                    let dice = pool.Dice[i];
+                    dice.Used = true;
+                    dice.UpdateUI();
+                }
                 break;
             }
         }
@@ -283,19 +295,19 @@
         switch (phase) {
             case "Monster": {
                 if (nextPhase == "End")
-                    return;
+                    return true;
                 // Recalc the monster attack
                 DoMonsterAttack();
                 // Then do the Roll stuff
             }
             case "Roll": {
                 if (nextPhase == "End")
-                    return;
+                    return true;
                 // take the cached dmg
                 let dmg = Global.phases.DamageToDeal - Global.phases.DamageReduction;
                 if (dmg > 0) {
                     if (!DoDamage(dmg))
-                        return;
+                        return false;
                 }
                 // reset status
                 Global.phases.SetStatus("");
@@ -310,6 +322,12 @@
             default:
                 break;
         }
+        return true;
+    }
+
+    function OnWeaponRelicUnlock() {
+        // switch to the next phase
+        Global.phases.SwitchPhase("SelectDungeon");
     }
 
     function OnRelicClick(relic) {
