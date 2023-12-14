@@ -2,7 +2,7 @@
 https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 
 ## TODO:
-- add missing relics (markDice (click dice, then tile))
+- add other relics
 - add other items
 - move root code into game class
 - implement other bonus effects (rerollAny (click on reroll?))

@@ -483,6 +483,34 @@
             }
             // let items that do nothing fall through?
         }
+        if (Global.selectedRelic != null) {
+            let relic = Global.selectedRelic;
+            switch (relic.Effect) {
+                case "markDice":
+                    let dice = Global.selectedDice;
+                    if (dice == null)
+                        return;
+                    // normal tile rules
+                    if (!tile.CanBeMarked())
+                        break;
+                    // check if its reachable
+                    let char = Global.character;
+                    if (!dungeon.CanReachTile(tile, char))
+                        return;
+                    tile.Value = dice.Value;
+                    tile.UpdateUI();
+                    relic.Use();
+                    UnselectRelic();
+                    UnselectDice();
+                    if (CheckDungeon(dungeon, tile))
+                        return;
+                    RecalculateDamage();
+                    break;
+                default:
+                    break;
+            }
+            // let items that do nothing fall through?
+        }
         // Use dice
         if (Global.phases.Phase != "Explore")
             return;
@@ -590,6 +618,25 @@
                     dice.Reroll();
                     relic.Use();
                     UnselectRelic();
+                    return;
+                }
+                case "markDice": {
+                    if (!Global.dice.CanUseDice(dice))
+                        return;
+                    let prev = Global.selectedDice;
+                    // unselect old one, if selected
+                    if (prev != null) {
+                        prev.Selected = false;
+                        prev.UpdateUI();
+                        Global.selectedDice = null;
+                    }
+                    if (prev == dice) { // if it was selected, toggle
+                        UnselectDice();
+                        return;
+                    }
+                    Global.selectedDice = dice;
+                    dice.Selected = true;
+                    dice.UpdateUI();
                     return;
                 }
             }
