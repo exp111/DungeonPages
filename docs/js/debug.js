@@ -33,9 +33,9 @@ class Debug {
         this.DOMObject = ret;
         ret.innerHTML = `
         <button id="debug-unlockAll">Unlock All</button>
-        <div>
+        <div id="debug-diceResults">
             <input id="debug-overwriteDice" type="checkbox" />
-            <label for="">Overwrite Dice:</label>
+            <label for="debug-overwriteDice">Overwrite Dice:</label>
             <input type="number" min="1" max="6" value="1" />
             <input type="number" min="1" max="6" value="2" />
             <input type="number" min="1" max="6" value="3" />
@@ -62,6 +62,10 @@ class Debug {
         // Dice results
         let resultCheckbox = ret.querySelector("#debug-overwriteDice");
         resultCheckbox.onchange = (_) => base.ForceDiceResults = resultCheckbox.checked;
+        /// add all result inputs to the list
+        ret.querySelectorAll("#debug-diceResults > input[type=number]").forEach((e) => {
+           base.DiceResults.push(e);
+        });
         // Experience
         let xp = ret.querySelector("#debug-xp");
         let xpButton = ret.querySelector("#debug-giveXP");
