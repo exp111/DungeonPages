@@ -31,62 +31,53 @@ class Debug {
         let ret = document.createElement("div");
         ret.classList.add("debug");
         this.DOMObject = ret;
+        ret.innerHTML = `
+        <button id="debug-unlockAll">Unlock All</button>
+        <div>
+            <input id="debug-overwriteDice" type="checkbox" />
+            <label for="">Overwrite Dice:</label>
+            <input type="number" min="1" max="6" value="1" />
+            <input type="number" min="1" max="6" value="2" />
+            <input type="number" min="1" max="6" value="3" />
+            <input type="number" min="1" max="6" value="4" />
+            <input type="number" min="1" max="6" value="5" />
+            <input type="number" min="1" max="6" value="6" />
+        </div>
+        <div>
+            <input id="debug-xp" type="number" value="1" min="0" max="75" />
+            <button id="debug-giveXP">Give XP</button>
+        </div>
+        <div>
+            <input id="debug-dmg" type="number" value="1" min="0" max="30" />
+            <button id="debug-giveDmg">Give Dmg</button>
+        </div>
+        `;
         // Unlock all
-        let unlockAll = document.createElement("button");
-        unlockAll.innerText = "Unlock All";
+        let unlockAll = ret.querySelector("#debug-unlockAll");
         unlockAll.onclick = (_) => {
             if (this.UnlockAll) {
                 this.UnlockAll();
             }
         }
-        ret.appendChild(unlockAll);
         // Dice results
-        let resultCheckbox = document.createElement("input");
-        resultCheckbox.type = "checkbox";
+        let resultCheckbox = ret.querySelector("#debug-overwriteDice");
         resultCheckbox.onchange = (_) => base.ForceDiceResults = resultCheckbox.checked;
-        ret.appendChild(resultCheckbox);
-        let label = document.createElement("label");
-        label.innerText = "Overwrite Dice:";
-        ret.appendChild(label);
-        for (let i = 0; i < 6; i++) {
-            let res = document.createElement("input");
-            res.type = "number";
-            res.value = i + 1;
-            res.min = "1";
-            res.max = "6";
-            this.DiceResults.push(res);
-            ret.appendChild(res);
-        }
-        // Experrience
-        let xp = document.createElement("input");
-        xp.type = "number";
-        xp.value = "1";
-        xp.min = "0";
-        xp.max = "75";
-        ret.appendChild(xp);
-        let xpButton = document.createElement("button");
-        xpButton.innerText = "Give XP";
+        // Experience
+        let xp = ret.querySelector("#debug-xp");
+        let xpButton = ret.querySelector("#debug-giveXP");
         xpButton.onclick = (_) => {
             if (this.GiveXP) {
                 this.GiveXP(Number(xp.value));
             }
         }
-        ret.appendChild(xpButton);
         // Dmg
-        let dmg = document.createElement("input");
-        dmg.type = "number";
-        dmg.value = "1";
-        dmg.min = "0";
-        dmg.max = "30";
-        ret.appendChild(dmg);
-        let dmgButton = document.createElement("button");
-        dmgButton.innerText = "Give Dmg";
+        let dmg = ret.querySelector("#debug-dmg");
+        let dmgButton = ret.querySelector("#debug-giveDmg");
         dmgButton.onclick = (_) => {
             if (this.GiveDmg) {
                 this.GiveDmg(Number(dmg.value));
             }
         }
-        ret.appendChild(dmgButton);
         return ret;
     }
 }
