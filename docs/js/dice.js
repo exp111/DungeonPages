@@ -62,10 +62,12 @@ class DicePool {
     GoodDice = [];
     EvilDice = [];
     // Runtime
-    DOMObject = null;
     SelectedDice = null;
     AvailableGood = 1;
     AvailableEvil = 0;
+    // Objects
+    DOMObject = null;
+    Buttons = null;
     // Events
     OnDiceClick = null;
 
@@ -214,6 +216,9 @@ class DicePool {
                 }
             };
         }
+        this.Buttons = document.createElement("div");
+        this.Buttons.classList.add("dicepool-buttons");
+        ret.appendChild(this.Buttons);
         return ret;
     }
 

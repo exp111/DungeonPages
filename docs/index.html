@@ -113,6 +113,8 @@
         let dice = Global.selectedDice;
         if (dice == null)
             return;
+        // clear dice buttons
+        Global.dice.Buttons.innerHTML = "";
         Global.selectedDice = null;
         dice.Selected = false;
         dice.UpdateUI();
@@ -589,20 +591,39 @@
                 case "coin": {
                     if (!Global.dice.CanUseDice(dice))
                         break;
-                    // change dice //TODO: make this better
-                    let result = confirm("Press OK for +1, Cancel for -1") ? 1 : -1;
-                    let newRes = dice.Value + result;
-                    if (newRes > 6 || newRes < 1) {
-                        alert("Dice Value can't go lower than 1 or higher 6.")
+                    let prev = Global.selectedDice;
+                    // unselect old one, if selected
+                    UnselectDice();
+                    if (prev == dice) { // if it was selected, toggle
                         return;
                     }
-                    dice.Value = newRes;
+                    // select dice
+                    Global.selectedDice = dice;
+                    dice.Selected = true;
                     dice.UpdateUI();
-                    // unselect item
-                    UnselectItem();
-                    item.Use();
-                    item.UpdateUI();
-                    RecalculateDamage();
+                    // create buttons
+                    Global.dice.Buttons.innerHTML = `<button>+1</button><button>-1</button>`;
+                    let buttons = Global.dice.Buttons.querySelectorAll("button");
+                    let plus = buttons[0];
+                    let minus = buttons[1];
+                    plus.disabled = dice.Value + 1 > 6;
+                    minus.disabled = dice.Value - 1 < 1;
+                    function action(mod) {
+                        let newRes = dice.Value + mod;
+                        if (newRes > 6 || newRes < 1) {
+                            alert("Dice Value can't go lower than 1 or higher 6.")
+                            return;
+                        }
+                        dice.Value = newRes;
+                        UnselectDice();
+                        // unselect item
+                        UnselectItem();
+                        item.Use();
+                        item.UpdateUI();
+                        RecalculateDamage();
+                    }
+                    plus.onclick = () => action(1);
+                    minus.onclick = () => action(-1);
                     return;
                 }
             }
@@ -665,13 +686,8 @@
                         return;
                     let prev = Global.selectedDice;
                     // unselect old one, if selected
-                    if (prev != null) {
-                        prev.Selected = false;
-                        prev.UpdateUI();
-                        Global.selectedDice = null;
-                    }
+                    UnselectDice();
                     if (prev == dice) { // if it was selected, toggle
-                        UnselectDice();
                         return;
                     }
                     Global.selectedDice = dice;

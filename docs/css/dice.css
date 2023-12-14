@@ -88,3 +88,7 @@
 .pip.active:nth-of-type(odd):has(+ :not(.pip.active)) {
     grid-area: g;
 }
+
+.dicepool-buttons {
+    display: flex;
+}
