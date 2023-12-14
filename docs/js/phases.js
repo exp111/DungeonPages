@@ -21,8 +21,9 @@ class Phases {
     End = null;
     Status = null;
     // Events
-    OnPhaseSelected = null;
+    CanSwitchPhase = null;
     OnPhaseEnd = null;
+    OnPhaseStart = null;
 
     constructor() {
         this.CreateDOM();
@@ -32,6 +33,7 @@ class Phases {
         this.DamageToDeal = dmg;
         this.UpdateDamageStatus();
     }
+
     AddDamageReduction(red) {
         this.DamageReduction = red;
         this.UpdateDamageStatus();
@@ -51,6 +53,25 @@ class Phases {
         this.DamageReduction = 0;
     }
 
+    SwitchPhase(phase) {
+        if (this.CanSwitchPhase) {
+            let res = this.CanSwitchPhase({
+                "current": this.Phase,
+                "phase": phase
+            });
+            if (res) {
+                this.SelectPhase(phase);
+            }
+            else
+            {
+                console.error(`Could not switch to Phase ${phase} from ${this.Phase}`);
+            }
+            return res;
+        }
+        console.error("Phases.CanSwitchPhase not set.");
+        return false;
+    }
+
     SelectPhase(phase) {
         if (this.OnPhaseEnd) {
             this.OnPhaseEnd({"phase": this.Phase, "next": phase});
@@ -58,6 +79,9 @@ class Phases {
         this.Reset();
         this.Phase = phase;
         this.UpdateUI();
+        if (this.OnPhaseStart) {
+            this.OnPhaseStart({"phase": this.Phase});
+        }
     }
 
     CreateDOM() {
@@ -70,17 +94,13 @@ class Phases {
         ret.appendChild(title);
 
         let base = this;
+
         function addPhase(name, phase) {
             let button = document.createElement("button");
             button.classList.add("phase");
             button.innerText = name;
             button.onclick = (_) => {
-                if (base.OnPhaseSelected) {
-                    base.OnPhaseSelected({
-                        "current": base.Phase,
-                        "phase": phase != null ? phase : name
-                    });
-                }
+                base.SwitchPhase(phase != null ? phase : name);
             }
             ret.appendChild(button);
             return button;

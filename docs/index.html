@@ -53,9 +53,9 @@
     Global.phases = new Phases();
     let p = document.getElementById("phases");
     p.parentNode.replaceChild(Global.phases.DOMObject, p);
-    Global.phases.OnPhaseSelected = (e) => OnPhaseSelected(e.current, e.phase);
+    Global.phases.CanSwitchPhase = (e) => CanSwitchPhase(e.current, e.phase);
+    Global.phases.OnPhaseStart = (e) => OnPhaseStart(e.phase);
     Global.phases.OnPhaseEnd = (e) => OnPhaseEnd(e.phase, e.next);
-    //TODO: event
     // Dice
     Global.dice = new DicePool();
     let d = document.getElementById("dice");
@@ -124,34 +124,13 @@
         relic.UpdateUI();
     }
 
-    function StartRollPhase() {
-        let map = Global.map;
-        if (!map.HasActiveDungeon()) {
-            console.log("No active dungeon");
-            return;
-        }
-        let pool = Global.dice;
-        let results = pool.Reroll();
-        if (Global.debug.IsDebug && Global.debug.ForceDiceResults) {
-            pool.SetDice(Global.debug.GetRollResults());
-        }
-        if (!results) {
-            console.log("Can't reroll dice.");
-            return;
-        }
-        Global.map.OnReroll(); //TODO: do this as an event
-        Global.phases.SelectPhase("Roll");
-        // Wandering monsters
-        WanderingMonsters(results);
-    }
-
     function StartFinishPhase(dungeon) {
         let char = Global.character;
         let dice = Global.dice;
         let map = Global.map;
         let phases = Global.phases;
 
-        phases.SelectPhase("Finish");
+        phases.SwitchPhase("Finish");
         map.FinishDungeon();
         // check if there is a sequential path
         if (dungeon.IsFinished(true)) {
@@ -171,7 +150,7 @@
                 return;
             }
             dice.SetAvailableDice(char.GoodDice, 0);
-            //TODO: allow player to choose weapon/relic
+            // allow player to choose weapon/relic
             char.AllowWeaponSelection(true);
         } else {
             console.log("Dungeon did not finish with a sequential path");
@@ -179,7 +158,7 @@
     }
 
     function EndGame(status) {
-        Global.phases.SelectPhase("End");
+        Global.phases.SwitchPhase("End");
         Global.phases.SetStatus(status);
         // disable all dice
         let pool = Global.dice;
@@ -252,32 +231,51 @@
         return true;
     }
 
-    //TODO: instead use a "CanGoToPhase" callback (which checks if we can change) + a OnPhaseStart event (which does stuff)
-    function OnPhaseSelected(current, phase) {
+    function CanSwitchPhase(current, phase) {
         switch (phase) {
             case "SelectDungeon":
-                if (current != "Finish")
-                    return;
-                Global.phases.SelectPhase("SelectDungeon");
-                break;
+                return current == "Finish";
             case "Roll":
-                if (current != "Explore")
-                    return;
-                StartRollPhase();
-                break;
+                if (current != "Explore" && current != "SelectDungeon")
+                    return false;
+                let map = Global.map;
+                if (!map.HasActiveDungeon()) {
+                    return false;
+                }
+                let pool = Global.dice;
+                let results = pool.Reroll();
+                if (Global.debug.IsDebug && Global.debug.ForceDiceResults) {
+                    pool.SetDice(Global.debug.GetRollResults());
+                }
+                if (!results) {
+                    console.log("Can't reroll dice.");
+                    return false;
+                }
+                Global.map.OnReroll(); //TODO: do this as an event
+                return true;
             case "Monster":
-                if (current != "Roll")
-                    return;
-                Global.phases.SelectPhase("Monster");
+                return current == "Roll";
+            case "Explore":
+                return current == "Monster";
+            case "Finish":
+                return current == "Roll" || current == "Monster" || current == "Explore";
+            case "End":
+                return true;
+        }
+        console.error(`Unknown Phase: ${phase}`);
+    }
+
+    function OnPhaseStart(phase) {
+        switch (phase) {
+            case "Roll": {
+                // Wandering monsters
+                WanderingMonsters();
+                break;
+            }
+            case "Monster": {
                 DoMonsterAttack();
                 break;
-            case "Explore":
-                if (current != "Monster")
-                    return;
-                Global.phases.SelectPhase("Explore");
-                break;
-            default:
-                break;
+            }
         }
     }
 
@@ -386,7 +384,9 @@
             let pool = Global.dice;
             pool.SetAvailableDice(pool.AvailableGood, dungeon.Dice);
             // Run roll phase
-            StartRollPhase();
+            if (!Global.phases.SwitchPhase("Roll")) {
+                console.error("Could not start Roll phase");
+            }
         }
     }
 
