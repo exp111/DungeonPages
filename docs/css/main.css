@@ -26,3 +26,7 @@
 .game {
     grid-row-start: 1;
 }
+
+.debug {
+    grid-column-end: span 2;
+}
