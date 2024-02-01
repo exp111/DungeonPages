@@ -9,6 +9,7 @@ class Help {
     TutorialTextObject = null;
     Visible = false;
     TutorialActive = false;
+    TutorialStep = 0;
     TutorialText = "";
 
     constructor() {
@@ -86,19 +87,42 @@ class Help {
 
     SetVisible(val) {
         this.Visible = val;
+        // Cancel the tutorial, if active
+        this.TutorialActive = false;
         this.UpdateDOM();
     }
 
     StartTutorial() {
         this.TutorialActive = true;
-        this.TutorialText = "Text";
-        this.TutorialWindowObject.style.transform = "translate(50%, 50%)";
-        this.UpdateDOM();
+        this.TutorialStep = 0;
+        this.NextStep();
     }
 
     NextStep() {
-        this.TutorialText = "Some longer text";
+        switch (this.TutorialStep) {
+            case 0: // Intro
+                this.StepPos(`In Dungeon Pages you play as a character trying to explore various dungeons.
+                You win the game by completing all dungeons. To complete dungeons you need to roll dice to explore dungeons, collect items and defeat enemies.`,
+                    "50%", "50%");
+                break;
+            case 1: // Intro Character?
+                break;
+            default:
+                this.TutorialActive = false;
+                break;
+        }
+        this.TutorialStep++;
         this.UpdateDOM();
+    }
+
+    StepPos(text, right, top) {
+        this.TutorialText = text;
+        let style = this.TutorialWindowObject.style;
+        // set pos
+        style.right = right;
+        style.top = top;
+        // offset window to the center
+        style.transform = "translate(50%, -50%)";
     }
 
     UpdateDOM() {
