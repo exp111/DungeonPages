@@ -46,6 +46,25 @@
     background: white;
     height: 100%;
 }
-.help-tutorial {
+.help-tutorial-button {
     align-self: end;
+}
+.help-tutorial-window {
+    position: absolute;
+    visibility: hidden;
+    background: white;
+    color: #315067;
+    border: 1px solid #315067;
+    border-radius: var(--border-radius);
+    padding: 5px;
+}
+.help-tutorial-window.visible {
+    visibility: visible;
+    min-width: 10%;
+}
+.help-tutorial-text {
+
+}
+.help-tutorial-next {
+    float: right;
 }

@@ -4,8 +4,12 @@ class Help {
     // Runtime
     ButtonDOMObject = null;
     DOMObject = null;
+    WrapperObject = null;
+    TutorialWindowObject = null;
+    TutorialTextObject = null;
     Visible = false;
     TutorialActive = false;
+    TutorialText = "";
 
     constructor() {
         this.CreateDOM();
@@ -32,6 +36,7 @@ class Help {
         // Menu Wrapper
         let wrapper = document.createElement("div");
         wrapper.classList.add("help-wrapper");
+        this.WrapperObject = wrapper;
         obj.appendChild(wrapper);
         /// Menu
         let menu = document.createElement("div");
@@ -55,10 +60,26 @@ class Help {
         menu.appendChild(content);
         // Tutorial button
         let tutorial = document.createElement("button");
-        tutorial.classList.add("help-tutorial");
+        tutorial.classList.add("help-tutorial-button");
         tutorial.innerText = "Tutorial";
         tutorial.onclick = () => this.StartTutorial();
         wrapper.appendChild(tutorial);
+        // Tutorial window
+        let tutWindow = document.createElement("div");
+        tutWindow.classList.add("help-tutorial-window");
+        this.TutorialWindowObject = tutWindow;
+        /// Content
+        let tutText = document.createElement("p");
+        tutText.classList.add("help-tutorial-text");
+        this.TutorialTextObject = tutText;
+        tutWindow.appendChild(tutText);
+        /// Next button
+        let tutNext = document.createElement("button");
+        tutNext.classList.add("help-tutorial-next");
+        tutNext.innerText = "Next";
+        tutNext.onclick = () => this.NextStep();
+        tutWindow.appendChild(tutNext);
+        obj.appendChild(tutWindow);
 
         this.UpdateDOM();
     }
@@ -70,13 +91,20 @@ class Help {
 
     StartTutorial() {
         this.TutorialActive = true;
+        this.TutorialText = "Text";
+        this.TutorialWindowObject.style.transform = "translate(50%, 50%)";
+        this.UpdateDOM();
+    }
+
+    NextStep() {
+        this.TutorialText = "Some longer text";
         this.UpdateDOM();
     }
 
     UpdateDOM() {
-        let help = this.DOMObject;
-        help.classList.toggle("visible", this.Visible);
-        let menu = help.getElementsByClassName("help-wrapper")[0];
-        menu.classList.toggle("hidden", this.TutorialActive);
+        this.DOMObject.classList.toggle("visible", this.Visible);
+        this.WrapperObject.classList.toggle("hidden", this.TutorialActive);
+        this.TutorialWindowObject.classList.toggle("visible", this.TutorialActive);
+        this.TutorialTextObject.innerText = this.TutorialText;
     }
 }
