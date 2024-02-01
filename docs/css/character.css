@@ -117,6 +117,7 @@
 .character-ability {
     border: 1px solid #315067;
     border-radius: var(--border-radius);
+    background-color: white;
 }
 .character-ability.selected, .character-relics-relic.selected, .character-xp-bonus.selected {
     border: 1px solid yellow;

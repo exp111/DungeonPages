@@ -8,6 +8,10 @@
     z-index: 1;
     background: rgba(0, 0, 0, 0.5);
     visibility: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .help.visible {
     visibility: visible;
@@ -17,4 +21,20 @@
     position: absolute;
     top: 8px;
     right: 8px;
+}
+
+.help-menu {
+    width: 50%;
+    height: 50%;
+    border: 1px solid #315067;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+.help-menu-header {
+    background: #315067;
+    color: white;
+}
+.help-menu-content {
+    background: white;
+    height: 100%;
 }
