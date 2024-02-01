@@ -22,3 +22,4 @@ https://boardgamegeek.com/boardgame/374145/dungeon-pages-core-set
 - disable ability/items/relics if they cant be used
 - testing??
 - something like a event log?
+- dont make game interactable during tutorial

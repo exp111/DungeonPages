@@ -107,7 +107,12 @@ class Help {
                     "50%", "50%");
                 break;
             case 1: // Intro Character
-                this.StepEl(`This is your character. Here you can see your HP, your XP and your items and abilities.`, "character");
+                this.StepEl(`This is your character. Here you can see your HP, XP, items and abilities.`,
+                    "character");
+                break;
+            case 2: // Intro Dungeon
+                this.StepEl(`These are the dungeons you can explore. There are 4 minor dungeons and one boss dungeon. To explore a dungeon, you can select it. Once a dungeon is selected you need to finish it before you can explore the other dungeons. The Boss dungeon requires you to complete all other dungeons first.`,
+                    "dungeons");
                 break;
             default:
                 this.RemoveFocus();
