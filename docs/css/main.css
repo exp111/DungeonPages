@@ -21,7 +21,7 @@
 .phases {
     flex-grow: 1;
 }
-.help {
+.help-button {
     width: min-content;
 }
 
