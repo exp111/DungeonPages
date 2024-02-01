@@ -12,10 +12,17 @@
     gap: 10px;
 }
 
-.phases {
-    width: 100%;
+.top {
     grid-row-end: 1;
     grid-column-start: span 2;
+    display: flex;
+}
+
+.phases {
+    flex-grow: 1;
+}
+.help {
+    width: min-content;
 }
 
 .dicepool {
