@@ -5,6 +5,7 @@ class Help {
     ButtonDOMObject = null;
     DOMObject = null;
     Visible = false;
+    TutorialActive = false;
 
     constructor() {
         this.CreateDOM();
@@ -16,7 +17,7 @@ class Help {
         obj = document.createElement("button");
         obj.classList.add("help-button");
         obj.innerText = "Help";
-        obj.onclick = () => Global.help.SetVisible(true);
+        obj.onclick = () => this.SetVisible(true);
         this.ButtonDOMObject = obj;
         // Menu
         obj = document.createElement("div");
@@ -28,10 +29,14 @@ class Help {
         close.innerText = "Close";
         close.onclick = () => Global.help.SetVisible(false);
         obj.appendChild(close);
+        // Menu Wrapper
+        let wrapper = document.createElement("div");
+        wrapper.classList.add("help-wrapper");
+        obj.appendChild(wrapper);
         /// Menu
         let menu = document.createElement("div");
         menu.classList.add("help-menu");
-        obj.appendChild(menu);
+        wrapper.appendChild(menu);
         //// Header
         let header = document.createElement("div");
         header.classList.add("help-menu-header");
@@ -48,6 +53,13 @@ class Help {
         Please open a issue on <a href="${this.GithubLink}">GitHub</a>.
         `;
         menu.appendChild(content);
+        // Tutorial button
+        let tutorial = document.createElement("button");
+        tutorial.classList.add("help-tutorial");
+        tutorial.innerText = "Tutorial";
+        tutorial.onclick = () => this.StartTutorial();
+        wrapper.appendChild(tutorial);
+
         this.UpdateDOM();
     }
 
@@ -56,7 +68,15 @@ class Help {
         this.UpdateDOM();
     }
 
+    StartTutorial() {
+        this.TutorialActive = true;
+        this.UpdateDOM();
+    }
+
     UpdateDOM() {
-        this.DOMObject.classList.toggle("visible", this.Visible);
+        let help = this.DOMObject;
+        help.classList.toggle("visible", this.Visible);
+        let menu = help.getElementsByClassName("help-wrapper")[0];
+        menu.classList.toggle("hidden", this.TutorialActive);
     }
 }

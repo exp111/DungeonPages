@@ -23,9 +23,17 @@
     right: 8px;
 }
 
-.help-menu {
+.help-wrapper {
     width: 50%;
     height: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.help-wrapper.hidden {
+    visibility: hidden;
+}
+.help-menu {
+    height: 90%;
     border: 1px solid #315067;
     border-radius: var(--border-radius);
     overflow: hidden;
@@ -37,4 +45,7 @@
 .help-menu-content {
     background: white;
     height: 100%;
+}
+.help-tutorial {
+    align-self: end;
 }
