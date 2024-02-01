@@ -88,6 +88,7 @@ class Help {
     SetVisible(val) {
         this.Visible = val;
         // Cancel the tutorial, if active
+        this.RemoveFocus();
         this.TutorialActive = false;
         this.UpdateDOM();
     }
@@ -105,9 +106,11 @@ class Help {
                 You win the game by completing all dungeons. To complete dungeons you need to roll dice to explore dungeons, collect items and defeat enemies.`,
                     "50%", "50%");
                 break;
-            case 1: // Intro Character?
+            case 1: // Intro Character
+                this.StepEl(`This is your character. Here you can see your HP, your XP and your items and abilities.`, "character");
                 break;
             default:
+                this.RemoveFocus();
                 this.TutorialActive = false;
                 break;
         }
@@ -116,6 +119,7 @@ class Help {
     }
 
     StepPos(text, right, top) {
+        this.RemoveFocus();
         this.TutorialText = text;
         let style = this.TutorialWindowObject.style;
         // set pos
@@ -123,6 +127,21 @@ class Help {
         style.top = top;
         // offset window to the center
         style.transform = "translate(50%, -50%)";
+    }
+
+    StepEl(text, className) {
+        this.RemoveFocus();
+        let el = document.getElementsByClassName(className)[0];
+        this.TutorialText = text;
+        el.classList.add("tutorial-focus");
+        //TODO: move under/above el
+    }
+
+    RemoveFocus() {
+        let el = document.getElementsByClassName("tutorial-focus");
+        for (let e of el) {
+            e.classList.remove("tutorial-focus");
+        }
     }
 
     UpdateDOM() {

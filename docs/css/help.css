@@ -68,3 +68,9 @@
 .help-tutorial-next {
     float: right;
 }
+
+.tutorial-focus {
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 0 0 2px yellow;
+}
