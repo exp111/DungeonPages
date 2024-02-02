@@ -80,7 +80,6 @@ class Help {
         tutNext.innerText = "Next";
         tutNext.onclick = () => this.NextStep();
         tutWindow.appendChild(tutNext);
-        obj.appendChild(tutWindow);
 
         this.UpdateDOM();
     }
@@ -114,6 +113,12 @@ class Help {
                 this.StepEl(`These are the dungeons you can explore. There are 4 minor dungeons and one boss dungeon. To explore a dungeon, you can select it. Once a dungeon is selected you need to finish it before you can explore the other dungeons. The Boss dungeon requires you to complete all other dungeons first.`,
                     "dungeons");
                 break;
+                //TODO: Intro Legend
+                // Intro phases
+                // Explain phase "Select Dungeon"
+                // Explain phase "Roll"
+                /// Explain dice interface
+                // Explain phase "Monster"
             default:
                 this.RemoveFocus();
                 this.TutorialActive = false;

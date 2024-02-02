@@ -50,6 +50,7 @@
     align-self: end;
 }
 .help-tutorial-window {
+    z-index: 3;
     position: absolute;
     visibility: hidden;
     background: white;

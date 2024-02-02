@@ -56,8 +56,10 @@ Global.debug.GiveDmg = (dmg) => DoDamage(dmg);
 Global.help = new Help();
 let help = document.getElementById("help");
 let helpButton = document.getElementById("help-button");
+let tutWindow = document.getElementById("tutorial-window");
 help.parentNode.replaceChild(Global.help.DOMObject, help);
 helpButton.parentNode.replaceChild(Global.help.ButtonDOMObject, helpButton);
+tutWindow.parentNode.replaceChild(Global.help.TutorialWindowObject, tutWindow);
 
 function UnselectItem() {
     let item = Global.selectedItem;
