@@ -263,10 +263,14 @@ class Ability {
         header.classList.add("character-ability-header");
         header.innerText = "Ability";
         ret.appendChild(header);
+        // Content
+        let content = document.createElement("div");
+        content.classList.add("character-ability-content");
+        ret.appendChild(content);
         // Text
         let txt = document.createElement("span");
         txt.classList.add("character-ability-text");
-        ret.appendChild(txt);
+        content.appendChild(txt);
         /// Name
         let name = document.createElement("b");
         name.innerText = `${this.Name}: `;

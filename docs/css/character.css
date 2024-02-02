@@ -63,7 +63,7 @@
 }
 
 .character-xp-content {
-    padding: 10px;
+    padding: 5px 10px;
 }
 
 .character-xp-points {
@@ -135,6 +135,9 @@
     color: white;
     background-color: #315067;
     width: 100%;
+}
+.character-ability-content {
+    padding: 5px 10px;
 }
 .character-ability-text {
     color: #315067;
