@@ -184,6 +184,15 @@ class Health {
         let ret = document.createElement("div");
         ret.classList.add("character-health");
         this.DOMObject = ret;
+        // Header
+        let header = document.createElement("div");
+        header.classList.add("character-health-header");
+        header.textContent = "Health";
+        ret.appendChild(header);
+        // Content
+        let content = document.createElement("div");
+        content.classList.add("character-health-content");
+        ret.appendChild(content);
         // Elements
         for (let i in this.Elements) {
             let count = this.Elements[i];
@@ -208,7 +217,7 @@ class Health {
                 icons.appendChild(icon);
             }
             element.appendChild(icons);
-            ret.appendChild(element);
+            content.appendChild(element);
         }
         this.UpdateUI();
         return ret;

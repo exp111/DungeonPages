@@ -12,6 +12,16 @@
 }
 
 .character-health {
+    width: max-content;
+}
+.character-health-header {
+    color: white;
+    background-color: #315067;
+    width: 100%;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+.character-health-content {
+    padding-top: 5px;
     --row-count: 3;
     --column-count: 3;
     display: grid;
