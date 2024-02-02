@@ -150,6 +150,20 @@
     row-gap: 3px;
 }
 
+.character-weapons-header {
+    color: white;
+    background-color: #315067;
+    width: 100%;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    display: grid;
+    grid-template-columns: 2fr 0.5fr 1fr;
+    gap: 2px;
+}
+
+.character-weapons-content {
+    padding-top: 5px;
+}
+
 .character-weapons-weapon {
     display: grid;
     grid-template-columns: 2fr 0.5fr 1fr;
@@ -176,6 +190,21 @@
     display: flex;
     align-items: center;
     padding-left: 5px;
+}
+
+.character-relics-header {
+    color: white;
+    background-color: #315067;
+    width: 100%;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    display: flex;
+}
+.character-relics-header span:first-child {
+    flex-grow: 1;
+}
+
+.character-relics-content {
+    padding-top: 5px;
 }
 
 .character-relics-relic {

@@ -524,9 +524,18 @@ class Weapons {
         let ret = document.createElement("div");
         ret.classList.add("character-weapons");
         this.DOMObject = ret;
+        // Header
+        let header = document.createElement("div");
+        header.classList.add("character-weapons-header");
+        header.innerHTML = "<span>Weapons</span><span>Range</span><span>Effect</span>";
+        ret.appendChild(header);
+        // Content
+        let content = document.createElement("div");
+        content.classList.add("character-weapons-content");
+        ret.appendChild(content);
         let weapons = document.createElement("div");
         weapons.classList.add("character-weapons-list");
-        ret.appendChild(weapons);
+        content.appendChild(weapons);
         for (let i in this.Weapons) {
             let w = this.Weapons[i];
             weapons.appendChild(w.DOMObject);
@@ -768,9 +777,18 @@ class Relics {
         let ret = document.createElement("div");
         ret.classList.add("character-relics");
         this.DOMObject = ret;
+        // Header
+        let header = document.createElement("div");
+        header.classList.add("character-relics-header");
+        header.innerHTML = "<span>Relics</span><span>Charges</span>"
+        ret.appendChild(header);
+        // Content
+        let content = document.createElement("div");
+        content.classList.add("character-relics-content");
+        ret.appendChild(content);
         let relics = document.createElement("div");
         relics.classList.add("character-relics-list");
-        ret.appendChild(relics);
+        content.appendChild(relics);
         for (let i in this.Relics) {
             let r = this.Relics[i];
             relics.appendChild(r.DOMObject);
