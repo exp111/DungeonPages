@@ -258,6 +258,11 @@ class Ability {
         let ret = document.createElement("div");
         ret.classList.add("character-ability");
         this.DOMObject = ret;
+        // Header
+        let header = document.createElement("div");
+        header.classList.add("character-ability-header");
+        header.innerText = "Ability";
+        ret.appendChild(header);
         // Text
         let txt = document.createElement("span");
         txt.classList.add("character-ability-text");
@@ -320,6 +325,15 @@ class Experience {
         let ret = document.createElement("div");
         ret.classList.add("character-xp");
         this.DOMObject = ret;
+        // Header
+        let header = document.createElement("div");
+        header.classList.add("character-xp-header");
+        header.textContent = "Experience (XP)";
+        ret.appendChild(header);
+        // Content
+        let content = document.createElement("div");
+        content.classList.add("character-xp-content");
+        ret.appendChild(content);
         // Points
         let points = document.createElement("div");
         points.classList.add("character-xp-points");
@@ -335,7 +349,7 @@ class Experience {
             }
             points.appendChild(grid);
         }
-        ret.appendChild(points);
+        content.appendChild(points);
         // Bonuses
         let bonuses = document.createElement("div");
         bonuses.classList.add("character-xp-bonuses");
@@ -348,7 +362,7 @@ class Experience {
                 }
             }
         }
-        ret.appendChild(bonuses);
+        content.appendChild(bonuses);
         // update ui
         this.UpdateUI();
         return ret;

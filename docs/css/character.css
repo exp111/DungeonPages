@@ -55,8 +55,17 @@
 .character-xp {
     border: 1px solid #315067;
     border-radius: var(--border-radius);
+}
+.character-xp-header {
+    color: white;
+    background-color: #315067;
+    width: 100%;
+}
+
+.character-xp-content {
     padding: 10px;
 }
+
 .character-xp-points {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -121,6 +130,11 @@
 }
 .character-ability.selected, .character-relics-relic.selected, .character-xp-bonus.selected {
     border: 1px solid yellow;
+}
+.character-ability-header {
+    color: white;
+    background-color: #315067;
+    width: 100%;
 }
 .character-ability-text {
     color: #315067;
