@@ -101,11 +101,13 @@ class Phases {
         let base = this;
 
         function addPhase(name, phase) {
+            let ID = phase ?? name;
             let button = document.createElement("button");
             button.classList.add("phase");
+            button.classList.add(ID);
             button.innerText = name;
             button.onclick = (_) => {
-                base.SwitchPhase(phase != null ? phase : name);
+                base.SwitchPhase(ID);
             }
             ret.appendChild(button);
             return button;

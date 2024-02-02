@@ -101,26 +101,56 @@ class Help {
     NextStep() {
         switch (this.TutorialStep) {
             case 0: // Intro
-                this.StepPos(`In Dungeon Pages you play as a character trying to explore various dungeons.
-                You win the game by completing all dungeons. To complete dungeons you need to roll dice to explore dungeons, collect items and defeat enemies.`,
+                this.StepPos("In Dungeon Pages you play as a character trying to explore various dungeons. "+
+                    "You win the game by completing all dungeons. " +
+                    "To complete dungeons you need to roll dice to explore dungeons, collect items and defeat enemies.",
                     "50%", "50%");
                 break;
             case 1: // Intro Character
-                this.StepEl(`This is your character. Here you can see your HP, XP, items and abilities.`,
+                this.StepEl("This is your character. Here you can see your HP, XP, items and abilities.",
                     "character");
                 break;
             case 2: // Intro Dungeon
-                this.StepEl(`These are the dungeons you can explore. There are 4 minor dungeons and one boss dungeon. To explore a dungeon, you can select it. Once a dungeon is selected you need to finish it before you can explore the other dungeons. The Boss dungeon requires you to complete all other dungeons first.`,
+                this.StepEl("These are the dungeons you can explore. " +
+                    "There are 4 minor dungeons and one boss dungeon. " +
+                    "To explore a dungeon, you need to select it. Once a dungeon is selected you need to finish it before you can explore the other dungeons. " +
+                    "The boss dungeon requires you to complete all other dungeons first.",
                     "dungeons");
                 break;
-                //TODO: Intro Legend
-                // Intro phases
-                // Explain phase "Select Dungeon"
-                // Explain phase "Roll"
-                /// Explain dice interface
-                // Explain phase "Monster" (auto skip except there is a dmg reduction ability)
-                // Explain phase "Explore" (use ALL rolled dice, use items+abilities, if chest is reached dungeon is finished)
+            case 3: // Intro Legend
+                this.StepEl("This is the legend that contains informations about monsters and traps inside the dungeons, like when they attack, their damage, defense, XP reward and optionally special effects.",
+                    "legend");
+                break;
+            case 4: // Intro phases
+                this.StepEl("The gameplay is split into multiple game phases. " +
+                    "The active phase is marked at the top. The game tries to automatically skip phases where you can't do anything, however sometimes you need to manually proceed into the next phase by clicking on it.",
+                    "phases");
+                break;
+            case 5: // Explain phase "Select Dungeon"
+                this.StepEl("This is the first phase where you need to select a dungeon to explore. " +
+                    "The order in which to explore dungeons doesn't matter except for the boss dungeon always being last. " +
+                    "Dungeons are not always ordered by difficulty.",
+                    "SelectDungeon");
+                break;
+            case 6: // Explain phase "Roll"
+                this.StepEl("The Roll phase consists of you rolling the dice and optionally adjusting the results using special effects like your ability, items, weapons or relics.",
+                    "Roll");
+                break;
+            case 7: // Explain dice interface + good, evil dice
+                this.StepEl("This is the dice area where all dice are shown. Not usable dice are greyed out. You start the game with one Good dice. " +
+                    "The white dice are Good Dice and can be unlocked by leveling up. The black dice are Evil Dice, which count varies from dungeon to dungeon and are the only dice that trigger monster attacks. " +
+                    "If two Evil dice show the same dice face, they will trigger wandering monsters in the dungeon, which will attack you for 1 damage. " +
+                    "This will even trigger when all monsters inside the dungeon are defeated.",
+                    "dicepool")
+                break;
+            case 8: // Explain phase "Monster" (when do monsters attack, wandering monster, auto skip except there is a dmg reduction ability)
+                this.StepEl("The Monster phase consists of the remaining monsters inside the dungeon attacking your character. " +
+                    "They can only attack when any Evil Dice has a dice face higher than their attack trigger, which is the ATK stat listed in the legend.",
+                    "Monster");
+                break;
+                // Explain phase "Explore" (use ALL rolled dice, use items+abilities, if chest is reached dungeon is finished, how are items collected/monsters defeated)
                 // Explain phase "Finish" (explain sequential line, get rewards)
+                // somewhere maybe explain
             default:
                 this.RemoveFocus();
                 this.TutorialActive = false;
