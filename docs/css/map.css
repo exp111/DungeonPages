@@ -208,14 +208,28 @@
     padding: 10px;
     display: flex;
     background-color: #f9f9f8;
-    gap: 5px;
 }
 
+.legend-monsters-header, .legend-traps-header {
+    width: 100%;
+    color: white;
+    background-color: #315067;
+}
+
+.legend-traps-header, .traps {
+    /* offset from seperator while keeping bg color */
+    padding-left: 5px;
+}
 .monsters {
+    margin-top: 5px;
     display: flex;
     gap: 5px;
     padding-right: 5px;
     border-right: 1px solid black;
+}
+
+.traps {
+    margin-top: 5px;
 }
 
 .monsters-monster-title, .traps-trap-title {

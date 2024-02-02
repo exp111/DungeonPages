@@ -118,7 +118,9 @@ class Help {
                 // Explain phase "Select Dungeon"
                 // Explain phase "Roll"
                 /// Explain dice interface
-                // Explain phase "Monster"
+                // Explain phase "Monster" (auto skip except there is a dmg reduction ability)
+                // Explain phase "Explore" (use ALL rolled dice, use items+abilities, if chest is reached dungeon is finished)
+                // Explain phase "Finish" (explain sequential line, get rewards)
             default:
                 this.RemoveFocus();
                 this.TutorialActive = false;

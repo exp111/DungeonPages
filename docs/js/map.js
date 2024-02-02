@@ -229,17 +229,31 @@ class Map {
         legend.classList.add("legend");
         ret.appendChild(legend);
         /// monsters
+        let monsterWrapper = document.createElement("div");
+        monsterWrapper.classList.add("legend-monsters");
+        legend.appendChild(monsterWrapper);
+        let monsterHeader = document.createElement("div");
+        monsterHeader.classList.add("legend-monsters-header");
+        monsterHeader.innerText = "Monsters";
+        monsterWrapper.appendChild(monsterHeader);
         let monsters = document.createElement("div");
         monsters.classList.add("monsters");
-        legend.appendChild(monsters);
+        monsterWrapper.appendChild(monsters);
         for (let i in this.Monsters) {
             let m = this.Monsters[i];
             monsters.appendChild(m.DOMObject);
         }
         /// traps
+        let trapWrapper = document.createElement("div");
+        trapWrapper.classList.add("legend-traps");
+        legend.appendChild(trapWrapper);
+        let trapHeader = document.createElement("div");
+        trapHeader.classList.add("legend-traps-header");
+        trapHeader.innerText = "Traps";
+        trapWrapper.appendChild(trapHeader);
         let traps = document.createElement("div");
         traps.classList.add("traps");
-        legend.appendChild(traps);
+        trapWrapper.appendChild(traps);
         for (let i in this.Traps) {
             let t = this.Traps[i];
             traps.appendChild(t.DOMObject);
