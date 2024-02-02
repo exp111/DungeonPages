@@ -107,7 +107,8 @@ class Help {
                     "50%", "50%");
                 break;
             case 1: // Intro Character
-                this.StepEl("This is your character. Here you can see your HP, XP, items and abilities.",
+                this.StepEl("This is your character. Here you can see your HP, XP, items and abilities. " +
+                    "When your remaining health points reach zero, you lose the game.",
                     "character");
                 break;
             case 2: // Intro Dungeon
@@ -145,12 +146,37 @@ class Help {
                 break;
             case 8: // Explain phase "Monster" (when do monsters attack, wandering monster, auto skip except there is a dmg reduction ability)
                 this.StepEl("The Monster phase consists of the remaining monsters inside the dungeon attacking your character. " +
-                    "They can only attack when any Evil Dice has a dice face higher than their attack trigger, which is the ATK stat listed in the legend.",
+                    "They can only attack when any Evil Dice has a dice face equal to or higher than their attack trigger, which is the ATK stat listed in the legend. " +
+                    "If they attack, they will deal the damage (DMG) listed in the legend." +
+                    "This phase is skipped automatically unless you receive damage and have a way to reducing that damage.",
                     "Monster");
                 break;
-                // Explain phase "Explore" (use ALL rolled dice, use items+abilities, if chest is reached dungeon is finished, how are items collected/monsters defeated)
-                // Explain phase "Finish" (explain sequential line, get rewards)
-                // somewhere maybe explain
+            case 9: // Explain phase "Explore" (use ALL rolled dice, use items+abilities, if chest is reached dungeon is finished, how are items collected/monsters defeated)
+                this.StepEl("In the Explore phase you need to use all dice to explore the dungeon. " +
+                    "This is done by first selecting a dice and then a empty space inside the dungeon to mark with that number. " +
+                    "Notice that you only mark spaces within range of any other marked space or the entrance door and can not count range through walls, locked doors, undefeated monster, uncollected items or unmarked traps. " +
+                    "The dungeon is finished immediately after completing a path of marked orthogonally adjacent spaces from the door to the treasure chest. " +
+                    "You may use effects from items, abilities or relics to change the value of dice. " +
+                    "To collect items you need to mark the adjacent spaces with at least 2 times the same number. " +
+                    "To defeat enemies you need to mark an adjacent space with a number equal or higher than its defense (DEF) for each point of its health (HP). " +
+                    "Traps have to marked before they can be passed. If a trap is marked with a value that is smaller than its Disarm value, it will trigger its effect. " +
+                    "After all dice have been used, the next turn will start with the Roll phase.",
+                    "Explore")
+                break;
+            case 10: // Weapons + Range
+                this.StepEl("Your character has multiple weapons which can be unlocked during your adventure. " +
+                    "Each character starts with a weapon. " +
+                    "Each weapon has a range value, which controls the range in which spaces can be marked, as well as one or multiple effects. " +
+                    "Some weapons have special effects, but most only have at least one direction that controls the direction in which range can be counted from spaces.",
+                    "character-weapons")
+                break;
+            case 11: // Explain phase "Finish" (explain sequential line, get rewards)
+                this.StepEl("The Finish phase is only reached after a dungeon has been completed. " +
+                    "If at the end of a dungeon there is a marked path in which each value is within 1 of the value of the previous space (equal, +1, -1), the path is considered sequential. " +
+                    "If you created a sequential path, you will gain extra rewards: 1 XP per filled column in the dungeon, as well as the XP rewards for each monster defeated. You can now also select a weapon or relic to unlock, if the XP threshold is met. " +
+                    "Else you will gain no experience and will only keep the items gained.",
+                    "Finish");
+                break;
             default:
                 this.RemoveFocus();
                 this.TutorialActive = false;
